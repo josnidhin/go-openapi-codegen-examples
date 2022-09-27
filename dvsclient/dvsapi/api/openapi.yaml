@@ -1,0 +1,3768 @@
+openapi: 3.0.2
+info:
+  description: |-
+    # Overview
+
+    Welcome to the Digital Value Services (DVS) API reference.
+
+    This API serves as the primary gateway to facilitate digital value transfers through [DT One](https://www.dtone.com), a leading global network covering more than 160 countries and 550 mobile operators.
+
+    The Digital Value Services API is organized according to [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) principles, using [JSON](https://en.wikipedia.org/wiki/JSON) as format for data interchange, and provides the following services:
+      - [Discovery Services](#tag/Services)
+      - [Transaction Services](#tag/Transactions)
+      - [Account Services](#tag/Balances)
+      - [Look-Up Services](#tag/Mobile-Number)
+
+    If you have any questions and/or suggestions related to our API, please do not hesitate to send an email to the [DVS API support team](mailto:dvs-api-support@dtone.com).
+
+    ## Integration Libraries
+
+    Officially supported [SDK](https://en.wikipedia.org/wiki/Software_development_kit)s are available for the following languages:
+
+    * [Java](https://github.com/dtone/dtone-dvs-api-java-client)
+    * [Node.js](https://www.npmjs.com/package/@dtone/dvs)
+
+    These SDKs offer an accelerated path to developing your applications as an alternative to accessing the REST API directly.
+
+    Separately, we would love to hear from you! If you have any questions and/or suggestions related to our SDKs, please do not hesitate to create corresponding [GitHub issues](https://guides.github.com/features/issues/) or send an email to the [DVS Open Source team](mailto:opensource@dtone.com).
+
+    ## Sandbox
+
+    A sandbox environment is available for testing integrations with the DVS API. It is available at [https://preprod-dvs-api.dtone.com/v1/](https://preprod-dvs-api.dtone.com/v1/).
+
+    You can generate sandbox API keys from your [DT Shop](https://dtshop.dtone.com/account?tab=developer) account, under the **Pre-Production API Keys** section.
+
+    All transactions on the sandbox environment are simulated: no real transaction goes through. To simulate different responses, the last three digits of the recipient mobile number (i.e. `credit_party_identifier.mobile_number`) will have to be replaced with one of the following suffixes:
+
+    | Suffix              | Transaction Status                        | Example       |
+    | ---                 | ---                                       | ---           |
+    | `100`, `200`, `300` | `COMPLETED` (PIN-less)                    | `+6595123100` |
+    | `101`, `201`, `301` | `COMPLETED` (PIN-based)                   | `+6595123201` |
+    | `102`, `202`, `302` | `DECLINED-INVALID-CREDIT-PARTY`           | `+6595123102` |
+    | `103`, `203`, `303` | `DECLINED-BARRED-CREDIT-PARTY`            | `+6595123103` |
+    | `104`, `204`, `304` | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE` | `+6595123205` |
+    | `105`, `205`, `305` | `DECLINED-DUPLICATED-TRANSACTION`         | `+6595123105` |
+    | `106`, `206`, `306` | `DECLINED`                                | `+6595123206` |
+    | `107`, `207`, `307` | `DECLINED-EXCEPTION`                      | `+6595123107` |
+
+    The different suffixes for a given transaction status can be used to simulate delays, as follows:
+      * `10X` suffix will take at least 3 seconds to finish
+      * `20X` suffix will take at least 20 seconds to finish
+      * `30X` suffix will take at least 5 minutes to finish
+
+    Please note that there are products that do not require any credit party identifier such as Gift Cards. For these products, the simulated transaction will always be in `COMPLETED` status.
+
+    ## Versioning
+
+    Endpoints of the API are prefixed with a corresponding version number.
+
+    This is done to provide complete isolation between implementations and to ensure that subsequent major changes to the API will never affect existing integrations.
+
+    When a new version of the API is available and you are keen to upgrade, testing in the sandbox environment to ensure that everything works well with your implementation before switching to the production environment comes highly recommended.
+
+    Feel free to [contact us](mailto:dvs-api-support@dtone.com) should you have any questions and/or are in need of assistance during your tests.
+
+    ## Transactions
+
+    The main purpose of this API is to deliver value (e.g. mobile airtime top-up, data bundles, etc.) to a beneficiary. This is what we call a "transaction".
+
+    During the course of a transfer, a transaction undergoes various status changes (or transitions) as illustrated below.
+
+    ![transaction states](/images/transaction_states.png)
+
+    As changes in transaction status occur, updates are sent in real-time when a callback URL is provided. In conjunction, transaction status can be queried through one of two means: via the returned `id` or a provided `external_id`.
+
+    The latter serves as your unique reference and provides a utility to retrieve transaction details when exceptions occur, such as when the supposed API response was not received, as an example.
+
+    ## Balances
+
+    Transactions can be created through the platform as long as there is enough balance available in your account. A given balance is composed of the following:
+
+    | Balance   | Description                                              |
+    | ---       | ---                                                      |
+    | Available | Balance amount available for use                         |
+    | Holding   | Amount being held while transactions are being processed |
+
+    As a given transaction goes through various changes in status as outlined [here](#section/Overview/Transactions), corresponding balance movements will be made. The following table illustrates the relationship between transaction status and balance movements:
+
+    | Transaction Status                  | Balance Movement | Description                                                |
+    | ---                                 | ---              | ---                                                        |
+    | `CREATED`                           | Authorize        | Transfer wholesale price and fee from available to holding |
+    | `CANCELLED`, `REJECTED`, `DECLINED` | Void             | Amount authorized in holding moves back to available       |
+    | `COMPLETED`                         | Capture          | Amount authorized in holding is captured, i.e. debited     |
+    | `REVERSED`                          | Reverse          | Debited amount is reversed back into available             |
+
+    ## Flow
+
+    Once a product has been selected through one of the [discovery methods](/#tag/Services) provided by the API, the actual transfer (i.e. transaction) can be performed in either one of the following modes:
+      - Asynchronous (recommended)
+      - Synchronous
+
+    Each mode is accessible via a specific endpoint.
+
+    As soon as a transaction is confirmed, the transfer order will be sent to the operator for immediate processing. During this time, the transaction will remain in a `CONFIRMED` status until the final status is received from the operator.
+
+    ### Asynchronous Mode
+
+    When a transaction is created and confirmed in an asynchronous fashion, the HTTP connection won't have to be kept open. This preserves system resources on your applications. As such, performing transactions **asynchronously** is **recommended**.
+
+    ### Synchronous Mode
+
+    When a transaction is created and confirmed in a synchronous fashion, the HTTP connection will be kept open in an attempt to capture the final status from the receiving operator so it can be returned in the API response. The processing time usually takes just a few seconds. However, with some receiving operators, it may take longer.
+
+    Our system will keep the HTTP connection open for up to 180 seconds (this value can be configured upon request) and will return a status before closing this connection. This status can be in one of the final status (e.g. `COMPLETED`, `DECLINED`) or not (e.g. `SUBMITTED`). In the latter case, this denotes the transaction is still being processed by the receiving operator.
+
+    **Note:** your application does not have to wait for the connection to close, it can listen for a shorter period of time and query the final status later on (refer to the "Final Status" section below for more details).
+
+    ### Final Status
+
+    Regardless of the processing mode, the application should be designed to capture the final status of a transaction. This can be done through one of the following means:
+      - Checking the status of a specific transaction via the corresponding API method ("pull" mechanism)
+      - Configuring a callback URL passed in the request when creating a transaction ("push" mechanism)
+
+    ## Callbacks
+
+    As a transaction is being processed, changes in status will be notified in real-time if a callback URL was provided. Even though one callback per transaction is expected (i.e. change to either `COMPLETED` or `DECLINED`), a manual reversal from the [DT One](https://dtone.com/) team, which may happen in very rare occasions, will also trigger a callback to inform your application of a change in transaction status to `REVERSED`.
+
+    This callback endpoint must be implemented by the sending partner, which should expect an HTTP `POST` request containing a transaction object represented in [JSON](https://en.wikipedia.org/wiki/JSON). As callbacks will be sent from the [DT One](https://dtone.com/) servers, these endpoints will have to be publicly-accessible in most cases. During development, a service such as [ngrok](https://ngrok.com/) can be used to expose local servers to the internet.
+
+    Upon successful receipt of data, the callback endpoint should respond with an HTTP `2XX` status. In the event that the platform did not receive a successful status, callback notifications will be retried several times, beyond which, the transaction status will have to be queried through the API.
+
+    ## Status and Errors
+
+    ### HTTP Status Codes
+
+    [DT One](https://dtone.com/) uses standard HTTP response codes to indicate whether an API request was successful or not.
+
+    | Status | Description                                        |
+    | ---    | ---                                                |
+    | `200`  | OK                                                 |
+    | `201`  | Created: Resource created                          |
+    | `202`  | Accepted: Request has been accepted for processing |
+    | `400`  | Bad Request: Request was malformed                 |
+    | `401`  | Unauthorized: Credentials missing or invalid       |
+    | `404`  | Not Found: Resource doesn't exist                  |
+    | `429`  | Too Many Requests                                  |
+    | `500`  | Server Error: Error occurred on DT One             |
+
+    ### API Error Codes
+
+    | Code      | Description                                       |
+    | ---       | ---                                               |
+    | `1000400` | Bad Request                                       |
+    | `1000401` | Unauthorized                                      |
+    | `1000404` | Resource not found                                |
+    | `1000429` | Too many requests                                 |
+    | `1003001` | Product is not available in your account          |
+    | `1003002` | Requested product amount is out of range          |
+    | `1003003` | Requested product unit is invalid                 |
+    | `1003101` | Benefits not defined for available products       |
+    | `1003201` | Promotion not found                               |
+    | `1003301` | Campaign not found                                |
+    | `1005003` | Credit party mobile number is invalid             |
+    | `1005004` | Service not found                                 |
+    | `1005005` | Country not found                                 |
+    | `1005006` | Operator not found                                |
+    | `1005503` | Sender mobile number is invalid                   |
+    | `1006001` | Insufficient balance                              |
+    | `1006003` | Debit party mobile number is invalid              |
+    | `1006009` | Account balance not found                         |
+    | `1006503` | Beneficiary mobile number is invalid              |
+    | `1007001` | Transaction external ID has already been used     |
+    | `1007002` | Transaction has already been confirmed            |
+    | `1007004` | Transaction can no longer be confirmed            |
+    | `1007005` | Transaction has already been cancelled            |
+    | `1007007` | Transaction can no longer be cancelled            |
+    | `1007500` | Method not supported by operator                  |
+    | `1008004` | Transaction not found                             |
+    | `1009001` | Unexpected error, please contact our support team |
+
+    ### Transaction Status
+
+    | Class       | Status                                          | Description                                                            |
+    | ---         | ---                                             | ---                                                                    |
+    | `CREATED`   | `CREATED`                                       | Created                                                                |
+    | `CONFIRMED` | `CONFIRMED`                                     | Confirmed                                                              |
+    | `REJECTED`  | `REJECTED`                                      | Rejected                                                               |
+    | `REJECTED`  | `REJECTED-INVALID-CREDIT-PARTY`                 | Rejected - Credit party is invalid                                     |
+    | `REJECTED`  | `REJECTED-BARRED-CREDIT-PARTY`                  | Rejected - Credit party is barred                                      |
+    | `REJECTED`  | `REJECTED-INELIGIBLE-CREDIT-PARTY`              | Rejected - Credit party is ineligible for chosen product               |
+    | `REJECTED`  | `REJECTED-INVALID-DEBIT-PARTY`                  | Rejected - Debit party is invalid                                      |
+    | `REJECTED`  | `REJECTED-BARRED-DEBIT-PARTY`                   | Rejected - Debit party is barred                                       |
+    | `REJECTED`  | `REJECTED-LIMITATIONS-ON-CREDIT-PARTY-AMOUNT`   | Rejected - Limitations on credit party cumulative transaction amount   |
+    | `REJECTED`  | `REJECTED-LIMITATIONS-ON-CREDIT-PARTY-QUANTITY` | Rejected - Limitations on credit party cumulative transaction quantity |
+    | `REJECTED`  | `REJECTED-OPERATOR-CURRENTLY-UNAVAILABLE`       | Rejected - Operator currently unavailable                              |
+    | `REJECTED`  | `REJECTED-INSUFFICIENT-BALANCE`                 | Rejected - Insufficient balance                                        |
+    | `CANCELLED` | `CANCELLED`                                     | Cancelled                                                              |
+    | `SUBMITTED` | `SUBMITTED`                                     | Submitted                                                              |
+    | `COMPLETED` | `COMPLETED`                                     | Completed                                                              |
+    | `REVERSED`  | `REVERSED`                                      | Reversed                                                               |
+    | `DECLINED`  | `DECLINED`                                      | Declined (no additional information available)                         |
+    | `DECLINED`  | `DECLINED-INVALID-CREDIT-PARTY`                 | Declined - Credit party is invalid                                     |
+    | `DECLINED`  | `DECLINED-BARRED-CREDIT-PARTY`                  | Declined - Credit party is barred                                      |
+    | `DECLINED`  | `DECLINED-INELIGIBLE-CREDIT-PARTY`              | Declined - Credit party is ineligible for chosen product               |
+    | `DECLINED`  | `DECLINED-INVALID-DEBIT-PARTY`                  | Declined - Debit party is invalid                                      |
+    | `DECLINED`  | `DECLINED-BARRED-DEBIT-PARTY`                   | Declined - Debit party is barred                                       |
+    | `DECLINED`  | `DECLINED-LIMITATIONS-ON-OPERATOR-AMOUNT`       | Declined - Limitations on operator cumulative transaction amount       |
+    | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CREDIT-PARTY-AMOUNT`   | Declined - Limitations on credit party cumulative transaction amount   |
+    | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CUSTOMER-AMOUNT`       | Declined - Limitations on customer cumulative transaction amount       |
+    | `DECLINED`  | `DECLINED-LIMITATIONS-ON-OPERATOR-QUANTITY`     | Declined - Limitations on operator cumulative transaction quantity     |
+    | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CREDIT-PARTY-QUANTITY` | Declined - Limitations on credit party cumulative transaction quantity |
+    | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CUSTOMER-QUANTITY`     | Declined - Limitations on customer cumulative transaction quantity     |
+    | `DECLINED`  | `DECLINED-DUPLICATED-TRANSACTION`               | Declined - Duplicated transaction                                      |
+    | `DECLINED`  | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE`       | Declined - Operator currently unavailable                              |
+
+    `REJECTED` and `DECLINED` status classes both denote unsuccessful transactions. The primary distinction between these two relates to the party that determined the failure:
+      * `REJECTED` are issued by the DVS platform based on various business rules (e.g. insufficient balance, limitations, etc)
+      * `DECLINED` are issued by the operators
+
+    Separately, it is recommended to define application logic based on **classes**, while additional distinction and/or insight are reflected on the actual **status**.
+
+    ## Pagination
+
+    API resources supporting bulk fetches via "list" API methods will be returned in a paginated fashion.
+
+    ### Input Parameters
+
+    | Field      | Required | Type    | Description                                      |
+    | ---        | ---      | ---     | ---                                              |
+    | `page`     | No       | Integer | Page number                                      |
+    | `per_page` | No       | Integer | Number of results per page (default 50, max 100) |
+
+    ### Output Headers
+
+    | Field           | Description                   |
+    | ---             | ---                           |
+    | `X-Total`       | Total number of records       |
+    | `X-Total-Pages` | Total number of pages         |
+    | `X-Per-Page`    | Number of records per page    |
+    | `X-Page`        | Current page number           |
+    | `X-Next-Page`   | Next page number (if any)     |
+    | `X-Prev-Page`   | Previous page number (if any) |
+
+    ## Rate Limiting
+
+    The API endpoints have rate limiting in place to protect our service from excessive number of requests.
+
+    If the limit is reached, an [HTTP error 429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) will be returned by the server.
+
+    # Authentication
+
+    <!-- ReDoc-Inject: <security-definitions> -->
+  title: Digital Value Services API
+  version: 1.11.0
+  x-logo:
+    url: https://dvs-api-doc.dtone.com/images/dtone.png
+servers:
+- description: Staging
+  url: https://staging-dvs-api.transferto.dtone.com:8443/v1
+- description: Pre-Production
+  url: https://preprod-dvs-api.dtone.com/v1
+- description: Production
+  url: https://dvs-api.dtone.com/v1
+security:
+- BasicAuth: []
+tags:
+- description: |
+    The Digital Value Services platform provides access to various products across several industries. Such industries are termed as "services" in the Digital Value Services platform.
+
+    | Service        | Examples                                  |
+    | ---            | ---                                       |
+    | Mobile         | Airtime Top Ups, Mobile Data Bundles, SMS |
+    | Internet       | Broadband, Wi-Fi Recharge                 |
+    | Utilities      | Electricity, Water, Utilities             |
+    | Gift Cards     | Vouchers, Groceries, Gift Cards           |
+    | Landline       | Landline                                  |
+    | Television     | Television                                |
+    | Insurance      | Insurance                                 |
+    | Transportation | Transportation                            |
+    | VoIP           | VoIP Credits                              |
+    | Finance        | Financial Services and Institutions       |
+    | Government     | Government Agencies                       |
+  name: Services
+- description: |
+    Products are available across various geographical boundaries. These endpoints provide the means to enumerate available countries, which can then be used to filter against the list of [available products](#tag/Products/paths/~1products/get) in your account.
+  name: Countries
+- description: |
+    Products in the Digital Value Services Platform are associated to individual service providers, termed as "operators".
+
+    Some examples of operators include:
+      - [Mobile Network Operators](https://en.wikipedia.org/wiki/Mobile_network_operator)
+      - [Utility Prepayment Meter Operators](https://en.wikipedia.org/wiki/Prepayment_meter)
+      - [VoIP Providers](https://en.wikipedia.org/wiki/Voice_over_IP)
+      - etc.
+  name: Operators
+- description: |
+    Products ultimately redeem into one or more underlying benefits. These endpoints provide the means to enumerate available benefits, which can then be used to filter against the list of [available products](#tag/Products/paths/~1products/get) in your account.
+
+    | Benefit Type | Examples                                                                                                    |
+    | ---          | ---                                                                                                         |
+    | `TALKTIME`   | Talktime Minutes                                                                                            |
+    | `DATA`       | Mobile Data, Broadband Data                                                                                 |
+    | `SMS`        | [SMS](https://en.wikipedia.org/wiki/SMS), [MMS](https://en.wikipedia.org/wiki/Multimedia_Messaging_Service) |
+    | `PAYMENT`    | Bill Payment, Insurance Payment                                                                             |
+    | `CREDITS`    | Prepaid Credits                                                                                             |
+  name: Benefits
+- description: |
+    Receiving operators are running seasonal promotions on selected products, this endpoint will provide visiblity on these promotions: start date, end date, terms and conditions, eligible products, ...
+  name: Promotions
+- description: |
+    Custom marketing campaigns, this endpoint will provide visiblity on these campaigns.
+  name: Campaigns
+- description: |
+    Products form the actual digital values and/or products being transferred through the Digital Value Services platform.
+
+    | Product Type                | Description                                                                              |
+    | ---                         | ---                                                                                      |
+    | `FIXED_VALUE_RECHARGE`      | Fixed denomination recharge                                                              |
+    | `RANGED_VALUE_RECHARGE`     | Recharge against a range of value                                                        |
+    | `FIXED_VALUE_PIN_PURCHASE`  | Digital [voucher](https://en.wikipedia.org/wiki/Voucher) storing a fixed value           |
+    | `RANGED_VALUE_PIN_PURCHASE` | Digital [voucher](https://en.wikipedia.org/wiki/Voucher) with a range of possible values |
+    | `RANGED_VALUE_PAYMENT`      | Pay bills and/or services                                                                |
+
+    Products are organized and subdivided into distinct types as each one has distinct characteristics and technical implications when transactions are performed. As such, each product type also carries a distinct [schema](https://en.wikipedia.org/wiki/JSON#JSON_Schema).
+  name: Products
+- description: |
+    This is the core service provided by the API, via this end point you can send value to the beneficiary in various forms.
+
+    Important notes on the flow can be found here: [Transaction Services](#section/Overview/Transactions)
+  name: Transaction
+- description: |
+    This endpoint can be used to retrieve the status of all your balances in real time.
+
+    Note that transactions will only be accepted if you have enough funds on your account so it's important to keep an eye on it.
+  name: Balances
+- description: |
+    Look up endpoints form a distinct category to ultimately discover products by resolving [mobile phone numbers](https://en.wikipedia.org/wiki/MSISDN) to their mobile operators based on [DT One](https://www.dtone.com) proprietary algorithm and logic.
+  name: Mobile-Number
+paths:
+  /services:
+    get:
+      parameters:
+      - description: Page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of records per page
+        explode: true
+        in: query
+        name: per_page
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Service'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve list of services
+      tags:
+      - Services
+      x-mojo-to: v1#get_services
+  /services/{service_id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: service_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ServiceID'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: Service not found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve service by ID
+      tags:
+      - Services
+      x-mojo-to: v1#get_service_by_id
+  /countries:
+    get:
+      parameters:
+      - description: Page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of records per page
+        explode: true
+        in: query
+        name: per_page
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Country'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve list of countries
+      tags:
+      - Countries
+      x-mojo-to: v1#get_countries
+  /countries/{country_iso_code}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: country_iso_code
+        required: true
+        schema:
+          $ref: '#/components/schemas/ISO-3166-1_Alpha-3'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Country'
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: Country not found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve country by ISO code
+      tags:
+      - Countries
+      x-mojo-to: v1#get_country_by_iso_code
+  /operators:
+    get:
+      parameters:
+      - description: Page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of records per page
+        explode: true
+        in: query
+        name: per_page
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: country_iso_code
+        required: false
+        schema:
+          $ref: '#/components/schemas/ISO-3166-1_Alpha-3'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/_operators_get_200_response_inner'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve list of operators
+      tags:
+      - Operators
+      x-mojo-to: v1#get_operators
+  /operators/{operator_id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: operator_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/OperatorID'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_operators_get_200_response_inner'
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: Operator not found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve operator by ID
+      tags:
+      - Operators
+      x-mojo-to: v1#get_operator_by_id
+  /benefit-types:
+    get:
+      parameters:
+      - description: Page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of records per page
+        explode: true
+        in: query
+        name: per_page
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BenefitType'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve list of benefit types
+      tags:
+      - Benefits
+      x-mojo-to: v1#get_benefit_types
+  /promotions:
+    get:
+      parameters:
+      - description: Page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of records per page
+        explode: true
+        in: query
+        name: per_page
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: country_iso_code
+        required: false
+        schema:
+          $ref: '#/components/schemas/ISO-3166-1_Alpha-3'
+        style: form
+      - explode: true
+        in: query
+        name: operator_id
+        required: false
+        schema:
+          $ref: '#/components/schemas/OperatorID'
+        style: form
+      - explode: true
+        in: query
+        name: product_id
+        required: false
+        schema:
+          $ref: '#/components/schemas/ProductID'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Promotion'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve list of promotions
+      tags:
+      - Promotions
+      x-mojo-to: v1#get_promotions
+  /promotions/{promotion_id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: promotion_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/PromotionID'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Promotion'
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: Promotion not found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve promotion by ID
+      tags:
+      - Promotions
+      x-mojo-to: v1#get_promotion_by_id
+  /campaigns:
+    get:
+      parameters:
+      - description: Page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of records per page
+        explode: true
+        in: query
+        name: per_page
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: country_iso_code
+        required: false
+        schema:
+          $ref: '#/components/schemas/ISO-3166-1_Alpha-3'
+        style: form
+      - explode: true
+        in: query
+        name: operator_id
+        required: false
+        schema:
+          $ref: '#/components/schemas/OperatorID'
+        style: form
+      - explode: true
+        in: query
+        name: product_id
+        required: false
+        schema:
+          $ref: '#/components/schemas/ProductID'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Campaign'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve list of active campaigns
+      tags:
+      - Campaigns
+      x-mojo-to: v1#get_campaigns
+  /campaigns/{campaign_id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: campaign_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/CampaignID'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: Campaign not found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve campaign by ID
+      tags:
+      - Campaigns
+      x-mojo-to: v1#get_campaign_by_id
+  /products:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: type
+        required: false
+        schema:
+          $ref: '#/components/schemas/ProductTypes'
+        style: form
+      - explode: true
+        in: query
+        name: service_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: false
+        in: query
+        name: tags
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ProductTag'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        style: form
+      - explode: true
+        in: query
+        name: country_iso_code
+        required: false
+        schema:
+          $ref: '#/components/schemas/ISO-3166-1_Alpha-3'
+        style: form
+      - explode: true
+        in: query
+        name: operator_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: region
+        required: false
+        schema:
+          $ref: '#/components/schemas/X-ISO-3166-2'
+        style: form
+      - explode: false
+        in: query
+        name: benefit_types
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/BenefitTypes'
+          type: array
+          uniqueItems: true
+        style: form
+      - description: Page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of records per page
+        explode: true
+        in: query
+        name: per_page
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Product'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve list of products
+      tags:
+      - Products
+      x-mojo-to: v1#get_products
+  /products/{product_id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: product_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ProductID'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: Product not found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve product by ID
+      tags:
+      - Products
+      x-mojo-to: v1#get_product_by_id
+  /async/transactions:
+    post:
+      description: Two transaction modes (asynchronous and synchronous) are available.
+        This endpoint lets you create a transaction in the **asynchronous** mode.
+        Note that the `auto_confirm` flag can be set to simultaneously create and
+        confirm a transaction in one step (i.e. HTTP request).
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_async_transactions_post_request'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: Transaction created
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Create a transaction asynchronously
+      tags:
+      - Transactions
+      x-mojo-to: v1#post_transaction
+  /sync/transactions:
+    post:
+      deprecated: true
+      description: Two transaction modes (asynchronous and synchronous) are available.
+        This endpoint lets you create a transaction in the **synchronous** mode. Note
+        that the `auto_confirm` flag can be set to simultaneously create and confirm
+        a transaction in one step (i.e. HTTP request).
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: Transaction created
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Create a transaction synchronously
+      tags:
+      - Transactions
+      x-mojo-to: v1#post_transaction
+  /transactions/{transaction_id}:
+    get:
+      description: This endpoint will return the details of the requested transaction.
+      parameters:
+      - explode: false
+        in: path
+        name: transaction_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/TransactionID'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_async_transactions_post_request'
+          description: successful operation
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: Transaction not found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Query a transaction by ID
+      tags:
+      - Transactions
+      x-mojo-to: v1#get_transactions
+  /transactions:
+    get:
+      description: "This endpoint will return a list of transactions matching the\
+        \ search criteria. Please note that when this endpoint is called without any\
+        \ parameters and/or if neither date ranges (i.e. `from_date`, `to_date`) nor\
+        \ `external_id` are specified, transactions created within the last 24 hours\
+        \ will be returned by default."
+      parameters:
+      - explode: true
+        in: query
+        name: external_id
+        required: false
+        schema:
+          minLength: 1
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: product_type
+        required: false
+        schema:
+          $ref: '#/components/schemas/ProductTypes'
+        style: form
+      - explode: true
+        in: query
+        name: service_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: country_iso_code
+        required: false
+        schema:
+          $ref: '#/components/schemas/ISO-3166-1_Alpha-3'
+        style: form
+      - explode: true
+        in: query
+        name: operator_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: status_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: credit_party_mobile_number
+        required: false
+        schema:
+          $ref: '#/components/schemas/E.164'
+        style: form
+      - explode: true
+        in: query
+        name: credit_party_account_number
+        required: false
+        schema:
+          $ref: '#/components/schemas/AccountNumber'
+        style: form
+      - description: "Starting date to filter transactions based on creation date,\
+          \ inclusive of the provided date. Please note that the window between `from_date`\
+          \ and `to_date` can not exceed 24 hours."
+        explode: true
+        in: query
+        name: from_date
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: "Ending date to filter transactions based on creation date, inclusive\
+          \ of the provided date. Please note that the window between `from_date`\
+          \ and `to_date` can not exceed 24 hours."
+        explode: true
+        in: query
+        name: to_date
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of records per page
+        explode: true
+        in: query
+        name: per_page
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/_async_transactions_post_request'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: Transaction not found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Query list of transactions
+      tags:
+      - Transactions
+      x-mojo-to: v1#get_transactions
+  /async/transactions/{transaction_id}/confirm:
+    post:
+      description: |
+        If an **asynchronous** transaction was created without setting the `auto_confirm` flag, this endpoint will have to be called to confirm the transaction. Once successfully confirmed, the transfer order will be submitted to the operator to be processed.
+
+        Please note that only unexpired transactions can be confirmed, as denoted in the `confirmation_expiration_date` field of the transaction. Beyond this, the only allowed change is to [cancel the transaction](/#tag/Transactions/paths/~1transactions~1{transaction_id}~1cancel/post), so as to release the held balance.
+      parameters:
+      - explode: false
+        in: path
+        name: transaction_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/TransactionID'
+        style: simple
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: Transaction confirmed
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Confirm a transaction asynchronously
+      tags:
+      - Transactions
+      x-mojo-to: v1#confirm_transaction
+  /sync/transactions/{transaction_id}/confirm:
+    post:
+      deprecated: true
+      description: |
+        If a **synchronous** transaction was created without setting the `auto_confirm` flag, this endpoint will have to be called to confirm the transaction. Once successfully confirmed, the transfer order will be submitted to the operator to be processed.
+
+        Please note that only unexpired transactions can be confirmed, as denoted in the `confirmation_expiration_date` field of the transaction. Beyond this, the only allowed change is to [cancel the transaction](/#tag/Transactions/paths/~1transactions~1{transaction_id}~1cancel/post), so as to release the held balance.
+      parameters:
+      - explode: false
+        in: path
+        name: transaction_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/TransactionID'
+        style: simple
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: Transaction confirmed
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Confirm a transaction synchronously
+      tags:
+      - Transactions
+      x-mojo-to: v1#confirm_transaction
+  /transactions/{transaction_id}/cancel:
+    post:
+      description: "If a transaction is still in the `CREATED` state, it has not yet\
+        \ been submitted to the receiving operator for processing. You can thus request\
+        \ to cancel such transactions by calling this endpoint."
+      parameters:
+      - explode: false
+        in: path
+        name: transaction_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/TransactionID'
+        style: simple
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: Transaction cancelled
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Cancel a transaction
+      tags:
+      - Transactions
+      x-mojo-to: v1#cancel_transaction
+  /balances:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: unit_type
+        required: false
+        schema:
+          $ref: '#/components/schemas/UnitTypes'
+        style: form
+      - explode: true
+        in: query
+        name: unit
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of records per page
+        explode: true
+        in: query
+        name: per_page
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Balance'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Retrieve balances
+      tags:
+      - Balances
+      x-mojo-to: v1#get_balances
+  /lookup/mobile-number/{mobile_number}:
+    get:
+      parameters:
+      - description: Page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of records per page
+        explode: true
+        in: query
+        name: per_page
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - explode: false
+        in: path
+        name: mobile_number
+        required: true
+        schema:
+          $ref: '#/components/schemas/E.164'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/_lookup_mobile_number__mobile_number__get_200_response_inner'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Look up operators for a given mobile number
+      tags:
+      - Mobile-Number
+      x-mojo-to: v1#lookup_mobile_number
+  /lookup/mobile-number:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_lookup_mobile_number_post_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/_lookup_mobile_number__mobile_number__get_200_response_inner'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Look up operators for a given mobile number
+      tags:
+      - Mobile-Number
+      x-mojo-to: v1#lookup_mobile_number
+  /lookup/statement-inquiry:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_lookup_statement_inquiry_post_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Statement'
+                type: array
+          description: successful operation
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+          description: default error response
+      summary: Inquire statements for a given account number
+      tags:
+      - Statement-Inquiry
+      x-mojo-to: v1#statement_inquiry
+components:
+  headers:
+    X-Total:
+      description: Total number of records
+      explode: false
+      schema:
+        type: integer
+      style: simple
+    X-Total-Pages:
+      description: Total number of pages
+      explode: false
+      schema:
+        type: integer
+      style: simple
+    X-Per-Page:
+      description: Number of records per page
+      explode: false
+      schema:
+        type: integer
+      style: simple
+    X-Page:
+      description: Current page number
+      explode: false
+      schema:
+        type: integer
+      style: simple
+    X-Next-Page:
+      description: Next page number (if any)
+      explode: false
+      schema:
+        type: integer
+      style: simple
+    X-Prev-Page:
+      description: Previous page number (if any)
+      explode: false
+      schema:
+        type: integer
+      style: simple
+  parameters:
+    Page:
+      description: Page number
+      explode: true
+      in: query
+      name: page
+      required: false
+      schema:
+        default: 1
+        format: int32
+        minimum: 1
+        type: integer
+      style: form
+    PerPage:
+      description: Number of records per page
+      explode: true
+      in: query
+      name: per_page
+      required: false
+      schema:
+        default: 50
+        format: int32
+        maximum: 100
+        minimum: 1
+        type: integer
+      style: form
+  schemas:
+    Service:
+      additionalProperties: false
+      example:
+        name: name
+        id: 1
+      properties:
+        id:
+          format: int32
+          minimum: 1
+          type: integer
+        name:
+          type: string
+      required:
+      - id
+      - name
+      type: object
+    Country:
+      additionalProperties: false
+      example:
+        regions:
+        - code: code
+          name: name
+        - code: code
+          name: name
+        name: name
+        iso_code: iso_code
+      properties:
+        name:
+          type: string
+        iso_code:
+          pattern: "^[A-Z]{3}$"
+          type: string
+        regions:
+          items:
+            $ref: '#/components/schemas/ServiceRegion'
+          nullable: true
+          type: array
+      required:
+      - iso_code
+      - name
+      - regions
+      type: object
+    Operator:
+      example:
+        country:
+          regions:
+          - code: code
+            name: name
+          - code: code
+            name: name
+          name: name
+          iso_code: iso_code
+        regions:
+        - code: code
+          name: name
+        - code: code
+          name: name
+        name: name
+        id: 1
+      properties:
+        id:
+          format: int32
+          minimum: 1
+          type: integer
+        name:
+          type: string
+        country:
+          $ref: '#/components/schemas/Country'
+        regions:
+          items:
+            $ref: '#/components/schemas/ServiceRegion'
+          nullable: true
+          type: array
+      required:
+      - country
+      - id
+      - name
+      - regions
+      type: object
+    ServiceRegion:
+      additionalProperties: false
+      example:
+        code: code
+        name: name
+      properties:
+        name:
+          type: string
+        code:
+          pattern: "^[A-Z]{2}-[A-Z0-9]{2,3}(?:-[A-Z]{2})?$"
+          type: string
+      required:
+      - code
+      - name
+      type: object
+    BenefitType:
+      additionalProperties: false
+      example:
+        name: null
+      properties:
+        name:
+          $ref: '#/components/schemas/BenefitTypes'
+      required:
+      - name
+      type: object
+    FixedBenefit:
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/BenefitTypes'
+        unit_type:
+          $ref: '#/components/schemas/BenefitUnitTypes'
+        unit:
+          type: string
+        amount:
+          $ref: '#/components/schemas/FixedBenefitAmount'
+        additional_information:
+          nullable: true
+          type: string
+      required:
+      - additional_information
+      - amount
+      - type
+      - unit
+      - unit_type
+      type: object
+    RangedBenefit:
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/BenefitTypes'
+        unit_type:
+          $ref: '#/components/schemas/BenefitUnitTypes'
+        unit:
+          type: string
+        amount:
+          $ref: '#/components/schemas/RangeBenefitAmountWithoutIncrement'
+        additional_information:
+          nullable: true
+          type: string
+      required:
+      - additional_information
+      - amount
+      - type
+      - unit
+      - unit_type
+      type: object
+    ProductBase:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          items:
+            $ref: '#/components/schemas/ProductTag'
+          maxItems: 1
+          minItems: 1
+          nullable: true
+          type: array
+          uniqueItems: true
+        service:
+          $ref: '#/components/schemas/Service'
+        operator:
+          $ref: '#/components/schemas/_operators_get_200_response_inner'
+        regions:
+          items:
+            $ref: '#/components/schemas/ServiceRegion'
+          nullable: true
+          type: array
+      required:
+      - description
+      - id
+      - name
+      - operator
+      - regions
+      - service
+      - tags
+      type: object
+    ProductFixedValueRecharge:
+      allOf:
+      - $ref: '#/components/schemas/ProductBase'
+      - $ref: '#/components/schemas/ProductFixedValueRecharge_allOf'
+      - additionalProperties: false
+        type: object
+    ProductRangedValueRecharge:
+      allOf:
+      - $ref: '#/components/schemas/ProductBase'
+      - $ref: '#/components/schemas/ProductRangedValueRecharge_allOf'
+      - additionalProperties: false
+        type: object
+    ProductFixedValuePinPurchase:
+      allOf:
+      - $ref: '#/components/schemas/ProductBase'
+      - $ref: '#/components/schemas/ProductFixedValuePinPurchase_allOf'
+      - additionalProperties: false
+        type: object
+    ProductRangedValuePinPurchase:
+      allOf:
+      - $ref: '#/components/schemas/ProductBase'
+      - $ref: '#/components/schemas/ProductRangedValuePinPurchase_allOf'
+      - additionalProperties: false
+        type: object
+    ProductRangedValuePayment:
+      allOf:
+      - $ref: '#/components/schemas/ProductBase'
+      - $ref: '#/components/schemas/ProductRangedValuePayment_allOf'
+      - additionalProperties: false
+        type: object
+    Product:
+      discriminator:
+        mapping:
+          FIXED_VALUE_RECHARGE: '#/components/schemas/ProductFixedValueRecharge'
+          RANGED_VALUE_RECHARGE: '#/components/schemas/ProductRangedValueRecharge'
+          FIXED_VALUE_PIN_PURCHASE: '#/components/schemas/ProductFixedValuePinPurchase'
+          RANGED_VALUE_PIN_PURCHASE: '#/components/schemas/ProductRangedValuePinPurchase'
+          RANGED_VALUE_PAYMENT: '#/components/schemas/ProductRangedValuePayment'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/ProductFixedValueRecharge'
+      - $ref: '#/components/schemas/ProductRangedValueRecharge'
+      - $ref: '#/components/schemas/ProductFixedValuePinPurchase'
+      - $ref: '#/components/schemas/ProductRangedValuePinPurchase'
+      - $ref: '#/components/schemas/ProductRangedValuePayment'
+    ProductPromotion:
+      additionalProperties: false
+      example:
+        end_date: 2000-01-23T04:56:07.000+00:00
+        terms: terms
+        description: description
+        id: 3
+        title: title
+        start_date: 2000-01-23T04:56:07.000+00:00
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        terms:
+          nullable: true
+          type: string
+        start_date:
+          format: date-time
+          type: string
+        end_date:
+          format: date-time
+          type: string
+      required:
+      - description
+      - end_date
+      - id
+      - start_date
+      - terms
+      - title
+      type: object
+    Promotion:
+      additionalProperties: false
+      example:
+        end_date: 2000-01-23T04:56:07.000+00:00
+        terms: terms
+        description: description
+        id: 0
+        title: title
+        operator:
+          country:
+            name: name
+            iso_code: iso_code
+          name: name
+          id: 1
+        start_date: 2000-01-23T04:56:07.000+00:00
+        products:
+        - name: name
+          description: description
+          id: 1
+          type: null
+        - name: name
+          description: description
+          id: 1
+          type: null
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        terms:
+          nullable: true
+          type: string
+        start_date:
+          format: date-time
+          type: string
+        end_date:
+          format: date-time
+          type: string
+        operator:
+          $ref: '#/components/schemas/Promotion_operator'
+        products:
+          items:
+            $ref: '#/components/schemas/Promotion_products_inner'
+          type: array
+      required:
+      - description
+      - end_date
+      - id
+      - operator
+      - products
+      - start_date
+      - terms
+      - title
+      type: object
+    Campaign:
+      additionalProperties: false
+      example:
+        end_date: 2000-01-23T04:56:07.000+00:00
+        terms: terms
+        description: description
+        id: 0
+        title: title
+        start_date: 2000-01-23T04:56:07.000+00:00
+        products:
+        - name: name
+          description: description
+          id: 6
+          type: null
+          operator:
+            country:
+              regions:
+              - code: code
+                name: name
+              - code: code
+                name: name
+              name: name
+              iso_code: iso_code
+            regions:
+            - code: code
+              name: name
+            - code: code
+              name: name
+            name: name
+            id: 1
+        - name: name
+          description: description
+          id: 6
+          type: null
+          operator:
+            country:
+              regions:
+              - code: code
+                name: name
+              - code: code
+                name: name
+              name: name
+              iso_code: iso_code
+            regions:
+            - code: code
+              name: name
+            - code: code
+              name: name
+            name: name
+            id: 1
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        terms:
+          nullable: true
+          type: string
+        start_date:
+          format: date-time
+          type: string
+        end_date:
+          format: date-time
+          type: string
+        products:
+          items:
+            $ref: '#/components/schemas/Campaign_products_inner'
+          type: array
+      required:
+      - description
+      - end_date
+      - id
+      - products
+      - start_date
+      - terms
+      - title
+      type: object
+    Transaction:
+      example:
+        benefits:
+        - null
+        - null
+        calculation_mode: ""
+        operator_reference: operator_reference
+        destination:
+          unit: unit
+          amount: 6.027456183070403
+          unit_type: null
+        external_id: ""
+        confirmation_date: 2000-01-23T04:56:07.000+00:00
+        source:
+          unit: unit
+          amount: 0.8008281904610115
+          unit_type: null
+        debit_party_identifier:
+          account_number: account_number
+          account_qualifier: account_qualifier
+          mobile_number: mobile_number
+        pin:
+          code: code
+          serial: serial
+        adjusted_values:
+          destination:
+            unit: unit
+            amount: 2.027123023002322
+            unit_type: null
+          source:
+            unit: unit
+            amount: 2.027123023002322
+            unit_type: null
+        product_id: ""
+        id: ""
+        prices:
+          wholesale:
+            unit: ""
+            amount: 5.637376656633329
+            fee: 2.3021358869347655
+            unit_type: null
+          retail:
+            unit: ""
+            amount: 7.061401241503109
+            fee: 9.301444243932576
+            unit_type: ""
+        requested_values:
+          destination:
+            unit: unit
+            amount: 2.027123023002322
+            unit_type: null
+          source:
+            unit: unit
+            amount: 2.027123023002322
+            unit_type: null
+        product: null
+        rates: null
+        creation_date: 2000-01-23T04:56:07.000+00:00
+        statement_identifier:
+          reference: reference
+          due_date: 2000-01-23
+        credit_party_identifier:
+          account_number: account_number
+          account_qualifier: account_qualifier
+          mobile_number: mobile_number
+        confirmation_expiration_date: 2000-01-23T04:56:07.000+00:00
+        promotions:
+        - end_date: 2000-01-23T04:56:07.000+00:00
+          terms: terms
+          description: description
+          id: 3
+          title: title
+          start_date: 2000-01-23T04:56:07.000+00:00
+        - end_date: 2000-01-23T04:56:07.000+00:00
+          terms: terms
+          description: description
+          id: 3
+          title: title
+          start_date: 2000-01-23T04:56:07.000+00:00
+        beneficiary:
+          address_country_iso_code: address_country_iso_code
+          nationality_country_iso_code: nationality_country_iso_code
+          address_postal_code: address_postal_code
+          address_text: address_text
+          last_name: last_name
+          middle_name: middle_name
+          mobile_number: mobile_number
+          first_name: first_name
+          email: email
+          address_city: address_city
+        sender:
+          address_country_iso_code: address_country_iso_code
+          nationality_country_iso_code: nationality_country_iso_code
+          address_postal_code: address_postal_code
+          address_text: address_text
+          last_name: last_name
+          middle_name: middle_name
+          mobile_number: mobile_number
+          first_name: first_name
+          email: email
+          address_city: address_city
+        auto_confirm: false
+        status:
+          id: 1
+          message: message
+          class:
+            id: 5
+            message: message
+      properties:
+        id:
+          allOf:
+          - $ref: '#/components/schemas/TransactionID'
+          - readOnly: true
+        external_id:
+          allOf:
+          - $ref: '#/components/schemas/NonEmptyString'
+          - maxLength: 40
+        creation_date:
+          format: date-time
+          readOnly: true
+          type: string
+        confirmation_expiration_date:
+          format: date-time
+          readOnly: true
+          type: string
+        confirmation_date:
+          format: date-time
+          readOnly: true
+          type: string
+        product_id:
+          allOf:
+          - $ref: '#/components/schemas/ProductID'
+          writeOnly: true
+        calculation_mode:
+          allOf:
+          - $ref: '#/components/schemas/CalculationModes'
+          - nullable: true
+          - writeOnly: true
+          - description: "Required when product type is either `RANGED_VALUE_RECHARGE`,\
+              \ `RANGED_VALUE_PIN_PURCHASE`, or `RANGED_VALUE_PAYMENT`"
+        source:
+          $ref: '#/components/schemas/Transaction_source'
+        destination:
+          $ref: '#/components/schemas/Transaction_destination'
+        auto_confirm:
+          default: false
+          type: boolean
+          writeOnly: true
+        status:
+          $ref: '#/components/schemas/Transaction_status'
+        operator_reference:
+          minLength: 1
+          nullable: true
+          pattern: \S
+          readOnly: true
+          type: string
+        pin:
+          $ref: '#/components/schemas/Transaction_pin'
+        product:
+          $ref: '#/components/schemas/Transaction_product'
+        prices:
+          $ref: '#/components/schemas/Transaction_prices'
+        rates:
+          $ref: '#/components/schemas/Transaction_rates'
+        benefits:
+          items:
+            $ref: '#/components/schemas/Transaction_benefits_inner'
+          nullable: true
+          readOnly: true
+          type: array
+        promotions:
+          items:
+            $ref: '#/components/schemas/ProductPromotion'
+          nullable: true
+          readOnly: true
+          type: array
+        requested_values:
+          $ref: '#/components/schemas/Transaction_requested_values'
+        adjusted_values:
+          $ref: '#/components/schemas/Transaction_requested_values'
+        sender:
+          $ref: '#/components/schemas/Transaction_sender'
+        beneficiary:
+          $ref: '#/components/schemas/Transaction_sender'
+        debit_party_identifier:
+          $ref: '#/components/schemas/Transaction_debit_party_identifier'
+        credit_party_identifier:
+          $ref: '#/components/schemas/Transaction_credit_party_identifier'
+        statement_identifier:
+          $ref: '#/components/schemas/Transaction_statement_identifier'
+      required:
+      - external_id
+      - product_id
+      type: object
+    Balance:
+      additionalProperties: false
+      example:
+        holding: 1.4658129805029452
+        unit: unit
+        available: 6.027456183070403
+        credit_limit: 5.962133916683182
+        id: 0
+        unit_type: null
+      properties:
+        id:
+          type: integer
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          type: string
+        available:
+          type: number
+        holding:
+          type: number
+        credit_limit:
+          type: number
+      required:
+      - available
+      - credit_limit
+      - holding
+      - id
+      - unit
+      - unit_type
+      type: object
+    Rates:
+      additionalProperties: false
+      properties:
+        base:
+          type: number
+        wholesale:
+          type: number
+        retail:
+          nullable: true
+          type: number
+      required:
+      - base
+      - retail
+      - wholesale
+      type: object
+    Statement:
+      example:
+        reference: reference
+        balance:
+          unit: unit
+          amount: 0.8008281904610115
+          unit_type: null
+        dates:
+          due: 2000-01-23
+          statement: 2000-01-23
+      properties:
+        reference:
+          minLength: 1
+          pattern: \S
+          type: string
+        dates:
+          $ref: '#/components/schemas/Statement_dates'
+        balance:
+          $ref: '#/components/schemas/Statement_balance'
+      required:
+      - balance
+      - dates
+      - reference
+      type: object
+    Errors:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/Errors_errors_inner'
+          type: array
+      required:
+      - errors
+      type: object
+    ISO-4217:
+      pattern: "^[A-Z]{3}$"
+      type: string
+    ISO-3166-1_Alpha-3:
+      pattern: "^[A-Z]{3}$"
+      type: string
+    X-ISO-3166-2:
+      pattern: "^[A-Z]{2}-[A-Z0-9]{2,3}(?:-[A-Z]{2})?$"
+      type: string
+    E.164:
+      pattern: "^\\+[1-9][0-9]{6,14}$"
+      type: string
+    PostalCode:
+      pattern: "^[A-Z0-9][A-Z0-9\\s\\-]*[A-Z0-9]$"
+      type: string
+    AccountNumber:
+      maxLength: 64
+      minLength: 1
+      pattern: \S
+      type: string
+    NonEmptyString:
+      minLength: 1
+      pattern: \S
+      type: string
+    ServiceID:
+      format: int32
+      minimum: 1
+      type: integer
+    OperatorID:
+      format: int32
+      minimum: 1
+      type: integer
+    ProductID:
+      format: int32
+      minimum: 1
+      type: integer
+    ProductTag:
+      maxLength: 16
+      minLength: 4
+      pattern: "^[A-Z0-9_]+"
+      type: string
+    PromotionID:
+      format: int32
+      minimum: 1
+      type: integer
+    CampaignID:
+      format: int32
+      minimum: 1
+      type: integer
+    TransactionID:
+      format: int64
+      minimum: 1
+      type: integer
+    FixedBenefitAmount:
+      additionalProperties: false
+      properties:
+        base:
+          type: number
+        promotion_bonus:
+          default: 0
+          type: number
+        total_excluding_tax:
+          type: number
+        total_including_tax:
+          type: number
+      required:
+      - base
+      - promotion_bonus
+      - total_excluding_tax
+      - total_including_tax
+      type: object
+    RangeBenefitAmountWithoutIncrement:
+      additionalProperties: false
+      properties:
+        base:
+          $ref: '#/components/schemas/RangeBenefitAmountWithoutIncrement_base'
+        promotion_bonus:
+          $ref: '#/components/schemas/RangeBenefitAmountWithoutIncrement_promotion_bonus'
+        total_excluding_tax:
+          $ref: '#/components/schemas/RangeBenefitAmountWithoutIncrement_base'
+        total_including_tax:
+          $ref: '#/components/schemas/RangeBenefitAmountWithoutIncrement_base'
+      required:
+      - base
+      - promotion_bonus
+      - total_excluding_tax
+      - total_including_tax
+      type: object
+    RangeWithoutIncrement:
+      properties:
+        min:
+          type: number
+        max:
+          type: number
+      type: object
+    Range:
+      properties:
+        min:
+          type: number
+        max:
+          type: number
+        increment:
+          type: number
+      type: object
+    PIN:
+      additionalProperties: false
+      properties:
+        usage_info:
+          items:
+            type: string
+          nullable: true
+          type: array
+        validity:
+          $ref: '#/components/schemas/PIN_validity'
+        terms:
+          minLength: 1
+          nullable: true
+          pattern: \S
+          type: string
+      required:
+      - terms
+      - usage_info
+      - validity
+      type: object
+    Payment:
+      additionalProperties: false
+      nullable: false
+      properties:
+        modes:
+          items:
+            $ref: '#/components/schemas/PaymentModes'
+          nullable: true
+          type: array
+        posting_period:
+          $ref: '#/components/schemas/Payment_posting_period'
+        supports_statement_inquiry:
+          type: boolean
+        required_inquiry_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        notes:
+          items:
+            type: string
+          nullable: true
+          type: array
+      required:
+      - modes
+      - posting_period
+      - supports_statement_inquiry
+      type: object
+    CalculationModes:
+      enum:
+      - SOURCE_AMOUNT
+      - DESTINATION_AMOUNT
+      type: string
+    AvailabilityZones:
+      enum:
+      - DOMESTIC
+      - INTERNATIONAL
+      type: string
+    PaymentModes:
+      enum:
+      - PARTIAL
+      - EXACT
+      - EXCESS
+      - PAST_DUE
+      type: string
+    UnitTypes:
+      enum:
+      - CURRENCY
+      type: string
+    ProductTypes:
+      enum:
+      - FIXED_VALUE_RECHARGE
+      - RANGED_VALUE_RECHARGE
+      - FIXED_VALUE_PIN_PURCHASE
+      - RANGED_VALUE_PIN_PURCHASE
+      - RANGED_VALUE_PAYMENT
+      type: string
+    BenefitTypes:
+      enum:
+      - TALKTIME
+      - DATA
+      - SMS
+      - PAYMENT
+      - CREDITS
+      type: string
+    BenefitUnitTypes:
+      enum:
+      - TIME
+      - DATA
+      - QUANTITY
+      - CURRENCY
+      type: string
+    TimeUnits:
+      enum:
+      - HOUR
+      - DAY
+      - WEEK
+      - MONTH
+      type: string
+    TimeUnitTypes:
+      enum:
+      - BUSINESS
+      - CALENDAR
+      type: string
+    _operators_get_200_response_inner:
+      allOf:
+      - $ref: '#/components/schemas/Operator'
+      - additionalProperties: false
+        type: object
+    _async_transactions_post_request_allOf:
+      properties:
+        callback_url:
+          format: uri
+          type: string
+    _async_transactions_post_request:
+      allOf:
+      - $ref: '#/components/schemas/Transaction'
+      - $ref: '#/components/schemas/_async_transactions_post_request_allOf'
+    _lookup_mobile_number__mobile_number__get_200_response_inner_allOf:
+      properties:
+        identified:
+          description: Indicates whether operator was identified as a direct match
+          type: boolean
+      required:
+      - identified
+      type: object
+    _lookup_mobile_number__mobile_number__get_200_response_inner:
+      allOf:
+      - $ref: '#/components/schemas/Operator'
+      - $ref: '#/components/schemas/_lookup_mobile_number__mobile_number__get_200_response_inner_allOf'
+      - additionalProperties: false
+        type: object
+    _lookup_mobile_number_post_request:
+      properties:
+        mobile_number:
+          pattern: "^\\+[1-9][0-9]{6,14}$"
+          type: string
+        page:
+          default: 1
+          description: Page number
+          format: int32
+          minimum: 1
+          type: integer
+        per_page:
+          default: 50
+          description: Number of records per page
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+      required:
+      - mobile_number
+      type: object
+    _lookup_statement_inquiry_post_request:
+      properties:
+        product_id:
+          format: int32
+          minimum: 1
+          type: integer
+        account_number:
+          maxLength: 64
+          minLength: 1
+          pattern: \S
+          type: string
+        account_qualifier:
+          minLength: 1
+          pattern: \S
+          type: string
+        page:
+          default: 1
+          description: Page number
+          format: int32
+          minimum: 1
+          type: integer
+        per_page:
+          default: 50
+          description: Number of records per page
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+      required:
+      - account_number
+      - product_id
+      type: object
+    ProductFixedValueRecharge_allOf_validity:
+      nullable: true
+      properties:
+        unit:
+          $ref: '#/components/schemas/TimeUnits'
+        quantity:
+          type: number
+      required:
+      - quantity
+      - unit
+      type: object
+      example: null
+    ProductFixedValueRecharge_allOf_source:
+      properties:
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          type: string
+        amount:
+          type: number
+      required:
+      - amount
+      - unit
+      - unit_type
+      type: object
+      example: null
+    ProductFixedValueRecharge_allOf_prices_wholesale:
+      properties:
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          type: string
+        amount:
+          type: number
+        fee:
+          type: number
+      required:
+      - amount
+      - fee
+      - unit
+      - unit_type
+      type: object
+      example: null
+    ProductFixedValueRecharge_allOf_prices_retail:
+      nullable: true
+      properties:
+        unit_type:
+          allOf:
+          - $ref: '#/components/schemas/UnitTypes'
+          - nullable: true
+        unit:
+          nullable: true
+          type: string
+        amount:
+          nullable: true
+          type: number
+        fee:
+          nullable: true
+          type: number
+      required:
+      - amount
+      - fee
+      - unit
+      - unit_type
+      type: object
+      example: null
+    ProductFixedValueRecharge_allOf_prices:
+      properties:
+        wholesale:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_prices_wholesale'
+        retail:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_prices_retail'
+      required:
+      - retail
+      - wholesale
+      type: object
+      example: null
+    ProductFixedValueRecharge_allOf:
+      properties:
+        type:
+          enum:
+          - FIXED_VALUE_RECHARGE
+          type: string
+        validity:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_validity'
+        required_debit_party_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_credit_party_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          type: array
+        required_sender_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_beneficiary_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_statement_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        availability_zones:
+          items:
+            $ref: '#/components/schemas/AvailabilityZones'
+          type: array
+        source:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_source'
+        destination:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_source'
+        prices:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_prices'
+        rates:
+          $ref: '#/components/schemas/Rates'
+        benefits:
+          items:
+            $ref: '#/components/schemas/FixedBenefit'
+          nullable: true
+          type: array
+        promotions:
+          items:
+            $ref: '#/components/schemas/ProductPromotion'
+          nullable: true
+          type: array
+      required:
+      - availability_zones
+      - benefits
+      - destination
+      - prices
+      - promotions
+      - rates
+      - required_beneficiary_fields
+      - required_credit_party_identifier_fields
+      - required_debit_party_identifier_fields
+      - required_sender_fields
+      - required_statement_identifier_fields
+      - source
+      - type
+      - validity
+      type: object
+      example: null
+    ProductRangedValueRecharge_allOf_source:
+      properties:
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          type: string
+        amount:
+          $ref: '#/components/schemas/RangeWithoutIncrement'
+      required:
+      - amount
+      - unit
+      - unit_type
+      type: object
+      example: null
+    ProductRangedValueRecharge_allOf_destination:
+      properties:
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          type: string
+        amount:
+          $ref: '#/components/schemas/Range'
+      required:
+      - amount
+      - unit
+      - unit_type
+      type: object
+      example: null
+    ProductRangedValueRecharge_allOf_prices_wholesale:
+      properties:
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          type: string
+        amount:
+          $ref: '#/components/schemas/RangeWithoutIncrement'
+        fee:
+          type: number
+      required:
+      - amount
+      - fee
+      - unit
+      - unit_type
+      type: object
+      example: null
+    ProductRangedValueRecharge_allOf_prices_retail:
+      nullable: true
+      properties:
+        unit_type:
+          allOf:
+          - $ref: '#/components/schemas/UnitTypes'
+          - nullable: true
+        unit:
+          nullable: true
+          type: string
+        amount:
+          allOf:
+          - $ref: '#/components/schemas/RangeWithoutIncrement'
+          - nullable: true
+        fee:
+          nullable: true
+          type: number
+      required:
+      - amount
+      - fee
+      - unit
+      - unit_type
+      type: object
+      example: null
+    ProductRangedValueRecharge_allOf_prices:
+      properties:
+        wholesale:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_prices_wholesale'
+        retail:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_prices_retail'
+      required:
+      - retail
+      - wholesale
+      type: object
+      example: null
+    ProductRangedValueRecharge_allOf:
+      properties:
+        type:
+          enum:
+          - RANGED_VALUE_RECHARGE
+          type: string
+        validity:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_validity'
+        required_debit_party_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_credit_party_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          type: array
+        required_sender_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_beneficiary_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_statement_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        accepted_calculation_modes:
+          items:
+            $ref: '#/components/schemas/CalculationModes'
+          type: array
+        availability_zones:
+          items:
+            $ref: '#/components/schemas/AvailabilityZones'
+          type: array
+        source:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_source'
+        destination:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_destination'
+        prices:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_prices'
+        rates:
+          $ref: '#/components/schemas/Rates'
+        benefits:
+          items:
+            $ref: '#/components/schemas/RangedBenefit'
+          nullable: true
+          type: array
+        promotions:
+          items:
+            $ref: '#/components/schemas/ProductPromotion'
+          nullable: true
+          type: array
+      required:
+      - accepted_calculation_modes
+      - availability_zones
+      - benefits
+      - destination
+      - prices
+      - promotions
+      - rates
+      - required_beneficiary_fields
+      - required_credit_party_identifier_fields
+      - required_debit_party_identifier_fields
+      - required_sender_fields
+      - required_statement_identifier_fields
+      - source
+      - type
+      - validity
+      type: object
+      example: null
+    ProductFixedValuePinPurchase_allOf:
+      properties:
+        type:
+          enum:
+          - FIXED_VALUE_PIN_PURCHASE
+          type: string
+        validity:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_validity'
+        required_debit_party_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_credit_party_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_sender_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_beneficiary_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_statement_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        availability_zones:
+          items:
+            $ref: '#/components/schemas/AvailabilityZones'
+          type: array
+        source:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_source'
+        destination:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_source'
+        prices:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_prices'
+        rates:
+          $ref: '#/components/schemas/Rates'
+        pin:
+          $ref: '#/components/schemas/PIN'
+        benefits:
+          items:
+            $ref: '#/components/schemas/FixedBenefit'
+          nullable: true
+          type: array
+        promotions:
+          items:
+            $ref: '#/components/schemas/ProductPromotion'
+          nullable: true
+          type: array
+      required:
+      - availability_zones
+      - benefits
+      - destination
+      - pin
+      - prices
+      - promotions
+      - rates
+      - required_beneficiary_fields
+      - required_credit_party_identifier_fields
+      - required_debit_party_identifier_fields
+      - required_sender_fields
+      - required_statement_identifier_fields
+      - source
+      - type
+      - validity
+      type: object
+      example: null
+    ProductRangedValuePinPurchase_allOf:
+      properties:
+        type:
+          enum:
+          - RANGED_VALUE_PIN_PURCHASE
+          type: string
+        validity:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_validity'
+        required_debit_party_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_credit_party_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_sender_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_beneficiary_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_statement_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        accepted_calculation_modes:
+          items:
+            $ref: '#/components/schemas/CalculationModes'
+          type: array
+        availability_zones:
+          items:
+            $ref: '#/components/schemas/AvailabilityZones'
+          type: array
+        source:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_source'
+        destination:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_destination'
+        prices:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_prices'
+        rates:
+          $ref: '#/components/schemas/Rates'
+        pin:
+          $ref: '#/components/schemas/PIN'
+        benefits:
+          items:
+            $ref: '#/components/schemas/RangedBenefit'
+          nullable: true
+          type: array
+        promotions:
+          items:
+            $ref: '#/components/schemas/ProductPromotion'
+          nullable: true
+          type: array
+      required:
+      - accepted_calculation_modes
+      - availability_zones
+      - benefits
+      - destination
+      - pin
+      - prices
+      - promotions
+      - rates
+      - required_beneficiary_fields
+      - required_credit_party_identifier_fields
+      - required_debit_party_identifier_fields
+      - required_sender_fields
+      - required_statement_identifier_fields
+      - source
+      - type
+      - validity
+      type: object
+      example: null
+    ProductRangedValuePayment_allOf:
+      properties:
+        type:
+          enum:
+          - RANGED_VALUE_PAYMENT
+          type: string
+        validity:
+          $ref: '#/components/schemas/ProductFixedValueRecharge_allOf_validity'
+        required_debit_party_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_credit_party_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          type: array
+        required_sender_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_beneficiary_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        required_statement_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
+        accepted_calculation_modes:
+          items:
+            $ref: '#/components/schemas/CalculationModes'
+          type: array
+        availability_zones:
+          items:
+            $ref: '#/components/schemas/AvailabilityZones'
+          type: array
+        source:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_source'
+        destination:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_destination'
+        prices:
+          $ref: '#/components/schemas/ProductRangedValueRecharge_allOf_prices'
+        rates:
+          $ref: '#/components/schemas/Rates'
+        payment:
+          $ref: '#/components/schemas/Payment'
+        benefits:
+          items:
+            $ref: '#/components/schemas/RangedBenefit'
+          nullable: true
+          type: array
+        promotions:
+          items:
+            $ref: '#/components/schemas/ProductPromotion'
+          nullable: true
+          type: array
+      required:
+      - accepted_calculation_modes
+      - availability_zones
+      - benefits
+      - destination
+      - payment
+      - prices
+      - promotions
+      - rates
+      - required_beneficiary_fields
+      - required_credit_party_identifier_fields
+      - required_debit_party_identifier_fields
+      - required_sender_fields
+      - required_statement_identifier_fields
+      - source
+      - type
+      - validity
+      type: object
+      example: null
+    Promotion_operator_country:
+      example:
+        name: name
+        iso_code: iso_code
+      properties:
+        name:
+          type: string
+        iso_code:
+          pattern: "^[A-Z]{3}$"
+          type: string
+      required:
+      - iso_code
+      - name
+      type: object
+    Promotion_operator:
+      example:
+        country:
+          name: name
+          iso_code: iso_code
+        name: name
+        id: 1
+      properties:
+        id:
+          format: int32
+          minimum: 1
+          type: integer
+        name:
+          type: string
+        country:
+          $ref: '#/components/schemas/Promotion_operator_country'
+      required:
+      - country
+      - id
+      - name
+      type: object
+    Promotion_products_inner:
+      example:
+        name: name
+        description: description
+        id: 1
+        type: null
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          $ref: '#/components/schemas/ProductTypes'
+      required:
+      - description
+      - id
+      - name
+      - type
+      type: object
+    Campaign_products_inner:
+      example:
+        name: name
+        description: description
+        id: 6
+        type: null
+        operator:
+          country:
+            regions:
+            - code: code
+              name: name
+            - code: code
+              name: name
+            name: name
+            iso_code: iso_code
+          regions:
+          - code: code
+            name: name
+          - code: code
+            name: name
+          name: name
+          id: 1
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          $ref: '#/components/schemas/ProductTypes'
+        operator:
+          $ref: '#/components/schemas/Operator'
+      required:
+      - description
+      - id
+      - name
+      - operator
+      - type
+      type: object
+    Transaction_source:
+      additionalProperties: false
+      description: Required for ranged value products and when `calculation_mode`
+        is set to `SOURCE_AMOUNT`
+      example:
+        unit: unit
+        amount: 0.8008281904610115
+        unit_type: null
+      nullable: true
+      properties:
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          minLength: 1
+          pattern: \S
+          type: string
+        amount:
+          type: number
+      required:
+      - amount
+      - unit
+      - unit_type
+      type: object
+      writeOnly: true
+    Transaction_destination:
+      additionalProperties: false
+      description: Required for ranged value products and when `calculation_mode`
+        is set to `DESTINATION_MODE`
+      example:
+        unit: unit
+        amount: 6.027456183070403
+        unit_type: null
+      nullable: true
+      properties:
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          minLength: 1
+          pattern: \S
+          type: string
+        amount:
+          type: number
+      required:
+      - amount
+      - unit
+      - unit_type
+      type: object
+      writeOnly: true
+    Transaction_status_class:
+      additionalProperties: false
+      example:
+        id: 5
+        message: message
+      properties:
+        id:
+          type: integer
+        message:
+          minLength: 1
+          pattern: \S
+          type: string
+      required:
+      - id
+      - message
+      type: object
+    Transaction_status:
+      example:
+        id: 1
+        message: message
+        class:
+          id: 5
+          message: message
+      properties:
+        id:
+          type: integer
+        message:
+          minLength: 1
+          pattern: \S
+          type: string
+        class:
+          $ref: '#/components/schemas/Transaction_status_class'
+      readOnly: true
+      type: object
+    Transaction_pin:
+      example:
+        code: code
+        serial: serial
+      nullable: true
+      properties:
+        code:
+          minLength: 1
+          nullable: true
+          pattern: \S
+          type: string
+        serial:
+          minLength: 1
+          nullable: true
+          pattern: \S
+          type: string
+      readOnly: true
+      required:
+      - code
+      - serial
+      type: object
+    Transaction_product_allOf_pin:
+      allOf:
+      - $ref: '#/components/schemas/PIN'
+      - nullable: true
+    Transaction_product_allOf:
+      properties:
+        pin:
+          $ref: '#/components/schemas/Transaction_product_allOf_pin'
+    Transaction_product:
+      allOf:
+      - $ref: '#/components/schemas/ProductBase'
+      - $ref: '#/components/schemas/Transaction_product_allOf'
+      - readOnly: true
+    Transaction_prices_wholesale:
+      additionalProperties: false
+      example:
+        unit: ""
+        amount: 5.637376656633329
+        fee: 2.3021358869347655
+        unit_type: null
+      properties:
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          allOf:
+          - $ref: '#/components/schemas/NonEmptyString'
+          - nullable: true
+        amount:
+          type: number
+        fee:
+          type: number
+      required:
+      - amount
+      - fee
+      - unit
+      - unit_type
+      type: object
+    Transaction_prices_retail:
+      additionalProperties: false
+      example:
+        unit: ""
+        amount: 7.061401241503109
+        fee: 9.301444243932576
+        unit_type: ""
+      nullable: true
+      properties:
+        unit_type:
+          allOf:
+          - $ref: '#/components/schemas/UnitTypes'
+          - nullable: true
+        unit:
+          allOf:
+          - $ref: '#/components/schemas/NonEmptyString'
+          - nullable: true
+        amount:
+          nullable: true
+          type: number
+        fee:
+          nullable: true
+          type: number
+      required:
+      - amount
+      - fee
+      - unit
+      - unit_type
+      type: object
+    Transaction_prices:
+      additionalProperties: false
+      example:
+        wholesale:
+          unit: ""
+          amount: 5.637376656633329
+          fee: 2.3021358869347655
+          unit_type: null
+        retail:
+          unit: ""
+          amount: 7.061401241503109
+          fee: 9.301444243932576
+          unit_type: ""
+      properties:
+        wholesale:
+          $ref: '#/components/schemas/Transaction_prices_wholesale'
+        retail:
+          $ref: '#/components/schemas/Transaction_prices_retail'
+      readOnly: true
+      required:
+      - retail
+      - wholesale
+      type: object
+    Transaction_rates:
+      allOf:
+      - $ref: '#/components/schemas/Rates'
+      - readOnly: true
+    Transaction_benefits_inner:
+      oneOf:
+      - $ref: '#/components/schemas/FixedBenefit'
+      - $ref: '#/components/schemas/RangedBenefit'
+    Transaction_requested_values_source:
+      additionalProperties: false
+      example:
+        unit: unit
+        amount: 2.027123023002322
+        unit_type: null
+      properties:
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          minLength: 1
+          pattern: \S
+          type: string
+        amount:
+          type: number
+      required:
+      - amount
+      - unit
+      - unit_type
+      type: object
+    Transaction_requested_values:
+      example:
+        destination:
+          unit: unit
+          amount: 2.027123023002322
+          unit_type: null
+        source:
+          unit: unit
+          amount: 2.027123023002322
+          unit_type: null
+      nullable: true
+      properties:
+        source:
+          $ref: '#/components/schemas/Transaction_requested_values_source'
+        destination:
+          $ref: '#/components/schemas/Transaction_requested_values_source'
+      readOnly: true
+      type: object
+    Transaction_sender:
+      example:
+        address_country_iso_code: address_country_iso_code
+        nationality_country_iso_code: nationality_country_iso_code
+        address_postal_code: address_postal_code
+        address_text: address_text
+        last_name: last_name
+        middle_name: middle_name
+        mobile_number: mobile_number
+        first_name: first_name
+        email: email
+        address_city: address_city
+      minProperties: 1
+      nullable: true
+      properties:
+        last_name:
+          minLength: 1
+          pattern: \S
+          type: string
+        first_name:
+          minLength: 1
+          pattern: \S
+          type: string
+        middle_name:
+          minLength: 1
+          pattern: \S
+          type: string
+        nationality_country_iso_code:
+          pattern: "^[A-Z]{3}$"
+          type: string
+        mobile_number:
+          pattern: "^\\+[1-9][0-9]{6,14}$"
+          type: string
+        email:
+          minLength: 1
+          pattern: \S
+          type: string
+        address_text:
+          minLength: 1
+          pattern: \S
+          type: string
+        address_city:
+          minLength: 1
+          pattern: \S
+          type: string
+        address_country_iso_code:
+          pattern: "^[A-Z]{3}$"
+          type: string
+        address_postal_code:
+          pattern: "^[A-Z0-9][A-Z0-9\\s\\-]*[A-Z0-9]$"
+          type: string
+      type: object
+    Transaction_debit_party_identifier:
+      example:
+        account_number: account_number
+        account_qualifier: account_qualifier
+        mobile_number: mobile_number
+      minProperties: 1
+      nullable: true
+      properties:
+        mobile_number:
+          pattern: "^\\+[1-9][0-9]{6,14}$"
+          type: string
+        account_number:
+          maxLength: 64
+          minLength: 1
+          pattern: \S
+          type: string
+        account_qualifier:
+          minLength: 1
+          pattern: \S
+          type: string
+      type: object
+    Transaction_credit_party_identifier:
+      example:
+        account_number: account_number
+        account_qualifier: account_qualifier
+        mobile_number: mobile_number
+      minProperties: 1
+      properties:
+        mobile_number:
+          pattern: "^\\+[1-9][0-9]{6,14}$"
+          type: string
+        account_number:
+          maxLength: 64
+          minLength: 1
+          pattern: \S
+          type: string
+        account_qualifier:
+          minLength: 1
+          pattern: \S
+          type: string
+      type: object
+    Transaction_statement_identifier:
+      example:
+        reference: reference
+        due_date: 2000-01-23
+      properties:
+        reference:
+          minLength: 1
+          pattern: \S
+          type: string
+        due_date:
+          format: date
+          type: string
+      type: object
+    Statement_dates:
+      example:
+        due: 2000-01-23
+        statement: 2000-01-23
+      properties:
+        due:
+          format: date
+          type: string
+        statement:
+          format: date
+          type: string
+      type: object
+    Statement_balance:
+      example:
+        unit: unit
+        amount: 0.8008281904610115
+        unit_type: null
+      properties:
+        unit_type:
+          $ref: '#/components/schemas/UnitTypes'
+        unit:
+          type: string
+        amount:
+          type: number
+      type: object
+    Errors_errors_inner:
+      additionalProperties: false
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    RangeBenefitAmountWithoutIncrement_base:
+      additionalProperties: false
+      properties:
+        min:
+          type: number
+        max:
+          type: number
+      required:
+      - max
+      - min
+      type: object
+    RangeBenefitAmountWithoutIncrement_promotion_bonus:
+      additionalProperties: false
+      properties:
+        min:
+          default: 0
+          type: number
+        max:
+          default: 0
+          type: number
+      required:
+      - max
+      - min
+      type: object
+    PIN_validity:
+      additionalProperties: false
+      nullable: true
+      properties:
+        unit:
+          $ref: '#/components/schemas/TimeUnits'
+        quantity:
+          type: number
+      required:
+      - quantity
+      - unit
+      type: object
+    Payment_posting_period:
+      additionalProperties: false
+      nullable: true
+      properties:
+        unit:
+          $ref: '#/components/schemas/TimeUnits'
+        quantity:
+          type: number
+        type:
+          $ref: '#/components/schemas/TimeUnitTypes'
+      required:
+      - quantity
+      - type
+      - unit
+      type: object
+  securitySchemes:
+    BasicAuth:
+      description: |
+        The Digital Value Services API requires requests to be authenticated through individualized API keys. You can view and manage your API keys in [DT Shop](https://dtshop.dtone.com/).
+
+        Your API keys carry many privileges, so please keep them secure! Do not share your secret API keys in publicly-accessible areas such as [GitHub](https://github.com/), client-side code, and so forth.
+
+        Authentication to the API is performed via [HTTP Basic Auth](https://tools.ietf.org/html/rfc7235). Provide your API key as the basic auth username value and your API secret as your password.
+
+        Except when site-to-site VPN is set up, all API requests must be made over [HTTPS](http://en.wikipedia.org/wiki/HTTP_Secure) with TLS 1.2.
+
+        On a side note, we strongly recommend securing your applications against common security flaws by employing best practices such as the [OWASP Top 10](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project).
+      scheme: basic
+      type: http
+x-tagGroups:
+- name: Discovery
+  tags:
+  - Services
+  - Countries
+  - Operators
+  - Benefits
+  - Promotions
+  - Campaigns
+  - Products
+- name: Transaction
+  tags:
+  - Transactions
+- name: Account
+  tags:
+  - Balances
+- name: Look-Up
+  tags:
+  - Mobile-Number
+  - Statement-Inquiry
