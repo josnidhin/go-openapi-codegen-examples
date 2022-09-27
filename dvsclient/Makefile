@@ -52,10 +52,13 @@ generate-dvsapi:
 	--env GO_POST_PROCESS_FILE="/usr/local/go/bin/gofmt -w" \
 	openapitools/openapi-generator-cli:v6.2.0 generate \
 	--enable-post-process-file \
+	--git-host github.com \
+	--git-user-id josnidhin \
+	--git-repo-id go-openapi-codegen-examples/dvsclient \
 	--input-spec /local/dvs-api-spec.json \
 	--generator-name go \
 	--package-name dvsapi \
-	--additional-properties structPrefix=true,enumClassPrefix=true \
+	--additional-properties structPrefix=true,enumClassPrefix=true,isGoSubmodule=true \
 	--output /local/dvsapi
 
 	sudo chown -R $(USER):$(USER) dvsapi
