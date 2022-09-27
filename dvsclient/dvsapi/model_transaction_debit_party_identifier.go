@@ -16,8 +16,8 @@ import (
 
 // TransactionDebitPartyIdentifier struct for TransactionDebitPartyIdentifier
 type TransactionDebitPartyIdentifier struct {
-	MobileNumber *string `json:"mobile_number,omitempty"`
-	AccountNumber *string `json:"account_number,omitempty"`
+	MobileNumber     *string `json:"mobile_number,omitempty"`
+	AccountNumber    *string `json:"account_number,omitempty"`
 	AccountQualifier *string `json:"account_qualifier,omitempty"`
 }
 
@@ -183,5 +183,3 @@ func (v *NullableTransactionDebitPartyIdentifier) UnmarshalJSON(src []byte) erro
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

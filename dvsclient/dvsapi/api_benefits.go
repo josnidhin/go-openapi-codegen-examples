@@ -18,15 +18,14 @@ import (
 	"net/url"
 )
 
-
 // BenefitsApiService BenefitsApi service
 type BenefitsApiService service
 
 type BenefitsApiBenefitTypesGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *BenefitsApiService
-	page *int32
-	perPage *int32
+	page       *int32
+	perPage    *int32
 }
 
 // Page number
@@ -48,24 +47,25 @@ func (r BenefitsApiBenefitTypesGetRequest) Execute() ([]BenefitType, *http.Respo
 /*
 BenefitTypesGet Retrieve list of benefit types
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return BenefitsApiBenefitTypesGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return BenefitsApiBenefitTypesGetRequest
 */
 func (a *BenefitsApiService) BenefitTypesGet(ctx context.Context) BenefitsApiBenefitTypesGetRequest {
 	return BenefitsApiBenefitTypesGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []BenefitType
+//
+//	@return []BenefitType
 func (a *BenefitsApiService) BenefitTypesGetExecute(r BenefitsApiBenefitTypesGetRequest) ([]BenefitType, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []BenefitType
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []BenefitType
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BenefitsApiService.BenefitTypesGet")
@@ -124,13 +124,13 @@ func (a *BenefitsApiService) BenefitTypesGetExecute(r BenefitsApiBenefitTypesGet
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

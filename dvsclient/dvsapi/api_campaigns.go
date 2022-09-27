@@ -19,12 +19,11 @@ import (
 	"strings"
 )
 
-
 // CampaignsApiService CampaignsApi service
 type CampaignsApiService service
 
 type CampaignsApiCampaignsCampaignIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *CampaignsApiService
 	campaignId int32
 }
@@ -36,26 +35,27 @@ func (r CampaignsApiCampaignsCampaignIdGetRequest) Execute() (*Campaign, *http.R
 /*
 CampaignsCampaignIdGet Retrieve campaign by ID
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param campaignId
- @return CampaignsApiCampaignsCampaignIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param campaignId
+	@return CampaignsApiCampaignsCampaignIdGetRequest
 */
 func (a *CampaignsApiService) CampaignsCampaignIdGet(ctx context.Context, campaignId int32) CampaignsApiCampaignsCampaignIdGetRequest {
 	return CampaignsApiCampaignsCampaignIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 		campaignId: campaignId,
 	}
 }
 
 // Execute executes the request
-//  @return Campaign
+//
+//	@return Campaign
 func (a *CampaignsApiService) CampaignsCampaignIdGetExecute(r CampaignsApiCampaignsCampaignIdGetRequest) (*Campaign, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Campaign
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Campaign
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CampaignsApiService.CampaignsCampaignIdGet")
@@ -122,13 +122,13 @@ func (a *CampaignsApiService) CampaignsCampaignIdGetExecute(r CampaignsApiCampai
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -145,13 +145,13 @@ func (a *CampaignsApiService) CampaignsCampaignIdGetExecute(r CampaignsApiCampai
 }
 
 type CampaignsApiCampaignsGetRequest struct {
-	ctx context.Context
-	ApiService *CampaignsApiService
-	page *int32
-	perPage *int32
+	ctx            context.Context
+	ApiService     *CampaignsApiService
+	page           *int32
+	perPage        *int32
 	countryIsoCode *string
-	operatorId *int32
-	productId *int32
+	operatorId     *int32
+	productId      *int32
 }
 
 // Page number
@@ -188,24 +188,25 @@ func (r CampaignsApiCampaignsGetRequest) Execute() ([]Campaign, *http.Response, 
 /*
 CampaignsGet Retrieve list of active campaigns
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return CampaignsApiCampaignsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return CampaignsApiCampaignsGetRequest
 */
 func (a *CampaignsApiService) CampaignsGet(ctx context.Context) CampaignsApiCampaignsGetRequest {
 	return CampaignsApiCampaignsGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []Campaign
+//
+//	@return []Campaign
 func (a *CampaignsApiService) CampaignsGetExecute(r CampaignsApiCampaignsGetRequest) ([]Campaign, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []Campaign
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Campaign
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CampaignsApiService.CampaignsGet")
@@ -273,13 +274,13 @@ func (a *CampaignsApiService) CampaignsGetExecute(r CampaignsApiCampaignsGetRequ
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

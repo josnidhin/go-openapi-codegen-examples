@@ -16,9 +16,9 @@ import (
 
 // Operator struct for Operator
 type Operator struct {
-	Id int32 `json:"id"`
-	Name string `json:"name"`
-	Country Country `json:"country"`
+	Id      int32           `json:"id"`
+	Name    string          `json:"name"`
+	Country Country         `json:"country"`
 	Regions []ServiceRegion `json:"regions"`
 }
 
@@ -193,5 +193,3 @@ func (v *NullableOperator) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

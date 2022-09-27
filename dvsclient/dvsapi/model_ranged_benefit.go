@@ -16,11 +16,11 @@ import (
 
 // RangedBenefit struct for RangedBenefit
 type RangedBenefit struct {
-	Type BenefitTypes `json:"type"`
-	UnitType BenefitUnitTypes `json:"unit_type"`
-	Unit string `json:"unit"`
-	Amount RangeBenefitAmountWithoutIncrement `json:"amount"`
-	AdditionalInformation NullableString `json:"additional_information"`
+	Type                  BenefitTypes                       `json:"type"`
+	UnitType              BenefitUnitTypes                   `json:"unit_type"`
+	Unit                  string                             `json:"unit"`
+	Amount                RangeBenefitAmountWithoutIncrement `json:"amount"`
+	AdditionalInformation NullableString                     `json:"additional_information"`
 }
 
 // NewRangedBenefit instantiates a new RangedBenefit object
@@ -222,5 +222,3 @@ func (v *NullableRangedBenefit) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

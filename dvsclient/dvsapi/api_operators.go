@@ -19,15 +19,14 @@ import (
 	"strings"
 )
 
-
 // OperatorsApiService OperatorsApi service
 type OperatorsApiService service
 
 type OperatorsApiOperatorsGetRequest struct {
-	ctx context.Context
-	ApiService *OperatorsApiService
-	page *int32
-	perPage *int32
+	ctx            context.Context
+	ApiService     *OperatorsApiService
+	page           *int32
+	perPage        *int32
 	countryIsoCode *string
 }
 
@@ -55,24 +54,25 @@ func (r OperatorsApiOperatorsGetRequest) Execute() ([]OperatorsGet200ResponseInn
 /*
 OperatorsGet Retrieve list of operators
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return OperatorsApiOperatorsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return OperatorsApiOperatorsGetRequest
 */
 func (a *OperatorsApiService) OperatorsGet(ctx context.Context) OperatorsApiOperatorsGetRequest {
 	return OperatorsApiOperatorsGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []OperatorsGet200ResponseInner
+//
+//	@return []OperatorsGet200ResponseInner
 func (a *OperatorsApiService) OperatorsGetExecute(r OperatorsApiOperatorsGetRequest) ([]OperatorsGet200ResponseInner, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []OperatorsGet200ResponseInner
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []OperatorsGet200ResponseInner
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OperatorsApiService.OperatorsGet")
@@ -134,13 +134,13 @@ func (a *OperatorsApiService) OperatorsGetExecute(r OperatorsApiOperatorsGetRequ
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -157,7 +157,7 @@ func (a *OperatorsApiService) OperatorsGetExecute(r OperatorsApiOperatorsGetRequ
 }
 
 type OperatorsApiOperatorsOperatorIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *OperatorsApiService
 	operatorId int32
 }
@@ -169,26 +169,27 @@ func (r OperatorsApiOperatorsOperatorIdGetRequest) Execute() (*OperatorsGet200Re
 /*
 OperatorsOperatorIdGet Retrieve operator by ID
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param operatorId
- @return OperatorsApiOperatorsOperatorIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param operatorId
+	@return OperatorsApiOperatorsOperatorIdGetRequest
 */
 func (a *OperatorsApiService) OperatorsOperatorIdGet(ctx context.Context, operatorId int32) OperatorsApiOperatorsOperatorIdGetRequest {
 	return OperatorsApiOperatorsOperatorIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 		operatorId: operatorId,
 	}
 }
 
 // Execute executes the request
-//  @return OperatorsGet200ResponseInner
+//
+//	@return OperatorsGet200ResponseInner
 func (a *OperatorsApiService) OperatorsOperatorIdGetExecute(r OperatorsApiOperatorsOperatorIdGetRequest) (*OperatorsGet200ResponseInner, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *OperatorsGet200ResponseInner
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *OperatorsGet200ResponseInner
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OperatorsApiService.OperatorsOperatorIdGet")
@@ -255,13 +256,13 @@ func (a *OperatorsApiService) OperatorsOperatorIdGetExecute(r OperatorsApiOperat
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

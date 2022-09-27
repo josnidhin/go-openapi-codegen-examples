@@ -20,13 +20,12 @@ import (
 	"time"
 )
 
-
 // TransactionsApiService TransactionsApi service
 type TransactionsApiService service
 
 type TransactionsApiAsyncTransactionsPostRequest struct {
-	ctx context.Context
-	ApiService *TransactionsApiService
+	ctx                          context.Context
+	ApiService                   *TransactionsApiService
 	asyncTransactionsPostRequest *AsyncTransactionsPostRequest
 }
 
@@ -44,24 +43,25 @@ AsyncTransactionsPost Create a transaction asynchronously
 
 Two transaction modes (asynchronous and synchronous) are available. This endpoint lets you create a transaction in the **asynchronous** mode. Note that the `auto_confirm` flag can be set to simultaneously create and confirm a transaction in one step (i.e. HTTP request).
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return TransactionsApiAsyncTransactionsPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return TransactionsApiAsyncTransactionsPostRequest
 */
 func (a *TransactionsApiService) AsyncTransactionsPost(ctx context.Context) TransactionsApiAsyncTransactionsPostRequest {
 	return TransactionsApiAsyncTransactionsPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return Transaction
+//
+//	@return Transaction
 func (a *TransactionsApiService) AsyncTransactionsPostExecute(r TransactionsApiAsyncTransactionsPostRequest) (*Transaction, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Transaction
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Transaction
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.AsyncTransactionsPost")
@@ -116,13 +116,13 @@ func (a *TransactionsApiService) AsyncTransactionsPostExecute(r TransactionsApiA
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -139,8 +139,8 @@ func (a *TransactionsApiService) AsyncTransactionsPostExecute(r TransactionsApiA
 }
 
 type TransactionsApiAsyncTransactionsTransactionIdConfirmPostRequest struct {
-	ctx context.Context
-	ApiService *TransactionsApiService
+	ctx           context.Context
+	ApiService    *TransactionsApiService
 	transactionId int64
 }
 
@@ -155,27 +155,27 @@ If an **asynchronous** transaction was created without setting the `auto_confirm
 
 Please note that only unexpired transactions can be confirmed, as denoted in the `confirmation_expiration_date` field of the transaction. Beyond this, the only allowed change is to [cancel the transaction](/#tag/Transactions/paths/~1transactions~1{transaction_id}~1cancel/post), so as to release the held balance.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param transactionId
- @return TransactionsApiAsyncTransactionsTransactionIdConfirmPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param transactionId
+	@return TransactionsApiAsyncTransactionsTransactionIdConfirmPostRequest
 */
 func (a *TransactionsApiService) AsyncTransactionsTransactionIdConfirmPost(ctx context.Context, transactionId int64) TransactionsApiAsyncTransactionsTransactionIdConfirmPostRequest {
 	return TransactionsApiAsyncTransactionsTransactionIdConfirmPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		transactionId: transactionId,
 	}
 }
 
 // Execute executes the request
-//  @return Transaction
+//
+//	@return Transaction
 func (a *TransactionsApiService) AsyncTransactionsTransactionIdConfirmPostExecute(r TransactionsApiAsyncTransactionsTransactionIdConfirmPostRequest) (*Transaction, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Transaction
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Transaction
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.AsyncTransactionsTransactionIdConfirmPost")
@@ -232,13 +232,13 @@ func (a *TransactionsApiService) AsyncTransactionsTransactionIdConfirmPostExecut
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -255,8 +255,8 @@ func (a *TransactionsApiService) AsyncTransactionsTransactionIdConfirmPostExecut
 }
 
 type TransactionsApiSyncTransactionsPostRequest struct {
-	ctx context.Context
-	ApiService *TransactionsApiService
+	ctx         context.Context
+	ApiService  *TransactionsApiService
 	transaction *Transaction
 }
 
@@ -274,27 +274,29 @@ SyncTransactionsPost Create a transaction synchronously
 
 Two transaction modes (asynchronous and synchronous) are available. This endpoint lets you create a transaction in the **synchronous** mode. Note that the `auto_confirm` flag can be set to simultaneously create and confirm a transaction in one step (i.e. HTTP request).
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return TransactionsApiSyncTransactionsPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return TransactionsApiSyncTransactionsPostRequest
 
 Deprecated
 */
 func (a *TransactionsApiService) SyncTransactionsPost(ctx context.Context) TransactionsApiSyncTransactionsPostRequest {
 	return TransactionsApiSyncTransactionsPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return Transaction
+//
+//	@return Transaction
+//
 // Deprecated
 func (a *TransactionsApiService) SyncTransactionsPostExecute(r TransactionsApiSyncTransactionsPostRequest) (*Transaction, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Transaction
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Transaction
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.SyncTransactionsPost")
@@ -349,13 +351,13 @@ func (a *TransactionsApiService) SyncTransactionsPostExecute(r TransactionsApiSy
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -372,8 +374,8 @@ func (a *TransactionsApiService) SyncTransactionsPostExecute(r TransactionsApiSy
 }
 
 type TransactionsApiSyncTransactionsTransactionIdConfirmPostRequest struct {
-	ctx context.Context
-	ApiService *TransactionsApiService
+	ctx           context.Context
+	ApiService    *TransactionsApiService
 	transactionId int64
 }
 
@@ -388,30 +390,31 @@ If a **synchronous** transaction was created without setting the `auto_confirm` 
 
 Please note that only unexpired transactions can be confirmed, as denoted in the `confirmation_expiration_date` field of the transaction. Beyond this, the only allowed change is to [cancel the transaction](/#tag/Transactions/paths/~1transactions~1{transaction_id}~1cancel/post), so as to release the held balance.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param transactionId
- @return TransactionsApiSyncTransactionsTransactionIdConfirmPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param transactionId
+	@return TransactionsApiSyncTransactionsTransactionIdConfirmPostRequest
 
 Deprecated
 */
 func (a *TransactionsApiService) SyncTransactionsTransactionIdConfirmPost(ctx context.Context, transactionId int64) TransactionsApiSyncTransactionsTransactionIdConfirmPostRequest {
 	return TransactionsApiSyncTransactionsTransactionIdConfirmPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		transactionId: transactionId,
 	}
 }
 
 // Execute executes the request
-//  @return Transaction
+//
+//	@return Transaction
+//
 // Deprecated
 func (a *TransactionsApiService) SyncTransactionsTransactionIdConfirmPostExecute(r TransactionsApiSyncTransactionsTransactionIdConfirmPostRequest) (*Transaction, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Transaction
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Transaction
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.SyncTransactionsTransactionIdConfirmPost")
@@ -468,13 +471,13 @@ func (a *TransactionsApiService) SyncTransactionsTransactionIdConfirmPostExecute
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -491,20 +494,20 @@ func (a *TransactionsApiService) SyncTransactionsTransactionIdConfirmPostExecute
 }
 
 type TransactionsApiTransactionsGetRequest struct {
-	ctx context.Context
-	ApiService *TransactionsApiService
-	externalId *string
-	productType *ProductTypes
-	serviceId *int32
-	countryIsoCode *string
-	operatorId *int32
-	statusId *int32
-	creditPartyMobileNumber *string
+	ctx                      context.Context
+	ApiService               *TransactionsApiService
+	externalId               *string
+	productType              *ProductTypes
+	serviceId                *int32
+	countryIsoCode           *string
+	operatorId               *int32
+	statusId                 *int32
+	creditPartyMobileNumber  *string
 	creditPartyAccountNumber *string
-	fromDate *time.Time
-	toDate *time.Time
-	page *int32
-	perPage *int32
+	fromDate                 *time.Time
+	toDate                   *time.Time
+	page                     *int32
+	perPage                  *int32
 }
 
 func (r TransactionsApiTransactionsGetRequest) ExternalId(externalId string) TransactionsApiTransactionsGetRequest {
@@ -580,24 +583,25 @@ TransactionsGet Query list of transactions
 
 This endpoint will return a list of transactions matching the search criteria. Please note that when this endpoint is called without any parameters and/or if neither date ranges (i.e. `from_date`, `to_date`) nor `external_id` are specified, transactions created within the last 24 hours will be returned by default.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return TransactionsApiTransactionsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return TransactionsApiTransactionsGetRequest
 */
 func (a *TransactionsApiService) TransactionsGet(ctx context.Context) TransactionsApiTransactionsGetRequest {
 	return TransactionsApiTransactionsGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []AsyncTransactionsPostRequest
+//
+//	@return []AsyncTransactionsPostRequest
 func (a *TransactionsApiService) TransactionsGetExecute(r TransactionsApiTransactionsGetRequest) ([]AsyncTransactionsPostRequest, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []AsyncTransactionsPostRequest
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []AsyncTransactionsPostRequest
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.TransactionsGet")
@@ -696,13 +700,13 @@ func (a *TransactionsApiService) TransactionsGetExecute(r TransactionsApiTransac
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -719,8 +723,8 @@ func (a *TransactionsApiService) TransactionsGetExecute(r TransactionsApiTransac
 }
 
 type TransactionsApiTransactionsTransactionIdCancelPostRequest struct {
-	ctx context.Context
-	ApiService *TransactionsApiService
+	ctx           context.Context
+	ApiService    *TransactionsApiService
 	transactionId int64
 }
 
@@ -733,26 +737,27 @@ TransactionsTransactionIdCancelPost Cancel a transaction
 
 If a transaction is still in the `CREATED` state, it has not yet been submitted to the receiving operator for processing. You can thus request to cancel such transactions by calling this endpoint.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param transactionId
- @return TransactionsApiTransactionsTransactionIdCancelPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param transactionId
+	@return TransactionsApiTransactionsTransactionIdCancelPostRequest
 */
 func (a *TransactionsApiService) TransactionsTransactionIdCancelPost(ctx context.Context, transactionId int64) TransactionsApiTransactionsTransactionIdCancelPostRequest {
 	return TransactionsApiTransactionsTransactionIdCancelPostRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		transactionId: transactionId,
 	}
 }
 
 // Execute executes the request
-//  @return Transaction
+//
+//	@return Transaction
 func (a *TransactionsApiService) TransactionsTransactionIdCancelPostExecute(r TransactionsApiTransactionsTransactionIdCancelPostRequest) (*Transaction, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Transaction
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Transaction
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.TransactionsTransactionIdCancelPost")
@@ -809,13 +814,13 @@ func (a *TransactionsApiService) TransactionsTransactionIdCancelPostExecute(r Tr
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -832,8 +837,8 @@ func (a *TransactionsApiService) TransactionsTransactionIdCancelPostExecute(r Tr
 }
 
 type TransactionsApiTransactionsTransactionIdGetRequest struct {
-	ctx context.Context
-	ApiService *TransactionsApiService
+	ctx           context.Context
+	ApiService    *TransactionsApiService
 	transactionId int64
 }
 
@@ -846,26 +851,27 @@ TransactionsTransactionIdGet Query a transaction by ID
 
 This endpoint will return the details of the requested transaction.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param transactionId
- @return TransactionsApiTransactionsTransactionIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param transactionId
+	@return TransactionsApiTransactionsTransactionIdGetRequest
 */
 func (a *TransactionsApiService) TransactionsTransactionIdGet(ctx context.Context, transactionId int64) TransactionsApiTransactionsTransactionIdGetRequest {
 	return TransactionsApiTransactionsTransactionIdGetRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		transactionId: transactionId,
 	}
 }
 
 // Execute executes the request
-//  @return AsyncTransactionsPostRequest
+//
+//	@return AsyncTransactionsPostRequest
 func (a *TransactionsApiService) TransactionsTransactionIdGetExecute(r TransactionsApiTransactionsTransactionIdGetRequest) (*AsyncTransactionsPostRequest, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AsyncTransactionsPostRequest
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AsyncTransactionsPostRequest
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.TransactionsTransactionIdGet")
@@ -932,13 +938,13 @@ func (a *TransactionsApiService) TransactionsTransactionIdGetExecute(r Transacti
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

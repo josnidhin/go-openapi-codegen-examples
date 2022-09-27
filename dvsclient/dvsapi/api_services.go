@@ -19,15 +19,14 @@ import (
 	"strings"
 )
 
-
 // ServicesApiService ServicesApi service
 type ServicesApiService service
 
 type ServicesApiServicesGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ServicesApiService
-	page *int32
-	perPage *int32
+	page       *int32
+	perPage    *int32
 }
 
 // Page number
@@ -49,24 +48,25 @@ func (r ServicesApiServicesGetRequest) Execute() ([]Service, *http.Response, err
 /*
 ServicesGet Retrieve list of services
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ServicesApiServicesGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ServicesApiServicesGetRequest
 */
 func (a *ServicesApiService) ServicesGet(ctx context.Context) ServicesApiServicesGetRequest {
 	return ServicesApiServicesGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []Service
+//
+//	@return []Service
 func (a *ServicesApiService) ServicesGetExecute(r ServicesApiServicesGetRequest) ([]Service, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []Service
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Service
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServicesApiService.ServicesGet")
@@ -125,13 +125,13 @@ func (a *ServicesApiService) ServicesGetExecute(r ServicesApiServicesGetRequest)
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -148,9 +148,9 @@ func (a *ServicesApiService) ServicesGetExecute(r ServicesApiServicesGetRequest)
 }
 
 type ServicesApiServicesServiceIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ServicesApiService
-	serviceId int32
+	serviceId  int32
 }
 
 func (r ServicesApiServicesServiceIdGetRequest) Execute() (*Service, *http.Response, error) {
@@ -160,26 +160,27 @@ func (r ServicesApiServicesServiceIdGetRequest) Execute() (*Service, *http.Respo
 /*
 ServicesServiceIdGet Retrieve service by ID
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param serviceId
- @return ServicesApiServicesServiceIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param serviceId
+	@return ServicesApiServicesServiceIdGetRequest
 */
 func (a *ServicesApiService) ServicesServiceIdGet(ctx context.Context, serviceId int32) ServicesApiServicesServiceIdGetRequest {
 	return ServicesApiServicesServiceIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		serviceId: serviceId,
+		ctx:        ctx,
+		serviceId:  serviceId,
 	}
 }
 
 // Execute executes the request
-//  @return Service
+//
+//	@return Service
 func (a *ServicesApiService) ServicesServiceIdGetExecute(r ServicesApiServicesServiceIdGetRequest) (*Service, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Service
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Service
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServicesApiService.ServicesServiceIdGet")
@@ -246,13 +247,13 @@ func (a *ServicesApiService) ServicesServiceIdGetExecute(r ServicesApiServicesSe
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

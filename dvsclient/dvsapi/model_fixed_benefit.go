@@ -16,11 +16,11 @@ import (
 
 // FixedBenefit struct for FixedBenefit
 type FixedBenefit struct {
-	Type BenefitTypes `json:"type"`
-	UnitType BenefitUnitTypes `json:"unit_type"`
-	Unit string `json:"unit"`
-	Amount FixedBenefitAmount `json:"amount"`
-	AdditionalInformation NullableString `json:"additional_information"`
+	Type                  BenefitTypes       `json:"type"`
+	UnitType              BenefitUnitTypes   `json:"unit_type"`
+	Unit                  string             `json:"unit"`
+	Amount                FixedBenefitAmount `json:"amount"`
+	AdditionalInformation NullableString     `json:"additional_information"`
 }
 
 // NewFixedBenefit instantiates a new FixedBenefit object
@@ -222,5 +222,3 @@ func (v *NullableFixedBenefit) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

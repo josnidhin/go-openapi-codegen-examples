@@ -20,9 +20,9 @@ type PaymentModes string
 
 // List of PaymentModes
 const (
-	PAYMENTMODES_PARTIAL PaymentModes = "PARTIAL"
-	PAYMENTMODES_EXACT PaymentModes = "EXACT"
-	PAYMENTMODES_EXCESS PaymentModes = "EXCESS"
+	PAYMENTMODES_PARTIAL  PaymentModes = "PARTIAL"
+	PAYMENTMODES_EXACT    PaymentModes = "EXACT"
+	PAYMENTMODES_EXCESS   PaymentModes = "EXCESS"
 	PAYMENTMODES_PAST_DUE PaymentModes = "PAST_DUE"
 )
 
@@ -112,4 +112,3 @@ func (v *NullablePaymentModes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

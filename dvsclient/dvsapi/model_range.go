@@ -16,8 +16,8 @@ import (
 
 // Range struct for Range
 type Range struct {
-	Min *float32 `json:"min,omitempty"`
-	Max *float32 `json:"max,omitempty"`
+	Min       *float32 `json:"min,omitempty"`
+	Max       *float32 `json:"max,omitempty"`
 	Increment *float32 `json:"increment,omitempty"`
 }
 
@@ -183,5 +183,3 @@ func (v *NullableRange) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -16,7 +16,7 @@ import (
 
 // TransactionRequestedValues struct for TransactionRequestedValues
 type TransactionRequestedValues struct {
-	Source *TransactionRequestedValuesSource `json:"source,omitempty"`
+	Source      *TransactionRequestedValuesSource `json:"source,omitempty"`
 	Destination *TransactionRequestedValuesSource `json:"destination,omitempty"`
 }
 
@@ -147,5 +147,3 @@ func (v *NullableTransactionRequestedValues) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

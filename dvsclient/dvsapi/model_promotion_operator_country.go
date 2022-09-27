@@ -16,7 +16,7 @@ import (
 
 // PromotionOperatorCountry struct for PromotionOperatorCountry
 type PromotionOperatorCountry struct {
-	Name string `json:"name"`
+	Name    string `json:"name"`
 	IsoCode string `json:"iso_code"`
 }
 
@@ -133,5 +133,3 @@ func (v *NullablePromotionOperatorCountry) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

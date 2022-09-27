@@ -16,8 +16,8 @@ import (
 
 // FixedBenefitAmount struct for FixedBenefitAmount
 type FixedBenefitAmount struct {
-	Base float32 `json:"base"`
-	PromotionBonus float32 `json:"promotion_bonus"`
+	Base              float32 `json:"base"`
+	PromotionBonus    float32 `json:"promotion_bonus"`
 	TotalExcludingTax float32 `json:"total_excluding_tax"`
 	TotalIncludingTax float32 `json:"total_including_tax"`
 }
@@ -193,5 +193,3 @@ func (v *NullableFixedBenefitAmount) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

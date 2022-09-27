@@ -16,8 +16,8 @@ import (
 
 // TransactionPrices struct for TransactionPrices
 type TransactionPrices struct {
-	Wholesale TransactionPricesWholesale `json:"wholesale"`
-	Retail NullableTransactionPricesRetail `json:"retail"`
+	Wholesale TransactionPricesWholesale      `json:"wholesale"`
+	Retail    NullableTransactionPricesRetail `json:"retail"`
 }
 
 // NewTransactionPrices instantiates a new TransactionPrices object
@@ -135,5 +135,3 @@ func (v *NullableTransactionPrices) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

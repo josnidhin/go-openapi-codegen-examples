@@ -17,8 +17,8 @@ import (
 // StatementBalance struct for StatementBalance
 type StatementBalance struct {
 	UnitType *UnitTypes `json:"unit_type,omitempty"`
-	Unit *string `json:"unit,omitempty"`
-	Amount *float32 `json:"amount,omitempty"`
+	Unit     *string    `json:"unit,omitempty"`
+	Amount   *float32   `json:"amount,omitempty"`
 }
 
 // NewStatementBalance instantiates a new StatementBalance object
@@ -183,5 +183,3 @@ func (v *NullableStatementBalance) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

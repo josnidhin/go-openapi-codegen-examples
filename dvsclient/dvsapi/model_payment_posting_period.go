@@ -16,9 +16,9 @@ import (
 
 // PaymentPostingPeriod struct for PaymentPostingPeriod
 type PaymentPostingPeriod struct {
-	Unit TimeUnits `json:"unit"`
-	Quantity float32 `json:"quantity"`
-	Type TimeUnitTypes `json:"type"`
+	Unit     TimeUnits     `json:"unit"`
+	Quantity float32       `json:"quantity"`
+	Type     TimeUnitTypes `json:"type"`
 }
 
 // NewPaymentPostingPeriod instantiates a new PaymentPostingPeriod object
@@ -162,5 +162,3 @@ func (v *NullablePaymentPostingPeriod) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

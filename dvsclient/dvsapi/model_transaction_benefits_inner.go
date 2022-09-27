@@ -17,7 +17,7 @@ import (
 
 // TransactionBenefitsInner - struct for TransactionBenefitsInner
 type TransactionBenefitsInner struct {
-	FixedBenefit *FixedBenefit
+	FixedBenefit  *FixedBenefit
 	RangedBenefit *RangedBenefit
 }
 
@@ -34,7 +34,6 @@ func RangedBenefitAsTransactionBenefitsInner(v *RangedBenefit) TransactionBenefi
 		RangedBenefit: v,
 	}
 }
-
 
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *TransactionBenefitsInner) UnmarshalJSON(data []byte) error {
@@ -93,7 +92,7 @@ func (src TransactionBenefitsInner) MarshalJSON() ([]byte, error) {
 }
 
 // Get the actual instance
-func (obj *TransactionBenefitsInner) GetActualInstance() (interface{}) {
+func (obj *TransactionBenefitsInner) GetActualInstance() interface{} {
 	if obj == nil {
 		return nil
 	}
@@ -144,5 +143,3 @@ func (v *NullableTransactionBenefitsInner) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

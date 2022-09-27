@@ -16,8 +16,8 @@ import (
 
 // PINValidity struct for PINValidity
 type PINValidity struct {
-	Unit TimeUnits `json:"unit"`
-	Quantity float32 `json:"quantity"`
+	Unit     TimeUnits `json:"unit"`
+	Quantity float32   `json:"quantity"`
 }
 
 // NewPINValidity instantiates a new PINValidity object
@@ -133,5 +133,3 @@ func (v *NullablePINValidity) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

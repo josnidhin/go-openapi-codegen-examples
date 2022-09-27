@@ -16,13 +16,13 @@ import (
 
 // ProductBase struct for ProductBase
 type ProductBase struct {
-	Id int32 `json:"id"`
-	Name string `json:"name"`
-	Description string `json:"description"`
-	Tags []string `json:"tags"`
-	Service Service `json:"service"`
-	Operator OperatorsGet200ResponseInner `json:"operator"`
-	Regions []ServiceRegion `json:"regions"`
+	Id          int32                        `json:"id"`
+	Name        string                       `json:"name"`
+	Description string                       `json:"description"`
+	Tags        []string                     `json:"tags"`
+	Service     Service                      `json:"service"`
+	Operator    OperatorsGet200ResponseInner `json:"operator"`
+	Regions     []ServiceRegion              `json:"regions"`
 }
 
 // NewProductBase instantiates a new ProductBase object
@@ -282,5 +282,3 @@ func (v *NullableProductBase) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

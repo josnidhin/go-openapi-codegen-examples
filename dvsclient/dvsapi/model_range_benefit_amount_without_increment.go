@@ -16,10 +16,10 @@ import (
 
 // RangeBenefitAmountWithoutIncrement struct for RangeBenefitAmountWithoutIncrement
 type RangeBenefitAmountWithoutIncrement struct {
-	Base RangeBenefitAmountWithoutIncrementBase `json:"base"`
-	PromotionBonus RangeBenefitAmountWithoutIncrementPromotionBonus `json:"promotion_bonus"`
-	TotalExcludingTax RangeBenefitAmountWithoutIncrementBase `json:"total_excluding_tax"`
-	TotalIncludingTax RangeBenefitAmountWithoutIncrementBase `json:"total_including_tax"`
+	Base              RangeBenefitAmountWithoutIncrementBase           `json:"base"`
+	PromotionBonus    RangeBenefitAmountWithoutIncrementPromotionBonus `json:"promotion_bonus"`
+	TotalExcludingTax RangeBenefitAmountWithoutIncrementBase           `json:"total_excluding_tax"`
+	TotalIncludingTax RangeBenefitAmountWithoutIncrementBase           `json:"total_including_tax"`
 }
 
 // NewRangeBenefitAmountWithoutIncrement instantiates a new RangeBenefitAmountWithoutIncrement object
@@ -191,5 +191,3 @@ func (v *NullableRangeBenefitAmountWithoutIncrement) UnmarshalJSON(src []byte) e
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

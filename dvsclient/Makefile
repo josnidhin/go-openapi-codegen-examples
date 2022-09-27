@@ -46,9 +46,12 @@ build:
 
 .PHONY: generate-dvsapi
 generate-dvsapi:
-	docker run -it --rm -v "$(PWD):/local" \
+	docker run -it --rm \
+	--volume "$(PWD):/local" \
+	--volume "/usr/local/go:/usr/local/go" \
 	--env GO_POST_PROCESS_FILE="/usr/local/go/bin/gofmt -w" \
 	openapitools/openapi-generator-cli:v6.2.0 generate \
+	--enable-post-process-file \
 	--input-spec /local/dvs-api-spec.json \
 	--generator-name go \
 	--package-name dvsapi \

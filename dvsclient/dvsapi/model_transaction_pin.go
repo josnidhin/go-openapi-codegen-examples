@@ -16,7 +16,7 @@ import (
 
 // TransactionPin struct for TransactionPin
 type TransactionPin struct {
-	Code NullableString `json:"code"`
+	Code   NullableString `json:"code"`
 	Serial NullableString `json:"serial"`
 }
 
@@ -137,5 +137,3 @@ func (v *NullableTransactionPin) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

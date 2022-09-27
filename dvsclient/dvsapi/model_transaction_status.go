@@ -16,9 +16,9 @@ import (
 
 // TransactionStatus struct for TransactionStatus
 type TransactionStatus struct {
-	Id *int32 `json:"id,omitempty"`
-	Message *string `json:"message,omitempty"`
-	Class *TransactionStatusClass `json:"class,omitempty"`
+	Id      *int32                  `json:"id,omitempty"`
+	Message *string                 `json:"message,omitempty"`
+	Class   *TransactionStatusClass `json:"class,omitempty"`
 }
 
 // NewTransactionStatus instantiates a new TransactionStatus object
@@ -183,5 +183,3 @@ func (v *NullableTransactionStatus) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

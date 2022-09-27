@@ -19,16 +19,15 @@ import (
 	"strings"
 )
 
-
 // MobileNumberApiService MobileNumberApi service
 type MobileNumberApiService service
 
 type MobileNumberApiLookupMobileNumberMobileNumberGetRequest struct {
-	ctx context.Context
-	ApiService *MobileNumberApiService
+	ctx          context.Context
+	ApiService   *MobileNumberApiService
 	mobileNumber string
-	page *int32
-	perPage *int32
+	page         *int32
+	perPage      *int32
 }
 
 // Page number
@@ -50,26 +49,27 @@ func (r MobileNumberApiLookupMobileNumberMobileNumberGetRequest) Execute() ([]Lo
 /*
 LookupMobileNumberMobileNumberGet Look up operators for a given mobile number
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param mobileNumber
- @return MobileNumberApiLookupMobileNumberMobileNumberGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param mobileNumber
+	@return MobileNumberApiLookupMobileNumberMobileNumberGetRequest
 */
 func (a *MobileNumberApiService) LookupMobileNumberMobileNumberGet(ctx context.Context, mobileNumber string) MobileNumberApiLookupMobileNumberMobileNumberGetRequest {
 	return MobileNumberApiLookupMobileNumberMobileNumberGetRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:   a,
+		ctx:          ctx,
 		mobileNumber: mobileNumber,
 	}
 }
 
 // Execute executes the request
-//  @return []LookupMobileNumberMobileNumberGet200ResponseInner
+//
+//	@return []LookupMobileNumberMobileNumberGet200ResponseInner
 func (a *MobileNumberApiService) LookupMobileNumberMobileNumberGetExecute(r MobileNumberApiLookupMobileNumberMobileNumberGetRequest) ([]LookupMobileNumberMobileNumberGet200ResponseInner, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []LookupMobileNumberMobileNumberGet200ResponseInner
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []LookupMobileNumberMobileNumberGet200ResponseInner
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MobileNumberApiService.LookupMobileNumberMobileNumberGet")
@@ -129,13 +129,13 @@ func (a *MobileNumberApiService) LookupMobileNumberMobileNumberGetExecute(r Mobi
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -152,8 +152,8 @@ func (a *MobileNumberApiService) LookupMobileNumberMobileNumberGetExecute(r Mobi
 }
 
 type MobileNumberApiLookupMobileNumberPostRequest struct {
-	ctx context.Context
-	ApiService *MobileNumberApiService
+	ctx                           context.Context
+	ApiService                    *MobileNumberApiService
 	lookupMobileNumberPostRequest *LookupMobileNumberPostRequest
 }
 
@@ -169,24 +169,25 @@ func (r MobileNumberApiLookupMobileNumberPostRequest) Execute() ([]LookupMobileN
 /*
 LookupMobileNumberPost Look up operators for a given mobile number
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return MobileNumberApiLookupMobileNumberPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return MobileNumberApiLookupMobileNumberPostRequest
 */
 func (a *MobileNumberApiService) LookupMobileNumberPost(ctx context.Context) MobileNumberApiLookupMobileNumberPostRequest {
 	return MobileNumberApiLookupMobileNumberPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []LookupMobileNumberMobileNumberGet200ResponseInner
+//
+//	@return []LookupMobileNumberMobileNumberGet200ResponseInner
 func (a *MobileNumberApiService) LookupMobileNumberPostExecute(r MobileNumberApiLookupMobileNumberPostRequest) ([]LookupMobileNumberMobileNumberGet200ResponseInner, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []LookupMobileNumberMobileNumberGet200ResponseInner
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []LookupMobileNumberMobileNumberGet200ResponseInner
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MobileNumberApiService.LookupMobileNumberPost")
@@ -244,13 +245,13 @@ func (a *MobileNumberApiService) LookupMobileNumberPostExecute(r MobileNumberApi
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

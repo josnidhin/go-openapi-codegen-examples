@@ -16,9 +16,9 @@ import (
 
 // LookupMobileNumberMobileNumberGet200ResponseInner struct for LookupMobileNumberMobileNumberGet200ResponseInner
 type LookupMobileNumberMobileNumberGet200ResponseInner struct {
-	Id int32 `json:"id"`
-	Name string `json:"name"`
-	Country Country `json:"country"`
+	Id      int32           `json:"id"`
+	Name    string          `json:"name"`
+	Country Country         `json:"country"`
 	Regions []ServiceRegion `json:"regions"`
 	// Indicates whether operator was identified as a direct match
 	Identified bool `json:"identified"`
@@ -223,5 +223,3 @@ func (v *NullableLookupMobileNumberMobileNumberGet200ResponseInner) UnmarshalJSO
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

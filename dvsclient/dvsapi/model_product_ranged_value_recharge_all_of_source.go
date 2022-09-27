@@ -16,9 +16,9 @@ import (
 
 // ProductRangedValueRechargeAllOfSource struct for ProductRangedValueRechargeAllOfSource
 type ProductRangedValueRechargeAllOfSource struct {
-	UnitType UnitTypes `json:"unit_type"`
-	Unit string `json:"unit"`
-	Amount RangeWithoutIncrement `json:"amount"`
+	UnitType UnitTypes             `json:"unit_type"`
+	Unit     string                `json:"unit"`
+	Amount   RangeWithoutIncrement `json:"amount"`
 }
 
 // NewProductRangedValueRechargeAllOfSource instantiates a new ProductRangedValueRechargeAllOfSource object
@@ -162,5 +162,3 @@ func (v *NullableProductRangedValueRechargeAllOfSource) UnmarshalJSON(src []byte
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

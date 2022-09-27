@@ -20,7 +20,7 @@ type CalculationModes string
 
 // List of CalculationModes
 const (
-	CALCULATIONMODES_SOURCE_AMOUNT CalculationModes = "SOURCE_AMOUNT"
+	CALCULATIONMODES_SOURCE_AMOUNT      CalculationModes = "SOURCE_AMOUNT"
 	CALCULATIONMODES_DESTINATION_AMOUNT CalculationModes = "DESTINATION_AMOUNT"
 )
 
@@ -108,4 +108,3 @@ func (v *NullableCalculationModes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

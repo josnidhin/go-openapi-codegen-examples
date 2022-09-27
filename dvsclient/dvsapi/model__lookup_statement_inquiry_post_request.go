@@ -16,8 +16,8 @@ import (
 
 // LookupStatementInquiryPostRequest struct for LookupStatementInquiryPostRequest
 type LookupStatementInquiryPostRequest struct {
-	ProductId int32 `json:"product_id"`
-	AccountNumber string `json:"account_number"`
+	ProductId        int32   `json:"product_id"`
+	AccountNumber    string  `json:"account_number"`
 	AccountQualifier *string `json:"account_qualifier,omitempty"`
 	// Page number
 	Page *int32 `json:"page,omitempty"`
@@ -251,5 +251,3 @@ func (v *NullableLookupStatementInquiryPostRequest) UnmarshalJSON(src []byte) er
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

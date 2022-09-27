@@ -16,28 +16,28 @@ import (
 
 // ProductFixedValuePinPurchase struct for ProductFixedValuePinPurchase
 type ProductFixedValuePinPurchase struct {
-	Id int32 `json:"id"`
-	Name string `json:"name"`
-	Description string `json:"description"`
-	Tags []string `json:"tags"`
-	Service Service `json:"service"`
-	Operator OperatorsGet200ResponseInner `json:"operator"`
-	Regions []ServiceRegion `json:"regions"`
-	Type string `json:"type"`
-	Validity NullableProductFixedValueRechargeAllOfValidity `json:"validity"`
-	RequiredDebitPartyIdentifierFields [][]string `json:"required_debit_party_identifier_fields"`
-	RequiredCreditPartyIdentifierFields [][]string `json:"required_credit_party_identifier_fields"`
-	RequiredSenderFields [][]string `json:"required_sender_fields"`
-	RequiredBeneficiaryFields [][]string `json:"required_beneficiary_fields"`
-	RequiredStatementIdentifierFields [][]string `json:"required_statement_identifier_fields"`
-	AvailabilityZones []AvailabilityZones `json:"availability_zones"`
-	Source ProductFixedValueRechargeAllOfSource `json:"source"`
-	Destination ProductFixedValueRechargeAllOfSource `json:"destination"`
-	Prices ProductFixedValueRechargeAllOfPrices `json:"prices"`
-	Rates Rates `json:"rates"`
-	Pin PIN `json:"pin"`
-	Benefits []FixedBenefit `json:"benefits"`
-	Promotions []ProductPromotion `json:"promotions"`
+	Id                                  int32                                          `json:"id"`
+	Name                                string                                         `json:"name"`
+	Description                         string                                         `json:"description"`
+	Tags                                []string                                       `json:"tags"`
+	Service                             Service                                        `json:"service"`
+	Operator                            OperatorsGet200ResponseInner                   `json:"operator"`
+	Regions                             []ServiceRegion                                `json:"regions"`
+	Type                                string                                         `json:"type"`
+	Validity                            NullableProductFixedValueRechargeAllOfValidity `json:"validity"`
+	RequiredDebitPartyIdentifierFields  [][]string                                     `json:"required_debit_party_identifier_fields"`
+	RequiredCreditPartyIdentifierFields [][]string                                     `json:"required_credit_party_identifier_fields"`
+	RequiredSenderFields                [][]string                                     `json:"required_sender_fields"`
+	RequiredBeneficiaryFields           [][]string                                     `json:"required_beneficiary_fields"`
+	RequiredStatementIdentifierFields   [][]string                                     `json:"required_statement_identifier_fields"`
+	AvailabilityZones                   []AvailabilityZones                            `json:"availability_zones"`
+	Source                              ProductFixedValueRechargeAllOfSource           `json:"source"`
+	Destination                         ProductFixedValueRechargeAllOfSource           `json:"destination"`
+	Prices                              ProductFixedValueRechargeAllOfPrices           `json:"prices"`
+	Rates                               Rates                                          `json:"rates"`
+	Pin                                 PIN                                            `json:"pin"`
+	Benefits                            []FixedBenefit                                 `json:"benefits"`
+	Promotions                          []ProductPromotion                             `json:"promotions"`
 }
 
 // NewProductFixedValuePinPurchase instantiates a new ProductFixedValuePinPurchase object
@@ -733,5 +733,3 @@ func (v *NullableProductFixedValuePinPurchase) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -16,9 +16,9 @@ import (
 
 // Statement struct for Statement
 type Statement struct {
-	Reference string `json:"reference"`
-	Dates StatementDates `json:"dates"`
-	Balance StatementBalance `json:"balance"`
+	Reference string           `json:"reference"`
+	Dates     StatementDates   `json:"dates"`
+	Balance   StatementBalance `json:"balance"`
 }
 
 // NewStatement instantiates a new Statement object
@@ -162,5 +162,3 @@ func (v *NullableStatement) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

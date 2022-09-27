@@ -16,22 +16,22 @@ import (
 
 // ProductRangedValuePinPurchaseAllOf struct for ProductRangedValuePinPurchaseAllOf
 type ProductRangedValuePinPurchaseAllOf struct {
-	Type string `json:"type"`
-	Validity NullableProductFixedValueRechargeAllOfValidity `json:"validity"`
-	RequiredDebitPartyIdentifierFields [][]string `json:"required_debit_party_identifier_fields"`
-	RequiredCreditPartyIdentifierFields [][]string `json:"required_credit_party_identifier_fields"`
-	RequiredSenderFields [][]string `json:"required_sender_fields"`
-	RequiredBeneficiaryFields [][]string `json:"required_beneficiary_fields"`
-	RequiredStatementIdentifierFields [][]string `json:"required_statement_identifier_fields"`
-	AcceptedCalculationModes []CalculationModes `json:"accepted_calculation_modes"`
-	AvailabilityZones []AvailabilityZones `json:"availability_zones"`
-	Source ProductRangedValueRechargeAllOfSource `json:"source"`
-	Destination ProductRangedValueRechargeAllOfDestination `json:"destination"`
-	Prices ProductRangedValueRechargeAllOfPrices `json:"prices"`
-	Rates Rates `json:"rates"`
-	Pin PIN `json:"pin"`
-	Benefits []RangedBenefit `json:"benefits"`
-	Promotions []ProductPromotion `json:"promotions"`
+	Type                                string                                         `json:"type"`
+	Validity                            NullableProductFixedValueRechargeAllOfValidity `json:"validity"`
+	RequiredDebitPartyIdentifierFields  [][]string                                     `json:"required_debit_party_identifier_fields"`
+	RequiredCreditPartyIdentifierFields [][]string                                     `json:"required_credit_party_identifier_fields"`
+	RequiredSenderFields                [][]string                                     `json:"required_sender_fields"`
+	RequiredBeneficiaryFields           [][]string                                     `json:"required_beneficiary_fields"`
+	RequiredStatementIdentifierFields   [][]string                                     `json:"required_statement_identifier_fields"`
+	AcceptedCalculationModes            []CalculationModes                             `json:"accepted_calculation_modes"`
+	AvailabilityZones                   []AvailabilityZones                            `json:"availability_zones"`
+	Source                              ProductRangedValueRechargeAllOfSource          `json:"source"`
+	Destination                         ProductRangedValueRechargeAllOfDestination     `json:"destination"`
+	Prices                              ProductRangedValueRechargeAllOfPrices          `json:"prices"`
+	Rates                               Rates                                          `json:"rates"`
+	Pin                                 PIN                                            `json:"pin"`
+	Benefits                            []RangedBenefit                                `json:"benefits"`
+	Promotions                          []ProductPromotion                             `json:"promotions"`
 }
 
 // NewProductRangedValuePinPurchaseAllOf instantiates a new ProductRangedValuePinPurchaseAllOf object
@@ -555,5 +555,3 @@ func (v *NullableProductRangedValuePinPurchaseAllOf) UnmarshalJSON(src []byte) e
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

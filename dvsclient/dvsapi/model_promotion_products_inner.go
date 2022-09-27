@@ -16,10 +16,10 @@ import (
 
 // PromotionProductsInner struct for PromotionProductsInner
 type PromotionProductsInner struct {
-	Id int32 `json:"id"`
-	Name string `json:"name"`
-	Description string `json:"description"`
-	Type ProductTypes `json:"type"`
+	Id          int32        `json:"id"`
+	Name        string       `json:"name"`
+	Description string       `json:"description"`
+	Type        ProductTypes `json:"type"`
 }
 
 // NewPromotionProductsInner instantiates a new PromotionProductsInner object
@@ -191,5 +191,3 @@ func (v *NullablePromotionProductsInner) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

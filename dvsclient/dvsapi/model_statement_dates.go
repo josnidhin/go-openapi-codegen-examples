@@ -16,7 +16,7 @@ import (
 
 // StatementDates struct for StatementDates
 type StatementDates struct {
-	Due *string `json:"due,omitempty"`
+	Due       *string `json:"due,omitempty"`
 	Statement *string `json:"statement,omitempty"`
 }
 
@@ -147,5 +147,3 @@ func (v *NullableStatementDates) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -18,17 +18,16 @@ import (
 	"net/url"
 )
 
-
 // BalancesApiService BalancesApi service
 type BalancesApiService service
 
 type BalancesApiBalancesGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *BalancesApiService
-	unitType *UnitTypes
-	unit *string
-	page *int32
-	perPage *int32
+	unitType   *UnitTypes
+	unit       *string
+	page       *int32
+	perPage    *int32
 }
 
 func (r BalancesApiBalancesGetRequest) UnitType(unitType UnitTypes) BalancesApiBalancesGetRequest {
@@ -60,24 +59,25 @@ func (r BalancesApiBalancesGetRequest) Execute() ([]Balance, *http.Response, err
 /*
 BalancesGet Retrieve balances
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return BalancesApiBalancesGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return BalancesApiBalancesGetRequest
 */
 func (a *BalancesApiService) BalancesGet(ctx context.Context) BalancesApiBalancesGetRequest {
 	return BalancesApiBalancesGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []Balance
+//
+//	@return []Balance
 func (a *BalancesApiService) BalancesGetExecute(r BalancesApiBalancesGetRequest) ([]Balance, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []Balance
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Balance
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BalancesApiService.BalancesGet")
@@ -142,13 +142,13 @@ func (a *BalancesApiService) BalancesGetExecute(r BalancesApiBalancesGetRequest)
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

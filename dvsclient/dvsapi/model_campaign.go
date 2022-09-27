@@ -17,13 +17,13 @@ import (
 
 // Campaign struct for Campaign
 type Campaign struct {
-	Id int32 `json:"id"`
-	Title string `json:"title"`
-	Description string `json:"description"`
-	Terms NullableString `json:"terms"`
-	StartDate time.Time `json:"start_date"`
-	EndDate time.Time `json:"end_date"`
-	Products []CampaignProductsInner `json:"products"`
+	Id          int32                   `json:"id"`
+	Title       string                  `json:"title"`
+	Description string                  `json:"description"`
+	Terms       NullableString          `json:"terms"`
+	StartDate   time.Time               `json:"start_date"`
+	EndDate     time.Time               `json:"end_date"`
+	Products    []CampaignProductsInner `json:"products"`
 }
 
 // NewCampaign instantiates a new Campaign object
@@ -281,5 +281,3 @@ func (v *NullableCampaign) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

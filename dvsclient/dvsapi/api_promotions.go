@@ -19,18 +19,17 @@ import (
 	"strings"
 )
 
-
 // PromotionsApiService PromotionsApi service
 type PromotionsApiService service
 
 type PromotionsApiPromotionsGetRequest struct {
-	ctx context.Context
-	ApiService *PromotionsApiService
-	page *int32
-	perPage *int32
+	ctx            context.Context
+	ApiService     *PromotionsApiService
+	page           *int32
+	perPage        *int32
 	countryIsoCode *string
-	operatorId *int32
-	productId *int32
+	operatorId     *int32
+	productId      *int32
 }
 
 // Page number
@@ -67,24 +66,25 @@ func (r PromotionsApiPromotionsGetRequest) Execute() ([]Promotion, *http.Respons
 /*
 PromotionsGet Retrieve list of promotions
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return PromotionsApiPromotionsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return PromotionsApiPromotionsGetRequest
 */
 func (a *PromotionsApiService) PromotionsGet(ctx context.Context) PromotionsApiPromotionsGetRequest {
 	return PromotionsApiPromotionsGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []Promotion
+//
+//	@return []Promotion
 func (a *PromotionsApiService) PromotionsGetExecute(r PromotionsApiPromotionsGetRequest) ([]Promotion, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []Promotion
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Promotion
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PromotionsApiService.PromotionsGet")
@@ -152,13 +152,13 @@ func (a *PromotionsApiService) PromotionsGetExecute(r PromotionsApiPromotionsGet
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -175,8 +175,8 @@ func (a *PromotionsApiService) PromotionsGetExecute(r PromotionsApiPromotionsGet
 }
 
 type PromotionsApiPromotionsPromotionIdGetRequest struct {
-	ctx context.Context
-	ApiService *PromotionsApiService
+	ctx         context.Context
+	ApiService  *PromotionsApiService
 	promotionId int32
 }
 
@@ -187,26 +187,27 @@ func (r PromotionsApiPromotionsPromotionIdGetRequest) Execute() (*Promotion, *ht
 /*
 PromotionsPromotionIdGet Retrieve promotion by ID
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param promotionId
- @return PromotionsApiPromotionsPromotionIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param promotionId
+	@return PromotionsApiPromotionsPromotionIdGetRequest
 */
 func (a *PromotionsApiService) PromotionsPromotionIdGet(ctx context.Context, promotionId int32) PromotionsApiPromotionsPromotionIdGetRequest {
 	return PromotionsApiPromotionsPromotionIdGetRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:  a,
+		ctx:         ctx,
 		promotionId: promotionId,
 	}
 }
 
 // Execute executes the request
-//  @return Promotion
+//
+//	@return Promotion
 func (a *PromotionsApiService) PromotionsPromotionIdGetExecute(r PromotionsApiPromotionsPromotionIdGetRequest) (*Promotion, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Promotion
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Promotion
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PromotionsApiService.PromotionsPromotionIdGet")
@@ -273,13 +274,13 @@ func (a *PromotionsApiService) PromotionsPromotionIdGetExecute(r PromotionsApiPr
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

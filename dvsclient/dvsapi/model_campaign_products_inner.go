@@ -16,11 +16,11 @@ import (
 
 // CampaignProductsInner struct for CampaignProductsInner
 type CampaignProductsInner struct {
-	Id int32 `json:"id"`
-	Name string `json:"name"`
-	Description string `json:"description"`
-	Type ProductTypes `json:"type"`
-	Operator Operator `json:"operator"`
+	Id          int32        `json:"id"`
+	Name        string       `json:"name"`
+	Description string       `json:"description"`
+	Type        ProductTypes `json:"type"`
+	Operator    Operator     `json:"operator"`
 }
 
 // NewCampaignProductsInner instantiates a new CampaignProductsInner object
@@ -220,5 +220,3 @@ func (v *NullableCampaignProductsInner) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

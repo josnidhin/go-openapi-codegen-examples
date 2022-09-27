@@ -16,7 +16,7 @@ import (
 
 // Service struct for Service
 type Service struct {
-	Id int32 `json:"id"`
+	Id   int32  `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -133,5 +133,3 @@ func (v *NullableService) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

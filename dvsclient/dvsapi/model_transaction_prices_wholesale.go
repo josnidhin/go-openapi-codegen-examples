@@ -17,9 +17,9 @@ import (
 // TransactionPricesWholesale struct for TransactionPricesWholesale
 type TransactionPricesWholesale struct {
 	UnitType UnitTypes `json:"unit_type"`
-	Unit string `json:"unit"`
-	Amount float32 `json:"amount"`
-	Fee float32 `json:"fee"`
+	Unit     string    `json:"unit"`
+	Amount   float32   `json:"amount"`
+	Fee      float32   `json:"fee"`
 }
 
 // NewTransactionPricesWholesale instantiates a new TransactionPricesWholesale object
@@ -191,5 +191,3 @@ func (v *NullableTransactionPricesWholesale) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

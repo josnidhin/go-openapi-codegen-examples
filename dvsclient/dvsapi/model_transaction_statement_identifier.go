@@ -17,7 +17,7 @@ import (
 // TransactionStatementIdentifier struct for TransactionStatementIdentifier
 type TransactionStatementIdentifier struct {
 	Reference *string `json:"reference,omitempty"`
-	DueDate *string `json:"due_date,omitempty"`
+	DueDate   *string `json:"due_date,omitempty"`
 }
 
 // NewTransactionStatementIdentifier instantiates a new TransactionStatementIdentifier object
@@ -147,5 +147,3 @@ func (v *NullableTransactionStatementIdentifier) UnmarshalJSON(src []byte) error
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

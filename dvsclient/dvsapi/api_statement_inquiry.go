@@ -18,13 +18,12 @@ import (
 	"net/url"
 )
 
-
 // StatementInquiryApiService StatementInquiryApi service
 type StatementInquiryApiService service
 
 type StatementInquiryApiLookupStatementInquiryPostRequest struct {
-	ctx context.Context
-	ApiService *StatementInquiryApiService
+	ctx                               context.Context
+	ApiService                        *StatementInquiryApiService
 	lookupStatementInquiryPostRequest *LookupStatementInquiryPostRequest
 }
 
@@ -40,24 +39,25 @@ func (r StatementInquiryApiLookupStatementInquiryPostRequest) Execute() ([]State
 /*
 LookupStatementInquiryPost Inquire statements for a given account number
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return StatementInquiryApiLookupStatementInquiryPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return StatementInquiryApiLookupStatementInquiryPostRequest
 */
 func (a *StatementInquiryApiService) LookupStatementInquiryPost(ctx context.Context) StatementInquiryApiLookupStatementInquiryPostRequest {
 	return StatementInquiryApiLookupStatementInquiryPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []Statement
+//
+//	@return []Statement
 func (a *StatementInquiryApiService) LookupStatementInquiryPostExecute(r StatementInquiryApiLookupStatementInquiryPostRequest) ([]Statement, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []Statement
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Statement
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "StatementInquiryApiService.LookupStatementInquiryPost")
@@ -115,13 +115,13 @@ func (a *StatementInquiryApiService) LookupStatementInquiryPostExecute(r Stateme
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

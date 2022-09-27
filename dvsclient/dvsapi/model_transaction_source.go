@@ -17,8 +17,8 @@ import (
 // TransactionSource Required for ranged value products and when `calculation_mode` is set to `SOURCE_AMOUNT`
 type TransactionSource struct {
 	UnitType UnitTypes `json:"unit_type"`
-	Unit string `json:"unit"`
-	Amount float32 `json:"amount"`
+	Unit     string    `json:"unit"`
+	Amount   float32   `json:"amount"`
 }
 
 // NewTransactionSource instantiates a new TransactionSource object
@@ -162,5 +162,3 @@ func (v *NullableTransactionSource) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

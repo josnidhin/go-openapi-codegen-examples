@@ -19,13 +19,12 @@ import (
 	"strings"
 )
 
-
 // CountriesApiService CountriesApi service
 type CountriesApiService service
 
 type CountriesApiCountriesCountryIsoCodeGetRequest struct {
-	ctx context.Context
-	ApiService *CountriesApiService
+	ctx            context.Context
+	ApiService     *CountriesApiService
 	countryIsoCode string
 }
 
@@ -36,26 +35,27 @@ func (r CountriesApiCountriesCountryIsoCodeGetRequest) Execute() (*Country, *htt
 /*
 CountriesCountryIsoCodeGet Retrieve country by ISO code
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param countryIsoCode
- @return CountriesApiCountriesCountryIsoCodeGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param countryIsoCode
+	@return CountriesApiCountriesCountryIsoCodeGetRequest
 */
 func (a *CountriesApiService) CountriesCountryIsoCodeGet(ctx context.Context, countryIsoCode string) CountriesApiCountriesCountryIsoCodeGetRequest {
 	return CountriesApiCountriesCountryIsoCodeGetRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:     a,
+		ctx:            ctx,
 		countryIsoCode: countryIsoCode,
 	}
 }
 
 // Execute executes the request
-//  @return Country
+//
+//	@return Country
 func (a *CountriesApiService) CountriesCountryIsoCodeGetExecute(r CountriesApiCountriesCountryIsoCodeGetRequest) (*Country, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Country
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Country
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CountriesApiService.CountriesCountryIsoCodeGet")
@@ -119,13 +119,13 @@ func (a *CountriesApiService) CountriesCountryIsoCodeGetExecute(r CountriesApiCo
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -142,10 +142,10 @@ func (a *CountriesApiService) CountriesCountryIsoCodeGetExecute(r CountriesApiCo
 }
 
 type CountriesApiCountriesGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *CountriesApiService
-	page *int32
-	perPage *int32
+	page       *int32
+	perPage    *int32
 }
 
 // Page number
@@ -167,24 +167,25 @@ func (r CountriesApiCountriesGetRequest) Execute() ([]Country, *http.Response, e
 /*
 CountriesGet Retrieve list of countries
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return CountriesApiCountriesGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return CountriesApiCountriesGetRequest
 */
 func (a *CountriesApiService) CountriesGet(ctx context.Context) CountriesApiCountriesGetRequest {
 	return CountriesApiCountriesGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []Country
+//
+//	@return []Country
 func (a *CountriesApiService) CountriesGetExecute(r CountriesApiCountriesGetRequest) ([]Country, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []Country
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Country
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CountriesApiService.CountriesGet")
@@ -243,13 +244,13 @@ func (a *CountriesApiService) CountriesGetExecute(r CountriesApiCountriesGetRequ
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

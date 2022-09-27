@@ -17,8 +17,8 @@ import (
 // TransactionRequestedValuesSource struct for TransactionRequestedValuesSource
 type TransactionRequestedValuesSource struct {
 	UnitType UnitTypes `json:"unit_type"`
-	Unit string `json:"unit"`
-	Amount float32 `json:"amount"`
+	Unit     string    `json:"unit"`
+	Amount   float32   `json:"amount"`
 }
 
 // NewTransactionRequestedValuesSource instantiates a new TransactionRequestedValuesSource object
@@ -162,5 +162,3 @@ func (v *NullableTransactionRequestedValuesSource) UnmarshalJSON(src []byte) err
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

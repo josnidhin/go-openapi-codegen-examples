@@ -17,32 +17,32 @@ import (
 
 // AsyncTransactionsPostRequest struct for AsyncTransactionsPostRequest
 type AsyncTransactionsPostRequest struct {
-	Id *int64 `json:"id,omitempty"`
-	ExternalId string `json:"external_id"`
-	CreationDate *time.Time `json:"creation_date,omitempty"`
-	ConfirmationExpirationDate *time.Time `json:"confirmation_expiration_date,omitempty"`
-	ConfirmationDate *time.Time `json:"confirmation_date,omitempty"`
-	ProductId int32 `json:"product_id"`
-	CalculationMode *CalculationModes `json:"calculation_mode,omitempty"`
-	Source NullableTransactionSource `json:"source,omitempty"`
-	Destination NullableTransactionDestination `json:"destination,omitempty"`
-	AutoConfirm *bool `json:"auto_confirm,omitempty"`
-	Status *TransactionStatus `json:"status,omitempty"`
-	OperatorReference NullableString `json:"operator_reference,omitempty"`
-	Pin NullableTransactionPin `json:"pin,omitempty"`
-	Product *TransactionProduct `json:"product,omitempty"`
-	Prices *TransactionPrices `json:"prices,omitempty"`
-	Rates *TransactionRates `json:"rates,omitempty"`
-	Benefits []TransactionBenefitsInner `json:"benefits,omitempty"`
-	Promotions []ProductPromotion `json:"promotions,omitempty"`
-	RequestedValues NullableTransactionRequestedValues `json:"requested_values,omitempty"`
-	AdjustedValues NullableTransactionRequestedValues `json:"adjusted_values,omitempty"`
-	Sender NullableTransactionSender `json:"sender,omitempty"`
-	Beneficiary NullableTransactionSender `json:"beneficiary,omitempty"`
-	DebitPartyIdentifier NullableTransactionDebitPartyIdentifier `json:"debit_party_identifier,omitempty"`
-	CreditPartyIdentifier *TransactionCreditPartyIdentifier `json:"credit_party_identifier,omitempty"`
-	StatementIdentifier *TransactionStatementIdentifier `json:"statement_identifier,omitempty"`
-	CallbackUrl *string `json:"callback_url,omitempty"`
+	Id                         *int64                                  `json:"id,omitempty"`
+	ExternalId                 string                                  `json:"external_id"`
+	CreationDate               *time.Time                              `json:"creation_date,omitempty"`
+	ConfirmationExpirationDate *time.Time                              `json:"confirmation_expiration_date,omitempty"`
+	ConfirmationDate           *time.Time                              `json:"confirmation_date,omitempty"`
+	ProductId                  int32                                   `json:"product_id"`
+	CalculationMode            *CalculationModes                       `json:"calculation_mode,omitempty"`
+	Source                     NullableTransactionSource               `json:"source,omitempty"`
+	Destination                NullableTransactionDestination          `json:"destination,omitempty"`
+	AutoConfirm                *bool                                   `json:"auto_confirm,omitempty"`
+	Status                     *TransactionStatus                      `json:"status,omitempty"`
+	OperatorReference          NullableString                          `json:"operator_reference,omitempty"`
+	Pin                        NullableTransactionPin                  `json:"pin,omitempty"`
+	Product                    *TransactionProduct                     `json:"product,omitempty"`
+	Prices                     *TransactionPrices                      `json:"prices,omitempty"`
+	Rates                      *TransactionRates                       `json:"rates,omitempty"`
+	Benefits                   []TransactionBenefitsInner              `json:"benefits,omitempty"`
+	Promotions                 []ProductPromotion                      `json:"promotions,omitempty"`
+	RequestedValues            NullableTransactionRequestedValues      `json:"requested_values,omitempty"`
+	AdjustedValues             NullableTransactionRequestedValues      `json:"adjusted_values,omitempty"`
+	Sender                     NullableTransactionSender               `json:"sender,omitempty"`
+	Beneficiary                NullableTransactionSender               `json:"beneficiary,omitempty"`
+	DebitPartyIdentifier       NullableTransactionDebitPartyIdentifier `json:"debit_party_identifier,omitempty"`
+	CreditPartyIdentifier      *TransactionCreditPartyIdentifier       `json:"credit_party_identifier,omitempty"`
+	StatementIdentifier        *TransactionStatementIdentifier         `json:"statement_identifier,omitempty"`
+	CallbackUrl                *string                                 `json:"callback_url,omitempty"`
 }
 
 // NewAsyncTransactionsPostRequest instantiates a new AsyncTransactionsPostRequest object
@@ -308,6 +308,7 @@ func (o *AsyncTransactionsPostRequest) HasSource() bool {
 func (o *AsyncTransactionsPostRequest) SetSource(v TransactionSource) {
 	o.Source.Set(&v)
 }
+
 // SetSourceNil sets the value for Source to be an explicit nil
 func (o *AsyncTransactionsPostRequest) SetSourceNil() {
 	o.Source.Set(nil)
@@ -350,6 +351,7 @@ func (o *AsyncTransactionsPostRequest) HasDestination() bool {
 func (o *AsyncTransactionsPostRequest) SetDestination(v TransactionDestination) {
 	o.Destination.Set(&v)
 }
+
 // SetDestinationNil sets the value for Destination to be an explicit nil
 func (o *AsyncTransactionsPostRequest) SetDestinationNil() {
 	o.Destination.Set(nil)
@@ -456,6 +458,7 @@ func (o *AsyncTransactionsPostRequest) HasOperatorReference() bool {
 func (o *AsyncTransactionsPostRequest) SetOperatorReference(v string) {
 	o.OperatorReference.Set(&v)
 }
+
 // SetOperatorReferenceNil sets the value for OperatorReference to be an explicit nil
 func (o *AsyncTransactionsPostRequest) SetOperatorReferenceNil() {
 	o.OperatorReference.Set(nil)
@@ -498,6 +501,7 @@ func (o *AsyncTransactionsPostRequest) HasPin() bool {
 func (o *AsyncTransactionsPostRequest) SetPin(v TransactionPin) {
 	o.Pin.Set(&v)
 }
+
 // SetPinNil sets the value for Pin to be an explicit nil
 func (o *AsyncTransactionsPostRequest) SetPinNil() {
 	o.Pin.Set(nil)
@@ -702,6 +706,7 @@ func (o *AsyncTransactionsPostRequest) HasRequestedValues() bool {
 func (o *AsyncTransactionsPostRequest) SetRequestedValues(v TransactionRequestedValues) {
 	o.RequestedValues.Set(&v)
 }
+
 // SetRequestedValuesNil sets the value for RequestedValues to be an explicit nil
 func (o *AsyncTransactionsPostRequest) SetRequestedValuesNil() {
 	o.RequestedValues.Set(nil)
@@ -744,6 +749,7 @@ func (o *AsyncTransactionsPostRequest) HasAdjustedValues() bool {
 func (o *AsyncTransactionsPostRequest) SetAdjustedValues(v TransactionRequestedValues) {
 	o.AdjustedValues.Set(&v)
 }
+
 // SetAdjustedValuesNil sets the value for AdjustedValues to be an explicit nil
 func (o *AsyncTransactionsPostRequest) SetAdjustedValuesNil() {
 	o.AdjustedValues.Set(nil)
@@ -786,6 +792,7 @@ func (o *AsyncTransactionsPostRequest) HasSender() bool {
 func (o *AsyncTransactionsPostRequest) SetSender(v TransactionSender) {
 	o.Sender.Set(&v)
 }
+
 // SetSenderNil sets the value for Sender to be an explicit nil
 func (o *AsyncTransactionsPostRequest) SetSenderNil() {
 	o.Sender.Set(nil)
@@ -828,6 +835,7 @@ func (o *AsyncTransactionsPostRequest) HasBeneficiary() bool {
 func (o *AsyncTransactionsPostRequest) SetBeneficiary(v TransactionSender) {
 	o.Beneficiary.Set(&v)
 }
+
 // SetBeneficiaryNil sets the value for Beneficiary to be an explicit nil
 func (o *AsyncTransactionsPostRequest) SetBeneficiaryNil() {
 	o.Beneficiary.Set(nil)
@@ -870,6 +878,7 @@ func (o *AsyncTransactionsPostRequest) HasDebitPartyIdentifier() bool {
 func (o *AsyncTransactionsPostRequest) SetDebitPartyIdentifier(v TransactionDebitPartyIdentifier) {
 	o.DebitPartyIdentifier.Set(&v)
 }
+
 // SetDebitPartyIdentifierNil sets the value for DebitPartyIdentifier to be an explicit nil
 func (o *AsyncTransactionsPostRequest) SetDebitPartyIdentifierNil() {
 	o.DebitPartyIdentifier.Set(nil)
@@ -1094,5 +1103,3 @@ func (v *NullableAsyncTransactionsPostRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

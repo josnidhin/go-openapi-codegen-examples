@@ -17,8 +17,8 @@ import (
 // TransactionDestination Required for ranged value products and when `calculation_mode` is set to `DESTINATION_MODE`
 type TransactionDestination struct {
 	UnitType UnitTypes `json:"unit_type"`
-	Unit string `json:"unit"`
-	Amount float32 `json:"amount"`
+	Unit     string    `json:"unit"`
+	Amount   float32   `json:"amount"`
 }
 
 // NewTransactionDestination instantiates a new TransactionDestination object
@@ -162,5 +162,3 @@ func (v *NullableTransactionDestination) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

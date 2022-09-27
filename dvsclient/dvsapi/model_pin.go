@@ -16,9 +16,9 @@ import (
 
 // PIN struct for PIN
 type PIN struct {
-	UsageInfo []string `json:"usage_info"`
-	Validity NullablePINValidity `json:"validity"`
-	Terms NullableString `json:"terms"`
+	UsageInfo []string            `json:"usage_info"`
+	Validity  NullablePINValidity `json:"validity"`
+	Terms     NullableString      `json:"terms"`
 }
 
 // NewPIN instantiates a new PIN object
@@ -168,5 +168,3 @@ func (v *NullablePIN) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -16,9 +16,9 @@ import (
 
 // TransactionRates struct for TransactionRates
 type TransactionRates struct {
-	Base float32 `json:"base"`
-	Wholesale float32 `json:"wholesale"`
-	Retail NullableFloat32 `json:"retail"`
+	Base      float32         `json:"base"`
+	Wholesale float32         `json:"wholesale"`
+	Retail    NullableFloat32 `json:"retail"`
 }
 
 // NewTransactionRates instantiates a new TransactionRates object
@@ -164,5 +164,3 @@ func (v *NullableTransactionRates) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -17,14 +17,14 @@ import (
 
 // Promotion struct for Promotion
 type Promotion struct {
-	Id int32 `json:"id"`
-	Title string `json:"title"`
-	Description string `json:"description"`
-	Terms NullableString `json:"terms"`
-	StartDate time.Time `json:"start_date"`
-	EndDate time.Time `json:"end_date"`
-	Operator PromotionOperator `json:"operator"`
-	Products []PromotionProductsInner `json:"products"`
+	Id          int32                    `json:"id"`
+	Title       string                   `json:"title"`
+	Description string                   `json:"description"`
+	Terms       NullableString           `json:"terms"`
+	StartDate   time.Time                `json:"start_date"`
+	EndDate     time.Time                `json:"end_date"`
+	Operator    PromotionOperator        `json:"operator"`
+	Products    []PromotionProductsInner `json:"products"`
 }
 
 // NewPromotion instantiates a new Promotion object
@@ -310,5 +310,3 @@ func (v *NullablePromotion) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

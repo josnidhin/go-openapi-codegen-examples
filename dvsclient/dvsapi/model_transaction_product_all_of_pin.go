@@ -16,9 +16,9 @@ import (
 
 // TransactionProductAllOfPin struct for TransactionProductAllOfPin
 type TransactionProductAllOfPin struct {
-	UsageInfo []string `json:"usage_info"`
-	Validity NullablePINValidity `json:"validity"`
-	Terms NullableString `json:"terms"`
+	UsageInfo []string            `json:"usage_info"`
+	Validity  NullablePINValidity `json:"validity"`
+	Terms     NullableString      `json:"terms"`
 }
 
 // NewTransactionProductAllOfPin instantiates a new TransactionProductAllOfPin object
@@ -168,5 +168,3 @@ func (v *NullableTransactionProductAllOfPin) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

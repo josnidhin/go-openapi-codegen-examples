@@ -17,9 +17,9 @@ import (
 // ProductFixedValueRechargeAllOfPricesWholesale struct for ProductFixedValueRechargeAllOfPricesWholesale
 type ProductFixedValueRechargeAllOfPricesWholesale struct {
 	UnitType UnitTypes `json:"unit_type"`
-	Unit string `json:"unit"`
-	Amount float32 `json:"amount"`
-	Fee float32 `json:"fee"`
+	Unit     string    `json:"unit"`
+	Amount   float32   `json:"amount"`
+	Fee      float32   `json:"fee"`
 }
 
 // NewProductFixedValueRechargeAllOfPricesWholesale instantiates a new ProductFixedValueRechargeAllOfPricesWholesale object
@@ -191,5 +191,3 @@ func (v *NullableProductFixedValueRechargeAllOfPricesWholesale) UnmarshalJSON(sr
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

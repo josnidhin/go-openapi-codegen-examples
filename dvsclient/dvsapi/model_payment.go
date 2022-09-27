@@ -16,11 +16,11 @@ import (
 
 // Payment struct for Payment
 type Payment struct {
-	Modes []PaymentModes `json:"modes"`
-	PostingPeriod NullablePaymentPostingPeriod `json:"posting_period"`
-	SupportsStatementInquiry bool `json:"supports_statement_inquiry"`
-	RequiredInquiryFields [][]string `json:"required_inquiry_fields,omitempty"`
-	Notes []string `json:"notes,omitempty"`
+	Modes                    []PaymentModes               `json:"modes"`
+	PostingPeriod            NullablePaymentPostingPeriod `json:"posting_period"`
+	SupportsStatementInquiry bool                         `json:"supports_statement_inquiry"`
+	RequiredInquiryFields    [][]string                   `json:"required_inquiry_fields,omitempty"`
+	Notes                    []string                     `json:"notes,omitempty"`
 }
 
 // NewPayment instantiates a new Payment object
@@ -240,5 +240,3 @@ func (v *NullablePayment) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

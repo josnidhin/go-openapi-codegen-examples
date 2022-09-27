@@ -16,8 +16,8 @@ import (
 
 // PromotionOperator struct for PromotionOperator
 type PromotionOperator struct {
-	Id int32 `json:"id"`
-	Name string `json:"name"`
+	Id      int32                    `json:"id"`
+	Name    string                   `json:"name"`
 	Country PromotionOperatorCountry `json:"country"`
 }
 
@@ -162,5 +162,3 @@ func (v *NullablePromotionOperator) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

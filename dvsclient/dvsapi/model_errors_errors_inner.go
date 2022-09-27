@@ -16,7 +16,7 @@ import (
 
 // ErrorsErrorsInner struct for ErrorsErrorsInner
 type ErrorsErrorsInner struct {
-	Code int32 `json:"code"`
+	Code    int32  `json:"code"`
 	Message string `json:"message"`
 }
 
@@ -133,5 +133,3 @@ func (v *NullableErrorsErrorsInner) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

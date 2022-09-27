@@ -20,9 +20,9 @@ type TimeUnits string
 
 // List of TimeUnits
 const (
-	TIMEUNITS_HOUR TimeUnits = "HOUR"
-	TIMEUNITS_DAY TimeUnits = "DAY"
-	TIMEUNITS_WEEK TimeUnits = "WEEK"
+	TIMEUNITS_HOUR  TimeUnits = "HOUR"
+	TIMEUNITS_DAY   TimeUnits = "DAY"
+	TIMEUNITS_WEEK  TimeUnits = "WEEK"
 	TIMEUNITS_MONTH TimeUnits = "MONTH"
 )
 
@@ -112,4 +112,3 @@ func (v *NullableTimeUnits) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

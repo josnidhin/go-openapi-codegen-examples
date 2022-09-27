@@ -16,7 +16,7 @@ import (
 
 // TransactionStatusClass struct for TransactionStatusClass
 type TransactionStatusClass struct {
-	Id int32 `json:"id"`
+	Id      int32  `json:"id"`
 	Message string `json:"message"`
 }
 
@@ -133,5 +133,3 @@ func (v *NullableTransactionStatusClass) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -16,16 +16,16 @@ import (
 
 // TransactionSender struct for TransactionSender
 type TransactionSender struct {
-	LastName *string `json:"last_name,omitempty"`
-	FirstName *string `json:"first_name,omitempty"`
-	MiddleName *string `json:"middle_name,omitempty"`
+	LastName                  *string `json:"last_name,omitempty"`
+	FirstName                 *string `json:"first_name,omitempty"`
+	MiddleName                *string `json:"middle_name,omitempty"`
 	NationalityCountryIsoCode *string `json:"nationality_country_iso_code,omitempty"`
-	MobileNumber *string `json:"mobile_number,omitempty"`
-	Email *string `json:"email,omitempty"`
-	AddressText *string `json:"address_text,omitempty"`
-	AddressCity *string `json:"address_city,omitempty"`
-	AddressCountryIsoCode *string `json:"address_country_iso_code,omitempty"`
-	AddressPostalCode *string `json:"address_postal_code,omitempty"`
+	MobileNumber              *string `json:"mobile_number,omitempty"`
+	Email                     *string `json:"email,omitempty"`
+	AddressText               *string `json:"address_text,omitempty"`
+	AddressCity               *string `json:"address_city,omitempty"`
+	AddressCountryIsoCode     *string `json:"address_country_iso_code,omitempty"`
+	AddressPostalCode         *string `json:"address_postal_code,omitempty"`
 }
 
 // NewTransactionSender instantiates a new TransactionSender object
@@ -435,5 +435,3 @@ func (v *NullableTransactionSender) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

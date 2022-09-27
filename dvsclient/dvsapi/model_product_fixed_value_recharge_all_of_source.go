@@ -17,8 +17,8 @@ import (
 // ProductFixedValueRechargeAllOfSource struct for ProductFixedValueRechargeAllOfSource
 type ProductFixedValueRechargeAllOfSource struct {
 	UnitType UnitTypes `json:"unit_type"`
-	Unit string `json:"unit"`
-	Amount float32 `json:"amount"`
+	Unit     string    `json:"unit"`
+	Amount   float32   `json:"amount"`
 }
 
 // NewProductFixedValueRechargeAllOfSource instantiates a new ProductFixedValueRechargeAllOfSource object
@@ -162,5 +162,3 @@ func (v *NullableProductFixedValueRechargeAllOfSource) UnmarshalJSON(src []byte)
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

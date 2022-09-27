@@ -105,5 +105,3 @@ func (v *NullableLookupMobileNumberMobileNumberGet200ResponseInnerAllOf) Unmarsh
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

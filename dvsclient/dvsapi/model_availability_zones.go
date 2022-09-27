@@ -20,7 +20,7 @@ type AvailabilityZones string
 
 // List of AvailabilityZones
 const (
-	AVAILABILITYZONES_DOMESTIC AvailabilityZones = "DOMESTIC"
+	AVAILABILITYZONES_DOMESTIC      AvailabilityZones = "DOMESTIC"
 	AVAILABILITYZONES_INTERNATIONAL AvailabilityZones = "INTERNATIONAL"
 )
 
@@ -108,4 +108,3 @@ func (v *NullableAvailabilityZones) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

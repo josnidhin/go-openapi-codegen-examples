@@ -20,8 +20,8 @@ type BenefitUnitTypes string
 
 // List of BenefitUnitTypes
 const (
-	BENEFITUNITTYPES_TIME BenefitUnitTypes = "TIME"
-	BENEFITUNITTYPES_DATA BenefitUnitTypes = "DATA"
+	BENEFITUNITTYPES_TIME     BenefitUnitTypes = "TIME"
+	BENEFITUNITTYPES_DATA     BenefitUnitTypes = "DATA"
 	BENEFITUNITTYPES_QUANTITY BenefitUnitTypes = "QUANTITY"
 	BENEFITUNITTYPES_CURRENCY BenefitUnitTypes = "CURRENCY"
 )
@@ -112,4 +112,3 @@ func (v *NullableBenefitUnitTypes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

@@ -17,11 +17,11 @@ import (
 
 // Product - struct for Product
 type Product struct {
-	ProductFixedValuePinPurchase *ProductFixedValuePinPurchase
-	ProductFixedValueRecharge *ProductFixedValueRecharge
-	ProductRangedValuePayment *ProductRangedValuePayment
+	ProductFixedValuePinPurchase  *ProductFixedValuePinPurchase
+	ProductFixedValueRecharge     *ProductFixedValueRecharge
+	ProductRangedValuePayment     *ProductRangedValuePayment
 	ProductRangedValuePinPurchase *ProductRangedValuePinPurchase
-	ProductRangedValueRecharge *ProductRangedValueRecharge
+	ProductRangedValueRecharge    *ProductRangedValueRecharge
 }
 
 // ProductFixedValuePinPurchaseAsProduct is a convenience function that returns ProductFixedValuePinPurchase wrapped in Product
@@ -58,7 +58,6 @@ func ProductRangedValueRechargeAsProduct(v *ProductRangedValueRecharge) Product 
 		ProductRangedValueRecharge: v,
 	}
 }
-
 
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *Product) UnmarshalJSON(data []byte) error {
@@ -171,7 +170,7 @@ func (src Product) MarshalJSON() ([]byte, error) {
 }
 
 // Get the actual instance
-func (obj *Product) GetActualInstance() (interface{}) {
+func (obj *Product) GetActualInstance() interface{} {
 	if obj == nil {
 		return nil
 	}
@@ -234,5 +233,3 @@ func (v *NullableProduct) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

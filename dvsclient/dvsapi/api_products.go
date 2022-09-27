@@ -19,22 +19,21 @@ import (
 	"strings"
 )
 
-
 // ProductsApiService ProductsApi service
 type ProductsApiService service
 
 type ProductsApiProductsGetRequest struct {
-	ctx context.Context
-	ApiService *ProductsApiService
-	type_ *ProductTypes
-	serviceId *int32
-	tags *[]string
+	ctx            context.Context
+	ApiService     *ProductsApiService
+	type_          *ProductTypes
+	serviceId      *int32
+	tags           *[]string
 	countryIsoCode *string
-	operatorId *int32
-	region *string
-	benefitTypes *[]BenefitTypes
-	page *int32
-	perPage *int32
+	operatorId     *int32
+	region         *string
+	benefitTypes   *[]BenefitTypes
+	page           *int32
+	perPage        *int32
 }
 
 func (r ProductsApiProductsGetRequest) Type_(type_ ProductTypes) ProductsApiProductsGetRequest {
@@ -91,24 +90,25 @@ func (r ProductsApiProductsGetRequest) Execute() ([]Product, *http.Response, err
 /*
 ProductsGet Retrieve list of products
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ProductsApiProductsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ProductsApiProductsGetRequest
 */
 func (a *ProductsApiService) ProductsGet(ctx context.Context) ProductsApiProductsGetRequest {
 	return ProductsApiProductsGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []Product
+//
+//	@return []Product
 func (a *ProductsApiService) ProductsGetExecute(r ProductsApiProductsGetRequest) ([]Product, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []Product
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Product
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductsApiService.ProductsGet")
@@ -188,13 +188,13 @@ func (a *ProductsApiService) ProductsGetExecute(r ProductsApiProductsGetRequest)
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -211,9 +211,9 @@ func (a *ProductsApiService) ProductsGetExecute(r ProductsApiProductsGetRequest)
 }
 
 type ProductsApiProductsProductIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ProductsApiService
-	productId int32
+	productId  int32
 }
 
 func (r ProductsApiProductsProductIdGetRequest) Execute() (*Product, *http.Response, error) {
@@ -223,26 +223,27 @@ func (r ProductsApiProductsProductIdGetRequest) Execute() (*Product, *http.Respo
 /*
 ProductsProductIdGet Retrieve product by ID
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param productId
- @return ProductsApiProductsProductIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param productId
+	@return ProductsApiProductsProductIdGetRequest
 */
 func (a *ProductsApiService) ProductsProductIdGet(ctx context.Context, productId int32) ProductsApiProductsProductIdGetRequest {
 	return ProductsApiProductsProductIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		productId: productId,
+		ctx:        ctx,
+		productId:  productId,
 	}
 }
 
 // Execute executes the request
-//  @return Product
+//
+//	@return Product
 func (a *ProductsApiService) ProductsProductIdGetExecute(r ProductsApiProductsProductIdGetRequest) (*Product, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Product
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Product
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductsApiService.ProductsProductIdGet")
@@ -309,13 +310,13 @@ func (a *ProductsApiService) ProductsProductIdGetExecute(r ProductsApiProductsPr
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

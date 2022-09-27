@@ -16,12 +16,12 @@ import (
 
 // Balance struct for Balance
 type Balance struct {
-	Id int32 `json:"id"`
-	UnitType UnitTypes `json:"unit_type"`
-	Unit string `json:"unit"`
-	Available float32 `json:"available"`
-	Holding float32 `json:"holding"`
-	CreditLimit float32 `json:"credit_limit"`
+	Id          int32     `json:"id"`
+	UnitType    UnitTypes `json:"unit_type"`
+	Unit        string    `json:"unit"`
+	Available   float32   `json:"available"`
+	Holding     float32   `json:"holding"`
+	CreditLimit float32   `json:"credit_limit"`
 }
 
 // NewBalance instantiates a new Balance object
@@ -249,5 +249,3 @@ func (v *NullableBalance) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

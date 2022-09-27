@@ -16,9 +16,9 @@ import (
 
 // OperatorsGet200ResponseInner struct for OperatorsGet200ResponseInner
 type OperatorsGet200ResponseInner struct {
-	Id int32 `json:"id"`
-	Name string `json:"name"`
-	Country Country `json:"country"`
+	Id      int32           `json:"id"`
+	Name    string          `json:"name"`
+	Country Country         `json:"country"`
 	Regions []ServiceRegion `json:"regions"`
 }
 
@@ -193,5 +193,3 @@ func (v *NullableOperatorsGet200ResponseInner) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -21,10 +21,10 @@ type BenefitTypes string
 // List of BenefitTypes
 const (
 	BENEFITTYPES_TALKTIME BenefitTypes = "TALKTIME"
-	BENEFITTYPES_DATA BenefitTypes = "DATA"
-	BENEFITTYPES_SMS BenefitTypes = "SMS"
-	BENEFITTYPES_PAYMENT BenefitTypes = "PAYMENT"
-	BENEFITTYPES_CREDITS BenefitTypes = "CREDITS"
+	BENEFITTYPES_DATA     BenefitTypes = "DATA"
+	BENEFITTYPES_SMS      BenefitTypes = "SMS"
+	BENEFITTYPES_PAYMENT  BenefitTypes = "PAYMENT"
+	BENEFITTYPES_CREDITS  BenefitTypes = "CREDITS"
 )
 
 // All allowed values of BenefitTypes enum
@@ -114,4 +114,3 @@ func (v *NullableBenefitTypes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
