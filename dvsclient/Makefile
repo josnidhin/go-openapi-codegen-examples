@@ -57,3 +57,4 @@ generate-dvsapi:
 
 	sudo chown -R $(USER):$(USER) dvsapi
 	chmod -R g+w dvsapi
+	rm dvsapi/go.mod dvsapi/go.sum
