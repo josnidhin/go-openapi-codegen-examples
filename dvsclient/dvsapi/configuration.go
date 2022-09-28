@@ -77,9 +77,9 @@ type ServerVariable struct {
 
 // ServerConfiguration stores the information about a server
 type ServerConfiguration struct {
-	URL         string
+	URL string
 	Description string
-	Variables   map[string]ServerVariable
+	Variables map[string]ServerVariable
 }
 
 // ServerConfigurations stores multiple ServerConfiguration items
@@ -100,24 +100,25 @@ type Configuration struct {
 // NewConfiguration returns a new Configuration object
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
-		DefaultHeader: make(map[string]string),
-		UserAgent:     "OpenAPI-Generator/1.0.0/go",
-		Debug:         false,
-		Servers: ServerConfigurations{
+		DefaultHeader:    make(map[string]string),
+		UserAgent:        "OpenAPI-Generator/1.0.0/go",
+		Debug:            false,
+		Servers:          ServerConfigurations{
 			{
-				URL:         "https://staging-dvs-api.transferto.dtone.com:8443/v1",
+				URL: "https://staging-dvs-api.transferto.dtone.com:8443/v1",
 				Description: "Staging",
 			},
 			{
-				URL:         "https://preprod-dvs-api.dtone.com/v1",
+				URL: "https://preprod-dvs-api.dtone.com/v1",
 				Description: "Pre-Production",
 			},
 			{
-				URL:         "https://dvs-api.dtone.com/v1",
+				URL: "https://dvs-api.dtone.com/v1",
 				Description: "Production",
 			},
 		},
-		OperationServers: map[string]ServerConfigurations{},
+		OperationServers: map[string]ServerConfigurations{
+		},
 	}
 	return cfg
 }
