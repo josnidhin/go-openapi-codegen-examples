@@ -21,7 +21,7 @@ import (
 // BalancesApiService BalancesApi service
 type BalancesApiService service
 
-type BalancesApiBalancesGetRequest struct {
+type BalancesApiGetBalancesRequest struct {
 	ctx        context.Context
 	ApiService *BalancesApiService
 	unitType   *UnitTypes
@@ -30,40 +30,40 @@ type BalancesApiBalancesGetRequest struct {
 	perPage    *int32
 }
 
-func (r BalancesApiBalancesGetRequest) UnitType(unitType UnitTypes) BalancesApiBalancesGetRequest {
+func (r BalancesApiGetBalancesRequest) UnitType(unitType UnitTypes) BalancesApiGetBalancesRequest {
 	r.unitType = &unitType
 	return r
 }
 
-func (r BalancesApiBalancesGetRequest) Unit(unit string) BalancesApiBalancesGetRequest {
+func (r BalancesApiGetBalancesRequest) Unit(unit string) BalancesApiGetBalancesRequest {
 	r.unit = &unit
 	return r
 }
 
 // Page number
-func (r BalancesApiBalancesGetRequest) Page(page int32) BalancesApiBalancesGetRequest {
+func (r BalancesApiGetBalancesRequest) Page(page int32) BalancesApiGetBalancesRequest {
 	r.page = &page
 	return r
 }
 
 // Number of records per page
-func (r BalancesApiBalancesGetRequest) PerPage(perPage int32) BalancesApiBalancesGetRequest {
+func (r BalancesApiGetBalancesRequest) PerPage(perPage int32) BalancesApiGetBalancesRequest {
 	r.perPage = &perPage
 	return r
 }
 
-func (r BalancesApiBalancesGetRequest) Execute() ([]Balance, *http.Response, error) {
-	return r.ApiService.BalancesGetExecute(r)
+func (r BalancesApiGetBalancesRequest) Execute() ([]Balance, *http.Response, error) {
+	return r.ApiService.GetBalancesExecute(r)
 }
 
 /*
-BalancesGet Retrieve balances
+GetBalances Retrieve balances
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return BalancesApiBalancesGetRequest
+	@return BalancesApiGetBalancesRequest
 */
-func (a *BalancesApiService) BalancesGet(ctx context.Context) BalancesApiBalancesGetRequest {
-	return BalancesApiBalancesGetRequest{
+func (a *BalancesApiService) GetBalances(ctx context.Context) BalancesApiGetBalancesRequest {
+	return BalancesApiGetBalancesRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -72,7 +72,7 @@ func (a *BalancesApiService) BalancesGet(ctx context.Context) BalancesApiBalance
 // Execute executes the request
 //
 //	@return []Balance
-func (a *BalancesApiService) BalancesGetExecute(r BalancesApiBalancesGetRequest) ([]Balance, *http.Response, error) {
+func (a *BalancesApiService) GetBalancesExecute(r BalancesApiGetBalancesRequest) ([]Balance, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -80,7 +80,7 @@ func (a *BalancesApiService) BalancesGetExecute(r BalancesApiBalancesGetRequest)
 		localVarReturnValue []Balance
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BalancesApiService.BalancesGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BalancesApiService.GetBalances")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

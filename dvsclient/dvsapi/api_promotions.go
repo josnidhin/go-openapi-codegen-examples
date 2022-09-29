@@ -22,7 +22,129 @@ import (
 // PromotionsApiService PromotionsApi service
 type PromotionsApiService service
 
-type PromotionsApiPromotionsGetRequest struct {
+type PromotionsApiGetPromotionByIdRequest struct {
+	ctx         context.Context
+	ApiService  *PromotionsApiService
+	promotionId int32
+}
+
+func (r PromotionsApiGetPromotionByIdRequest) Execute() (*Promotion, *http.Response, error) {
+	return r.ApiService.GetPromotionByIdExecute(r)
+}
+
+/*
+GetPromotionById Retrieve promotion by ID
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param promotionId
+	@return PromotionsApiGetPromotionByIdRequest
+*/
+func (a *PromotionsApiService) GetPromotionById(ctx context.Context, promotionId int32) PromotionsApiGetPromotionByIdRequest {
+	return PromotionsApiGetPromotionByIdRequest{
+		ApiService:  a,
+		ctx:         ctx,
+		promotionId: promotionId,
+	}
+}
+
+// Execute executes the request
+//
+//	@return Promotion
+func (a *PromotionsApiService) GetPromotionByIdExecute(r PromotionsApiGetPromotionByIdRequest) (*Promotion, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Promotion
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PromotionsApiService.GetPromotionById")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/promotions/{promotion_id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"promotion_id"+"}", url.PathEscape(parameterToString(r.promotionId, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.promotionId < 1 {
+		return localVarReturnValue, nil, reportError("promotionId must be greater than 1")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v Errors
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type PromotionsApiGetPromotionsRequest struct {
 	ctx            context.Context
 	ApiService     *PromotionsApiService
 	page           *int32
@@ -33,44 +155,44 @@ type PromotionsApiPromotionsGetRequest struct {
 }
 
 // Page number
-func (r PromotionsApiPromotionsGetRequest) Page(page int32) PromotionsApiPromotionsGetRequest {
+func (r PromotionsApiGetPromotionsRequest) Page(page int32) PromotionsApiGetPromotionsRequest {
 	r.page = &page
 	return r
 }
 
 // Number of records per page
-func (r PromotionsApiPromotionsGetRequest) PerPage(perPage int32) PromotionsApiPromotionsGetRequest {
+func (r PromotionsApiGetPromotionsRequest) PerPage(perPage int32) PromotionsApiGetPromotionsRequest {
 	r.perPage = &perPage
 	return r
 }
 
-func (r PromotionsApiPromotionsGetRequest) CountryIsoCode(countryIsoCode string) PromotionsApiPromotionsGetRequest {
+func (r PromotionsApiGetPromotionsRequest) CountryIsoCode(countryIsoCode string) PromotionsApiGetPromotionsRequest {
 	r.countryIsoCode = &countryIsoCode
 	return r
 }
 
-func (r PromotionsApiPromotionsGetRequest) OperatorId(operatorId int32) PromotionsApiPromotionsGetRequest {
+func (r PromotionsApiGetPromotionsRequest) OperatorId(operatorId int32) PromotionsApiGetPromotionsRequest {
 	r.operatorId = &operatorId
 	return r
 }
 
-func (r PromotionsApiPromotionsGetRequest) ProductId(productId int32) PromotionsApiPromotionsGetRequest {
+func (r PromotionsApiGetPromotionsRequest) ProductId(productId int32) PromotionsApiGetPromotionsRequest {
 	r.productId = &productId
 	return r
 }
 
-func (r PromotionsApiPromotionsGetRequest) Execute() ([]Promotion, *http.Response, error) {
-	return r.ApiService.PromotionsGetExecute(r)
+func (r PromotionsApiGetPromotionsRequest) Execute() ([]Promotion, *http.Response, error) {
+	return r.ApiService.GetPromotionsExecute(r)
 }
 
 /*
-PromotionsGet Retrieve list of promotions
+GetPromotions Retrieve list of promotions
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return PromotionsApiPromotionsGetRequest
+	@return PromotionsApiGetPromotionsRequest
 */
-func (a *PromotionsApiService) PromotionsGet(ctx context.Context) PromotionsApiPromotionsGetRequest {
-	return PromotionsApiPromotionsGetRequest{
+func (a *PromotionsApiService) GetPromotions(ctx context.Context) PromotionsApiGetPromotionsRequest {
+	return PromotionsApiGetPromotionsRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -79,7 +201,7 @@ func (a *PromotionsApiService) PromotionsGet(ctx context.Context) PromotionsApiP
 // Execute executes the request
 //
 //	@return []Promotion
-func (a *PromotionsApiService) PromotionsGetExecute(r PromotionsApiPromotionsGetRequest) ([]Promotion, *http.Response, error) {
+func (a *PromotionsApiService) GetPromotionsExecute(r PromotionsApiGetPromotionsRequest) ([]Promotion, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -87,7 +209,7 @@ func (a *PromotionsApiService) PromotionsGetExecute(r PromotionsApiPromotionsGet
 		localVarReturnValue []Promotion
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PromotionsApiService.PromotionsGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PromotionsApiService.GetPromotions")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -151,128 +273,6 @@ func (a *PromotionsApiService) PromotionsGetExecute(r PromotionsApiPromotionsGet
 		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
-		}
-		var v Errors
-		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-		if err != nil {
-			newErr.error = err.Error()
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		newErr.model = v
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type PromotionsApiPromotionsPromotionIdGetRequest struct {
-	ctx         context.Context
-	ApiService  *PromotionsApiService
-	promotionId int32
-}
-
-func (r PromotionsApiPromotionsPromotionIdGetRequest) Execute() (*Promotion, *http.Response, error) {
-	return r.ApiService.PromotionsPromotionIdGetExecute(r)
-}
-
-/*
-PromotionsPromotionIdGet Retrieve promotion by ID
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param promotionId
-	@return PromotionsApiPromotionsPromotionIdGetRequest
-*/
-func (a *PromotionsApiService) PromotionsPromotionIdGet(ctx context.Context, promotionId int32) PromotionsApiPromotionsPromotionIdGetRequest {
-	return PromotionsApiPromotionsPromotionIdGetRequest{
-		ApiService:  a,
-		ctx:         ctx,
-		promotionId: promotionId,
-	}
-}
-
-// Execute executes the request
-//
-//	@return Promotion
-func (a *PromotionsApiService) PromotionsPromotionIdGetExecute(r PromotionsApiPromotionsPromotionIdGetRequest) (*Promotion, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Promotion
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PromotionsApiService.PromotionsPromotionIdGet")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/promotions/{promotion_id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"promotion_id"+"}", url.PathEscape(parameterToString(r.promotionId, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.promotionId < 1 {
-		return localVarReturnValue, nil, reportError("promotionId must be greater than 1")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 404 {
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		var v Errors
 		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))

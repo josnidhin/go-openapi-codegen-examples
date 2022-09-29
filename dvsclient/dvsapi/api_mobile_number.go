@@ -22,7 +22,7 @@ import (
 // MobileNumberApiService MobileNumberApi service
 type MobileNumberApiService service
 
-type MobileNumberApiLookupMobileNumberMobileNumberGetRequest struct {
+type MobileNumberApiGetLookupMobileNumberRequest struct {
 	ctx          context.Context
 	ApiService   *MobileNumberApiService
 	mobileNumber string
@@ -31,30 +31,30 @@ type MobileNumberApiLookupMobileNumberMobileNumberGetRequest struct {
 }
 
 // Page number
-func (r MobileNumberApiLookupMobileNumberMobileNumberGetRequest) Page(page int32) MobileNumberApiLookupMobileNumberMobileNumberGetRequest {
+func (r MobileNumberApiGetLookupMobileNumberRequest) Page(page int32) MobileNumberApiGetLookupMobileNumberRequest {
 	r.page = &page
 	return r
 }
 
 // Number of records per page
-func (r MobileNumberApiLookupMobileNumberMobileNumberGetRequest) PerPage(perPage int32) MobileNumberApiLookupMobileNumberMobileNumberGetRequest {
+func (r MobileNumberApiGetLookupMobileNumberRequest) PerPage(perPage int32) MobileNumberApiGetLookupMobileNumberRequest {
 	r.perPage = &perPage
 	return r
 }
 
-func (r MobileNumberApiLookupMobileNumberMobileNumberGetRequest) Execute() ([]LookupMobileNumberMobileNumberGet200ResponseInner, *http.Response, error) {
-	return r.ApiService.LookupMobileNumberMobileNumberGetExecute(r)
+func (r MobileNumberApiGetLookupMobileNumberRequest) Execute() ([]GetLookupMobileNumber200ResponseInner, *http.Response, error) {
+	return r.ApiService.GetLookupMobileNumberExecute(r)
 }
 
 /*
-LookupMobileNumberMobileNumberGet Look up operators for a given mobile number
+GetLookupMobileNumber Look up operators for a given mobile number
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param mobileNumber
-	@return MobileNumberApiLookupMobileNumberMobileNumberGetRequest
+	@return MobileNumberApiGetLookupMobileNumberRequest
 */
-func (a *MobileNumberApiService) LookupMobileNumberMobileNumberGet(ctx context.Context, mobileNumber string) MobileNumberApiLookupMobileNumberMobileNumberGetRequest {
-	return MobileNumberApiLookupMobileNumberMobileNumberGetRequest{
+func (a *MobileNumberApiService) GetLookupMobileNumber(ctx context.Context, mobileNumber string) MobileNumberApiGetLookupMobileNumberRequest {
+	return MobileNumberApiGetLookupMobileNumberRequest{
 		ApiService:   a,
 		ctx:          ctx,
 		mobileNumber: mobileNumber,
@@ -63,16 +63,16 @@ func (a *MobileNumberApiService) LookupMobileNumberMobileNumberGet(ctx context.C
 
 // Execute executes the request
 //
-//	@return []LookupMobileNumberMobileNumberGet200ResponseInner
-func (a *MobileNumberApiService) LookupMobileNumberMobileNumberGetExecute(r MobileNumberApiLookupMobileNumberMobileNumberGetRequest) ([]LookupMobileNumberMobileNumberGet200ResponseInner, *http.Response, error) {
+//	@return []GetLookupMobileNumber200ResponseInner
+func (a *MobileNumberApiService) GetLookupMobileNumberExecute(r MobileNumberApiGetLookupMobileNumberRequest) ([]GetLookupMobileNumber200ResponseInner, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue []LookupMobileNumberMobileNumberGet200ResponseInner
+		localVarReturnValue []GetLookupMobileNumber200ResponseInner
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MobileNumberApiService.LookupMobileNumberMobileNumberGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MobileNumberApiService.GetLookupMobileNumber")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -151,29 +151,29 @@ func (a *MobileNumberApiService) LookupMobileNumberMobileNumberGetExecute(r Mobi
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type MobileNumberApiLookupMobileNumberPostRequest struct {
+type MobileNumberApiPostLookupMobileNumberRequest struct {
 	ctx                           context.Context
 	ApiService                    *MobileNumberApiService
-	lookupMobileNumberPostRequest *LookupMobileNumberPostRequest
+	postLookupMobileNumberRequest *PostLookupMobileNumberRequest
 }
 
-func (r MobileNumberApiLookupMobileNumberPostRequest) LookupMobileNumberPostRequest(lookupMobileNumberPostRequest LookupMobileNumberPostRequest) MobileNumberApiLookupMobileNumberPostRequest {
-	r.lookupMobileNumberPostRequest = &lookupMobileNumberPostRequest
+func (r MobileNumberApiPostLookupMobileNumberRequest) PostLookupMobileNumberRequest(postLookupMobileNumberRequest PostLookupMobileNumberRequest) MobileNumberApiPostLookupMobileNumberRequest {
+	r.postLookupMobileNumberRequest = &postLookupMobileNumberRequest
 	return r
 }
 
-func (r MobileNumberApiLookupMobileNumberPostRequest) Execute() ([]LookupMobileNumberMobileNumberGet200ResponseInner, *http.Response, error) {
-	return r.ApiService.LookupMobileNumberPostExecute(r)
+func (r MobileNumberApiPostLookupMobileNumberRequest) Execute() ([]GetLookupMobileNumber200ResponseInner, *http.Response, error) {
+	return r.ApiService.PostLookupMobileNumberExecute(r)
 }
 
 /*
-LookupMobileNumberPost Look up operators for a given mobile number
+PostLookupMobileNumber Look up operators for a given mobile number
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return MobileNumberApiLookupMobileNumberPostRequest
+	@return MobileNumberApiPostLookupMobileNumberRequest
 */
-func (a *MobileNumberApiService) LookupMobileNumberPost(ctx context.Context) MobileNumberApiLookupMobileNumberPostRequest {
-	return MobileNumberApiLookupMobileNumberPostRequest{
+func (a *MobileNumberApiService) PostLookupMobileNumber(ctx context.Context) MobileNumberApiPostLookupMobileNumberRequest {
+	return MobileNumberApiPostLookupMobileNumberRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -181,16 +181,16 @@ func (a *MobileNumberApiService) LookupMobileNumberPost(ctx context.Context) Mob
 
 // Execute executes the request
 //
-//	@return []LookupMobileNumberMobileNumberGet200ResponseInner
-func (a *MobileNumberApiService) LookupMobileNumberPostExecute(r MobileNumberApiLookupMobileNumberPostRequest) ([]LookupMobileNumberMobileNumberGet200ResponseInner, *http.Response, error) {
+//	@return []GetLookupMobileNumber200ResponseInner
+func (a *MobileNumberApiService) PostLookupMobileNumberExecute(r MobileNumberApiPostLookupMobileNumberRequest) ([]GetLookupMobileNumber200ResponseInner, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue []LookupMobileNumberMobileNumberGet200ResponseInner
+		localVarReturnValue []GetLookupMobileNumber200ResponseInner
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MobileNumberApiService.LookupMobileNumberPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MobileNumberApiService.PostLookupMobileNumber")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -200,8 +200,8 @@ func (a *MobileNumberApiService) LookupMobileNumberPostExecute(r MobileNumberApi
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.lookupMobileNumberPostRequest == nil {
-		return localVarReturnValue, nil, reportError("lookupMobileNumberPostRequest is required and must be specified")
+	if r.postLookupMobileNumberRequest == nil {
+		return localVarReturnValue, nil, reportError("postLookupMobileNumberRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -222,7 +222,7 @@ func (a *MobileNumberApiService) LookupMobileNumberPostExecute(r MobileNumberApi
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.lookupMobileNumberPostRequest
+	localVarPostBody = r.postLookupMobileNumberRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

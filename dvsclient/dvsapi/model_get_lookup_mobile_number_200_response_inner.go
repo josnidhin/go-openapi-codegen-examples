@@ -11,323 +11,215 @@ API version: 1.11.0
 package dvsapi
 
 import (
-	"bytes"
-	"context"
-	"io/ioutil"
-	"net/http"
-	"net/url"
-	"strings"
+	"encoding/json"
 )
 
-// ProductsApiService ProductsApi service
-type ProductsApiService service
-
-type ProductsApiGetProductByIdRequest struct {
-	ctx        context.Context
-	ApiService *ProductsApiService
-	productId  int32
+// GetLookupMobileNumber200ResponseInner struct for GetLookupMobileNumber200ResponseInner
+type GetLookupMobileNumber200ResponseInner struct {
+	Id      int32           `json:"id"`
+	Name    string          `json:"name"`
+	Country Country         `json:"country"`
+	Regions []ServiceRegion `json:"regions"`
+	// Indicates whether operator was identified as a direct match
+	Identified bool `json:"identified"`
 }
 
-func (r ProductsApiGetProductByIdRequest) Execute() (*Product, *http.Response, error) {
-	return r.ApiService.GetProductByIdExecute(r)
+// NewGetLookupMobileNumber200ResponseInner instantiates a new GetLookupMobileNumber200ResponseInner object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewGetLookupMobileNumber200ResponseInner(id int32, name string, country Country, regions []ServiceRegion, identified bool) *GetLookupMobileNumber200ResponseInner {
+	this := GetLookupMobileNumber200ResponseInner{}
+	this.Id = id
+	this.Name = name
+	this.Country = country
+	this.Regions = regions
+	this.Identified = identified
+	return &this
 }
 
-/*
-GetProductById Retrieve product by ID
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param productId
-	@return ProductsApiGetProductByIdRequest
-*/
-func (a *ProductsApiService) GetProductById(ctx context.Context, productId int32) ProductsApiGetProductByIdRequest {
-	return ProductsApiGetProductByIdRequest{
-		ApiService: a,
-		ctx:        ctx,
-		productId:  productId,
-	}
+// NewGetLookupMobileNumber200ResponseInnerWithDefaults instantiates a new GetLookupMobileNumber200ResponseInner object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewGetLookupMobileNumber200ResponseInnerWithDefaults() *GetLookupMobileNumber200ResponseInner {
+	this := GetLookupMobileNumber200ResponseInner{}
+	return &this
 }
 
-// Execute executes the request
-//
-//	@return Product
-func (a *ProductsApiService) GetProductByIdExecute(r ProductsApiGetProductByIdRequest) (*Product, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Product
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductsApiService.GetProductById")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+// GetId returns the Id field value
+func (o *GetLookupMobileNumber200ResponseInner) GetId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
 	}
 
-	localVarPath := localBasePath + "/products/{product_id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"product_id"+"}", url.PathEscape(parameterToString(r.productId, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.productId < 1 {
-		return localVarReturnValue, nil, reportError("productId must be greater than 1")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 404 {
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		var v Errors
-		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-		if err != nil {
-			newErr.error = err.Error()
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		newErr.model = v
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
+	return o.Id
 }
 
-type ProductsApiGetProductsRequest struct {
-	ctx            context.Context
-	ApiService     *ProductsApiService
-	type_          *ProductTypes
-	serviceId      *int32
-	tags           *[]string
-	countryIsoCode *string
-	operatorId     *int32
-	region         *string
-	benefitTypes   *[]BenefitTypes
-	page           *int32
-	perPage        *int32
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *GetLookupMobileNumber200ResponseInner) GetIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Id, true
 }
 
-func (r ProductsApiGetProductsRequest) Type_(type_ ProductTypes) ProductsApiGetProductsRequest {
-	r.type_ = &type_
-	return r
+// SetId sets field value
+func (o *GetLookupMobileNumber200ResponseInner) SetId(v int32) {
+	o.Id = v
 }
 
-func (r ProductsApiGetProductsRequest) ServiceId(serviceId int32) ProductsApiGetProductsRequest {
-	r.serviceId = &serviceId
-	return r
+// GetName returns the Name field value
+func (o *GetLookupMobileNumber200ResponseInner) GetName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Name
 }
 
-func (r ProductsApiGetProductsRequest) Tags(tags []string) ProductsApiGetProductsRequest {
-	r.tags = &tags
-	return r
+// GetNameOk returns a tuple with the Name field value
+// and a boolean to check if the value has been set.
+func (o *GetLookupMobileNumber200ResponseInner) GetNameOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Name, true
 }
 
-func (r ProductsApiGetProductsRequest) CountryIsoCode(countryIsoCode string) ProductsApiGetProductsRequest {
-	r.countryIsoCode = &countryIsoCode
-	return r
+// SetName sets field value
+func (o *GetLookupMobileNumber200ResponseInner) SetName(v string) {
+	o.Name = v
 }
 
-func (r ProductsApiGetProductsRequest) OperatorId(operatorId int32) ProductsApiGetProductsRequest {
-	r.operatorId = &operatorId
-	return r
+// GetCountry returns the Country field value
+func (o *GetLookupMobileNumber200ResponseInner) GetCountry() Country {
+	if o == nil {
+		var ret Country
+		return ret
+	}
+
+	return o.Country
 }
 
-func (r ProductsApiGetProductsRequest) Region(region string) ProductsApiGetProductsRequest {
-	r.region = &region
-	return r
+// GetCountryOk returns a tuple with the Country field value
+// and a boolean to check if the value has been set.
+func (o *GetLookupMobileNumber200ResponseInner) GetCountryOk() (*Country, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Country, true
 }
 
-func (r ProductsApiGetProductsRequest) BenefitTypes(benefitTypes []BenefitTypes) ProductsApiGetProductsRequest {
-	r.benefitTypes = &benefitTypes
-	return r
+// SetCountry sets field value
+func (o *GetLookupMobileNumber200ResponseInner) SetCountry(v Country) {
+	o.Country = v
 }
 
-// Page number
-func (r ProductsApiGetProductsRequest) Page(page int32) ProductsApiGetProductsRequest {
-	r.page = &page
-	return r
+// GetRegions returns the Regions field value
+// If the value is explicit nil, the zero value for []ServiceRegion will be returned
+func (o *GetLookupMobileNumber200ResponseInner) GetRegions() []ServiceRegion {
+	if o == nil {
+		var ret []ServiceRegion
+		return ret
+	}
+
+	return o.Regions
 }
 
-// Number of records per page
-func (r ProductsApiGetProductsRequest) PerPage(perPage int32) ProductsApiGetProductsRequest {
-	r.perPage = &perPage
-	return r
+// GetRegionsOk returns a tuple with the Regions field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *GetLookupMobileNumber200ResponseInner) GetRegionsOk() ([]ServiceRegion, bool) {
+	if o == nil || o.Regions == nil {
+		return nil, false
+	}
+	return o.Regions, true
 }
 
-func (r ProductsApiGetProductsRequest) Execute() ([]Product, *http.Response, error) {
-	return r.ApiService.GetProductsExecute(r)
+// SetRegions sets field value
+func (o *GetLookupMobileNumber200ResponseInner) SetRegions(v []ServiceRegion) {
+	o.Regions = v
 }
 
-/*
-GetProducts Retrieve list of products
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ProductsApiGetProductsRequest
-*/
-func (a *ProductsApiService) GetProducts(ctx context.Context) ProductsApiGetProductsRequest {
-	return ProductsApiGetProductsRequest{
-		ApiService: a,
-		ctx:        ctx,
+// GetIdentified returns the Identified field value
+func (o *GetLookupMobileNumber200ResponseInner) GetIdentified() bool {
+	if o == nil {
+		var ret bool
+		return ret
 	}
+
+	return o.Identified
 }
 
-// Execute executes the request
-//
-//	@return []Product
-func (a *ProductsApiService) GetProductsExecute(r ProductsApiGetProductsRequest) ([]Product, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue []Product
-	)
+// GetIdentifiedOk returns a tuple with the Identified field value
+// and a boolean to check if the value has been set.
+func (o *GetLookupMobileNumber200ResponseInner) GetIdentifiedOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Identified, true
+}
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductsApiService.GetProducts")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
+// SetIdentified sets field value
+func (o *GetLookupMobileNumber200ResponseInner) SetIdentified(v bool) {
+	o.Identified = v
+}
 
-	localVarPath := localBasePath + "/products"
+func (o GetLookupMobileNumber200ResponseInner) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["id"] = o.Id
+	}
+	if true {
+		toSerialize["name"] = o.Name
+	}
+	if true {
+		toSerialize["country"] = o.Country
+	}
+	if o.Regions != nil {
+		toSerialize["regions"] = o.Regions
+	}
+	if true {
+		toSerialize["identified"] = o.Identified
+	}
+	return json.Marshal(toSerialize)
+}
 
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
+type NullableGetLookupMobileNumber200ResponseInner struct {
+	value *GetLookupMobileNumber200ResponseInner
+	isSet bool
+}
 
-	if r.type_ != nil {
-		localVarQueryParams.Add("type", parameterToString(*r.type_, ""))
-	}
-	if r.serviceId != nil {
-		localVarQueryParams.Add("service_id", parameterToString(*r.serviceId, ""))
-	}
-	if r.tags != nil {
-		localVarQueryParams.Add("tags", parameterToString(*r.tags, "csv"))
-	}
-	if r.countryIsoCode != nil {
-		localVarQueryParams.Add("country_iso_code", parameterToString(*r.countryIsoCode, ""))
-	}
-	if r.operatorId != nil {
-		localVarQueryParams.Add("operator_id", parameterToString(*r.operatorId, ""))
-	}
-	if r.region != nil {
-		localVarQueryParams.Add("region", parameterToString(*r.region, ""))
-	}
-	if r.benefitTypes != nil {
-		localVarQueryParams.Add("benefit_types", parameterToString(*r.benefitTypes, "csv"))
-	}
-	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
-	}
-	if r.perPage != nil {
-		localVarQueryParams.Add("per_page", parameterToString(*r.perPage, ""))
-	}
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
+func (v NullableGetLookupMobileNumber200ResponseInner) Get() *GetLookupMobileNumber200ResponseInner {
+	return v.value
+}
 
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
+func (v *NullableGetLookupMobileNumber200ResponseInner) Set(val *GetLookupMobileNumber200ResponseInner) {
+	v.value = val
+	v.isSet = true
+}
 
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+func (v NullableGetLookupMobileNumber200ResponseInner) IsSet() bool {
+	return v.isSet
+}
 
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
+func (v *NullableGetLookupMobileNumber200ResponseInner) Unset() {
+	v.value = nil
+	v.isSet = false
+}
 
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
+func NewNullableGetLookupMobileNumber200ResponseInner(val *GetLookupMobileNumber200ResponseInner) *NullableGetLookupMobileNumber200ResponseInner {
+	return &NullableGetLookupMobileNumber200ResponseInner{value: val, isSet: true}
+}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
+func (v NullableGetLookupMobileNumber200ResponseInner) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
+}
 
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		var v Errors
-		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-		if err != nil {
-			newErr.error = err.Error()
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		newErr.model = v
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
+func (v *NullableGetLookupMobileNumber200ResponseInner) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

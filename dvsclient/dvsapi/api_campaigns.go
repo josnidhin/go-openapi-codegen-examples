@@ -22,25 +22,25 @@ import (
 // CampaignsApiService CampaignsApi service
 type CampaignsApiService service
 
-type CampaignsApiCampaignsCampaignIdGetRequest struct {
+type CampaignsApiGetCampaignByIdRequest struct {
 	ctx        context.Context
 	ApiService *CampaignsApiService
 	campaignId int32
 }
 
-func (r CampaignsApiCampaignsCampaignIdGetRequest) Execute() (*Campaign, *http.Response, error) {
-	return r.ApiService.CampaignsCampaignIdGetExecute(r)
+func (r CampaignsApiGetCampaignByIdRequest) Execute() (*Campaign, *http.Response, error) {
+	return r.ApiService.GetCampaignByIdExecute(r)
 }
 
 /*
-CampaignsCampaignIdGet Retrieve campaign by ID
+GetCampaignById Retrieve campaign by ID
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param campaignId
-	@return CampaignsApiCampaignsCampaignIdGetRequest
+	@return CampaignsApiGetCampaignByIdRequest
 */
-func (a *CampaignsApiService) CampaignsCampaignIdGet(ctx context.Context, campaignId int32) CampaignsApiCampaignsCampaignIdGetRequest {
-	return CampaignsApiCampaignsCampaignIdGetRequest{
+func (a *CampaignsApiService) GetCampaignById(ctx context.Context, campaignId int32) CampaignsApiGetCampaignByIdRequest {
+	return CampaignsApiGetCampaignByIdRequest{
 		ApiService: a,
 		ctx:        ctx,
 		campaignId: campaignId,
@@ -50,7 +50,7 @@ func (a *CampaignsApiService) CampaignsCampaignIdGet(ctx context.Context, campai
 // Execute executes the request
 //
 //	@return Campaign
-func (a *CampaignsApiService) CampaignsCampaignIdGetExecute(r CampaignsApiCampaignsCampaignIdGetRequest) (*Campaign, *http.Response, error) {
+func (a *CampaignsApiService) GetCampaignByIdExecute(r CampaignsApiGetCampaignByIdRequest) (*Campaign, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -58,7 +58,7 @@ func (a *CampaignsApiService) CampaignsCampaignIdGetExecute(r CampaignsApiCampai
 		localVarReturnValue *Campaign
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CampaignsApiService.CampaignsCampaignIdGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CampaignsApiService.GetCampaignById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *CampaignsApiService) CampaignsCampaignIdGetExecute(r CampaignsApiCampai
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type CampaignsApiCampaignsGetRequest struct {
+type CampaignsApiGetCampaignsRequest struct {
 	ctx            context.Context
 	ApiService     *CampaignsApiService
 	page           *int32
@@ -155,44 +155,44 @@ type CampaignsApiCampaignsGetRequest struct {
 }
 
 // Page number
-func (r CampaignsApiCampaignsGetRequest) Page(page int32) CampaignsApiCampaignsGetRequest {
+func (r CampaignsApiGetCampaignsRequest) Page(page int32) CampaignsApiGetCampaignsRequest {
 	r.page = &page
 	return r
 }
 
 // Number of records per page
-func (r CampaignsApiCampaignsGetRequest) PerPage(perPage int32) CampaignsApiCampaignsGetRequest {
+func (r CampaignsApiGetCampaignsRequest) PerPage(perPage int32) CampaignsApiGetCampaignsRequest {
 	r.perPage = &perPage
 	return r
 }
 
-func (r CampaignsApiCampaignsGetRequest) CountryIsoCode(countryIsoCode string) CampaignsApiCampaignsGetRequest {
+func (r CampaignsApiGetCampaignsRequest) CountryIsoCode(countryIsoCode string) CampaignsApiGetCampaignsRequest {
 	r.countryIsoCode = &countryIsoCode
 	return r
 }
 
-func (r CampaignsApiCampaignsGetRequest) OperatorId(operatorId int32) CampaignsApiCampaignsGetRequest {
+func (r CampaignsApiGetCampaignsRequest) OperatorId(operatorId int32) CampaignsApiGetCampaignsRequest {
 	r.operatorId = &operatorId
 	return r
 }
 
-func (r CampaignsApiCampaignsGetRequest) ProductId(productId int32) CampaignsApiCampaignsGetRequest {
+func (r CampaignsApiGetCampaignsRequest) ProductId(productId int32) CampaignsApiGetCampaignsRequest {
 	r.productId = &productId
 	return r
 }
 
-func (r CampaignsApiCampaignsGetRequest) Execute() ([]Campaign, *http.Response, error) {
-	return r.ApiService.CampaignsGetExecute(r)
+func (r CampaignsApiGetCampaignsRequest) Execute() ([]Campaign, *http.Response, error) {
+	return r.ApiService.GetCampaignsExecute(r)
 }
 
 /*
-CampaignsGet Retrieve list of active campaigns
+GetCampaigns Retrieve list of active campaigns
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return CampaignsApiCampaignsGetRequest
+	@return CampaignsApiGetCampaignsRequest
 */
-func (a *CampaignsApiService) CampaignsGet(ctx context.Context) CampaignsApiCampaignsGetRequest {
-	return CampaignsApiCampaignsGetRequest{
+func (a *CampaignsApiService) GetCampaigns(ctx context.Context) CampaignsApiGetCampaignsRequest {
+	return CampaignsApiGetCampaignsRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -201,7 +201,7 @@ func (a *CampaignsApiService) CampaignsGet(ctx context.Context) CampaignsApiCamp
 // Execute executes the request
 //
 //	@return []Campaign
-func (a *CampaignsApiService) CampaignsGetExecute(r CampaignsApiCampaignsGetRequest) ([]Campaign, *http.Response, error) {
+func (a *CampaignsApiService) GetCampaignsExecute(r CampaignsApiGetCampaignsRequest) ([]Campaign, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -209,7 +209,7 @@ func (a *CampaignsApiService) CampaignsGetExecute(r CampaignsApiCampaignsGetRequ
 		localVarReturnValue []Campaign
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CampaignsApiService.CampaignsGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CampaignsApiService.GetCampaigns")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

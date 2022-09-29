@@ -11,323 +11,97 @@ API version: 1.11.0
 package dvsapi
 
 import (
-	"bytes"
-	"context"
-	"io/ioutil"
-	"net/http"
-	"net/url"
-	"strings"
+	"encoding/json"
 )
 
-// ProductsApiService ProductsApi service
-type ProductsApiService service
-
-type ProductsApiGetProductByIdRequest struct {
-	ctx        context.Context
-	ApiService *ProductsApiService
-	productId  int32
+// GetLookupMobileNumber200ResponseInnerAllOf struct for GetLookupMobileNumber200ResponseInnerAllOf
+type GetLookupMobileNumber200ResponseInnerAllOf struct {
+	// Indicates whether operator was identified as a direct match
+	Identified bool `json:"identified"`
 }
 
-func (r ProductsApiGetProductByIdRequest) Execute() (*Product, *http.Response, error) {
-	return r.ApiService.GetProductByIdExecute(r)
+// NewGetLookupMobileNumber200ResponseInnerAllOf instantiates a new GetLookupMobileNumber200ResponseInnerAllOf object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewGetLookupMobileNumber200ResponseInnerAllOf(identified bool) *GetLookupMobileNumber200ResponseInnerAllOf {
+	this := GetLookupMobileNumber200ResponseInnerAllOf{}
+	this.Identified = identified
+	return &this
 }
 
-/*
-GetProductById Retrieve product by ID
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param productId
-	@return ProductsApiGetProductByIdRequest
-*/
-func (a *ProductsApiService) GetProductById(ctx context.Context, productId int32) ProductsApiGetProductByIdRequest {
-	return ProductsApiGetProductByIdRequest{
-		ApiService: a,
-		ctx:        ctx,
-		productId:  productId,
-	}
+// NewGetLookupMobileNumber200ResponseInnerAllOfWithDefaults instantiates a new GetLookupMobileNumber200ResponseInnerAllOf object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewGetLookupMobileNumber200ResponseInnerAllOfWithDefaults() *GetLookupMobileNumber200ResponseInnerAllOf {
+	this := GetLookupMobileNumber200ResponseInnerAllOf{}
+	return &this
 }
 
-// Execute executes the request
-//
-//	@return Product
-func (a *ProductsApiService) GetProductByIdExecute(r ProductsApiGetProductByIdRequest) (*Product, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Product
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductsApiService.GetProductById")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+// GetIdentified returns the Identified field value
+func (o *GetLookupMobileNumber200ResponseInnerAllOf) GetIdentified() bool {
+	if o == nil {
+		var ret bool
+		return ret
 	}
 
-	localVarPath := localBasePath + "/products/{product_id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"product_id"+"}", url.PathEscape(parameterToString(r.productId, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.productId < 1 {
-		return localVarReturnValue, nil, reportError("productId must be greater than 1")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 404 {
-			var v Errors
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		var v Errors
-		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-		if err != nil {
-			newErr.error = err.Error()
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		newErr.model = v
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
+	return o.Identified
 }
 
-type ProductsApiGetProductsRequest struct {
-	ctx            context.Context
-	ApiService     *ProductsApiService
-	type_          *ProductTypes
-	serviceId      *int32
-	tags           *[]string
-	countryIsoCode *string
-	operatorId     *int32
-	region         *string
-	benefitTypes   *[]BenefitTypes
-	page           *int32
-	perPage        *int32
+// GetIdentifiedOk returns a tuple with the Identified field value
+// and a boolean to check if the value has been set.
+func (o *GetLookupMobileNumber200ResponseInnerAllOf) GetIdentifiedOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Identified, true
 }
 
-func (r ProductsApiGetProductsRequest) Type_(type_ ProductTypes) ProductsApiGetProductsRequest {
-	r.type_ = &type_
-	return r
+// SetIdentified sets field value
+func (o *GetLookupMobileNumber200ResponseInnerAllOf) SetIdentified(v bool) {
+	o.Identified = v
 }
 
-func (r ProductsApiGetProductsRequest) ServiceId(serviceId int32) ProductsApiGetProductsRequest {
-	r.serviceId = &serviceId
-	return r
+func (o GetLookupMobileNumber200ResponseInnerAllOf) MarshalJSON() ([]byte, error) {
+	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["identified"] = o.Identified
+	}
+	return json.Marshal(toSerialize)
 }
 
-func (r ProductsApiGetProductsRequest) Tags(tags []string) ProductsApiGetProductsRequest {
-	r.tags = &tags
-	return r
+type NullableGetLookupMobileNumber200ResponseInnerAllOf struct {
+	value *GetLookupMobileNumber200ResponseInnerAllOf
+	isSet bool
 }
 
-func (r ProductsApiGetProductsRequest) CountryIsoCode(countryIsoCode string) ProductsApiGetProductsRequest {
-	r.countryIsoCode = &countryIsoCode
-	return r
+func (v NullableGetLookupMobileNumber200ResponseInnerAllOf) Get() *GetLookupMobileNumber200ResponseInnerAllOf {
+	return v.value
 }
 
-func (r ProductsApiGetProductsRequest) OperatorId(operatorId int32) ProductsApiGetProductsRequest {
-	r.operatorId = &operatorId
-	return r
+func (v *NullableGetLookupMobileNumber200ResponseInnerAllOf) Set(val *GetLookupMobileNumber200ResponseInnerAllOf) {
+	v.value = val
+	v.isSet = true
 }
 
-func (r ProductsApiGetProductsRequest) Region(region string) ProductsApiGetProductsRequest {
-	r.region = &region
-	return r
+func (v NullableGetLookupMobileNumber200ResponseInnerAllOf) IsSet() bool {
+	return v.isSet
 }
 
-func (r ProductsApiGetProductsRequest) BenefitTypes(benefitTypes []BenefitTypes) ProductsApiGetProductsRequest {
-	r.benefitTypes = &benefitTypes
-	return r
+func (v *NullableGetLookupMobileNumber200ResponseInnerAllOf) Unset() {
+	v.value = nil
+	v.isSet = false
 }
 
-// Page number
-func (r ProductsApiGetProductsRequest) Page(page int32) ProductsApiGetProductsRequest {
-	r.page = &page
-	return r
+func NewNullableGetLookupMobileNumber200ResponseInnerAllOf(val *GetLookupMobileNumber200ResponseInnerAllOf) *NullableGetLookupMobileNumber200ResponseInnerAllOf {
+	return &NullableGetLookupMobileNumber200ResponseInnerAllOf{value: val, isSet: true}
 }
 
-// Number of records per page
-func (r ProductsApiGetProductsRequest) PerPage(perPage int32) ProductsApiGetProductsRequest {
-	r.perPage = &perPage
-	return r
+func (v NullableGetLookupMobileNumber200ResponseInnerAllOf) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.value)
 }
 
-func (r ProductsApiGetProductsRequest) Execute() ([]Product, *http.Response, error) {
-	return r.ApiService.GetProductsExecute(r)
-}
-
-/*
-GetProducts Retrieve list of products
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ProductsApiGetProductsRequest
-*/
-func (a *ProductsApiService) GetProducts(ctx context.Context) ProductsApiGetProductsRequest {
-	return ProductsApiGetProductsRequest{
-		ApiService: a,
-		ctx:        ctx,
-	}
-}
-
-// Execute executes the request
-//
-//	@return []Product
-func (a *ProductsApiService) GetProductsExecute(r ProductsApiGetProductsRequest) ([]Product, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue []Product
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductsApiService.GetProducts")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/products"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-
-	if r.type_ != nil {
-		localVarQueryParams.Add("type", parameterToString(*r.type_, ""))
-	}
-	if r.serviceId != nil {
-		localVarQueryParams.Add("service_id", parameterToString(*r.serviceId, ""))
-	}
-	if r.tags != nil {
-		localVarQueryParams.Add("tags", parameterToString(*r.tags, "csv"))
-	}
-	if r.countryIsoCode != nil {
-		localVarQueryParams.Add("country_iso_code", parameterToString(*r.countryIsoCode, ""))
-	}
-	if r.operatorId != nil {
-		localVarQueryParams.Add("operator_id", parameterToString(*r.operatorId, ""))
-	}
-	if r.region != nil {
-		localVarQueryParams.Add("region", parameterToString(*r.region, ""))
-	}
-	if r.benefitTypes != nil {
-		localVarQueryParams.Add("benefit_types", parameterToString(*r.benefitTypes, "csv"))
-	}
-	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
-	}
-	if r.perPage != nil {
-		localVarQueryParams.Add("per_page", parameterToString(*r.perPage, ""))
-	}
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		var v Errors
-		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-		if err != nil {
-			newErr.error = err.Error()
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		newErr.model = v
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
+func (v *NullableGetLookupMobileNumber200ResponseInnerAllOf) UnmarshalJSON(src []byte) error {
+	v.isSet = true
+	return json.Unmarshal(src, &v.value)
 }

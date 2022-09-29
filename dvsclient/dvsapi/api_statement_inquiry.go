@@ -21,29 +21,29 @@ import (
 // StatementInquiryApiService StatementInquiryApi service
 type StatementInquiryApiService service
 
-type StatementInquiryApiLookupStatementInquiryPostRequest struct {
+type StatementInquiryApiPostLookupStatementInquiryRequest struct {
 	ctx                               context.Context
 	ApiService                        *StatementInquiryApiService
-	lookupStatementInquiryPostRequest *LookupStatementInquiryPostRequest
+	postLookupStatementInquiryRequest *PostLookupStatementInquiryRequest
 }
 
-func (r StatementInquiryApiLookupStatementInquiryPostRequest) LookupStatementInquiryPostRequest(lookupStatementInquiryPostRequest LookupStatementInquiryPostRequest) StatementInquiryApiLookupStatementInquiryPostRequest {
-	r.lookupStatementInquiryPostRequest = &lookupStatementInquiryPostRequest
+func (r StatementInquiryApiPostLookupStatementInquiryRequest) PostLookupStatementInquiryRequest(postLookupStatementInquiryRequest PostLookupStatementInquiryRequest) StatementInquiryApiPostLookupStatementInquiryRequest {
+	r.postLookupStatementInquiryRequest = &postLookupStatementInquiryRequest
 	return r
 }
 
-func (r StatementInquiryApiLookupStatementInquiryPostRequest) Execute() ([]Statement, *http.Response, error) {
-	return r.ApiService.LookupStatementInquiryPostExecute(r)
+func (r StatementInquiryApiPostLookupStatementInquiryRequest) Execute() ([]Statement, *http.Response, error) {
+	return r.ApiService.PostLookupStatementInquiryExecute(r)
 }
 
 /*
-LookupStatementInquiryPost Inquire statements for a given account number
+PostLookupStatementInquiry Inquire statements for a given account number
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return StatementInquiryApiLookupStatementInquiryPostRequest
+	@return StatementInquiryApiPostLookupStatementInquiryRequest
 */
-func (a *StatementInquiryApiService) LookupStatementInquiryPost(ctx context.Context) StatementInquiryApiLookupStatementInquiryPostRequest {
-	return StatementInquiryApiLookupStatementInquiryPostRequest{
+func (a *StatementInquiryApiService) PostLookupStatementInquiry(ctx context.Context) StatementInquiryApiPostLookupStatementInquiryRequest {
+	return StatementInquiryApiPostLookupStatementInquiryRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -52,7 +52,7 @@ func (a *StatementInquiryApiService) LookupStatementInquiryPost(ctx context.Cont
 // Execute executes the request
 //
 //	@return []Statement
-func (a *StatementInquiryApiService) LookupStatementInquiryPostExecute(r StatementInquiryApiLookupStatementInquiryPostRequest) ([]Statement, *http.Response, error) {
+func (a *StatementInquiryApiService) PostLookupStatementInquiryExecute(r StatementInquiryApiPostLookupStatementInquiryRequest) ([]Statement, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
 		localVarPostBody    interface{}
@@ -60,7 +60,7 @@ func (a *StatementInquiryApiService) LookupStatementInquiryPostExecute(r Stateme
 		localVarReturnValue []Statement
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "StatementInquiryApiService.LookupStatementInquiryPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "StatementInquiryApiService.PostLookupStatementInquiry")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -70,8 +70,8 @@ func (a *StatementInquiryApiService) LookupStatementInquiryPostExecute(r Stateme
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.lookupStatementInquiryPostRequest == nil {
-		return localVarReturnValue, nil, reportError("lookupStatementInquiryPostRequest is required and must be specified")
+	if r.postLookupStatementInquiryRequest == nil {
+		return localVarReturnValue, nil, reportError("postLookupStatementInquiryRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -92,7 +92,7 @@ func (a *StatementInquiryApiService) LookupStatementInquiryPostExecute(r Stateme
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.lookupStatementInquiryPostRequest
+	localVarPostBody = r.postLookupStatementInquiryRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

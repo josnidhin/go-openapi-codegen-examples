@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **Description** | **string** |  | 
 **Tags** | **[]string** |  | 
 **Service** | [**Service**](Service.md) |  | 
-**Operator** | [**OperatorsGet200ResponseInner**](OperatorsGet200ResponseInner.md) |  | 
+**Operator** | [**GetOperators200ResponseInner**](GetOperators200ResponseInner.md) |  | 
 **Regions** | [**[]ServiceRegion**](ServiceRegion.md) |  | 
 **Type** | **string** |  | 
 **Validity** | [**NullableProductFixedValueRechargeAllOfValidity**](ProductFixedValueRechargeAllOfValidity.md) |  | 
@@ -31,7 +31,7 @@ Name | Type | Description | Notes
 
 ### NewProductFixedValuePinPurchase
 
-`func NewProductFixedValuePinPurchase(id int32, name string, description string, tags []string, service Service, operator OperatorsGet200ResponseInner, regions []ServiceRegion, type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, availabilityZones []AvailabilityZones, source ProductFixedValueRechargeAllOfSource, destination ProductFixedValueRechargeAllOfSource, prices ProductFixedValueRechargeAllOfPrices, rates Rates, pin PIN, benefits []FixedBenefit, promotions []ProductPromotion, ) *ProductFixedValuePinPurchase`
+`func NewProductFixedValuePinPurchase(id int32, name string, description string, tags []string, service Service, operator GetOperators200ResponseInner, regions []ServiceRegion, type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, availabilityZones []AvailabilityZones, source ProductFixedValueRechargeAllOfSource, destination ProductFixedValueRechargeAllOfSource, prices ProductFixedValueRechargeAllOfPrices, rates Rates, pin PIN, benefits []FixedBenefit, promotions []ProductPromotion, ) *ProductFixedValuePinPurchase`
 
 NewProductFixedValuePinPurchase instantiates a new ProductFixedValuePinPurchase object
 This constructor will assign default values to properties that have it defined,
@@ -158,20 +158,20 @@ SetService sets Service field to given value.
 
 ### GetOperator
 
-`func (o *ProductFixedValuePinPurchase) GetOperator() OperatorsGet200ResponseInner`
+`func (o *ProductFixedValuePinPurchase) GetOperator() GetOperators200ResponseInner`
 
 GetOperator returns the Operator field if non-nil, zero value otherwise.
 
 ### GetOperatorOk
 
-`func (o *ProductFixedValuePinPurchase) GetOperatorOk() (*OperatorsGet200ResponseInner, bool)`
+`func (o *ProductFixedValuePinPurchase) GetOperatorOk() (*GetOperators200ResponseInner, bool)`
 
 GetOperatorOk returns a tuple with the Operator field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetOperator
 
-`func (o *ProductFixedValuePinPurchase) SetOperator(v OperatorsGet200ResponseInner)`
+`func (o *ProductFixedValuePinPurchase) SetOperator(v GetOperators200ResponseInner)`
 
 SetOperator sets Operator field to given value.
 

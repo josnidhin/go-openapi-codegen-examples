@@ -321,40 +321,38 @@ ctx = context.WithValue(context.Background(), dvsapi.ContextOperationServerVaria
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://staging-dvs-api.transferto.dtone.com:8443/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*BalancesApi* | [**BalancesGet**](docs/BalancesApi.md#balancesget) | **Get** /balances | Retrieve balances
-*BenefitsApi* | [**BenefitTypesGet**](docs/BenefitsApi.md#benefittypesget) | **Get** /benefit-types | Retrieve list of benefit types
-*CampaignsApi* | [**CampaignsCampaignIdGet**](docs/CampaignsApi.md#campaignscampaignidget) | **Get** /campaigns/{campaign_id} | Retrieve campaign by ID
-*CampaignsApi* | [**CampaignsGet**](docs/CampaignsApi.md#campaignsget) | **Get** /campaigns | Retrieve list of active campaigns
-*CountriesApi* | [**CountriesCountryIsoCodeGet**](docs/CountriesApi.md#countriescountryisocodeget) | **Get** /countries/{country_iso_code} | Retrieve country by ISO code
-*CountriesApi* | [**CountriesGet**](docs/CountriesApi.md#countriesget) | **Get** /countries | Retrieve list of countries
-*MobileNumberApi* | [**LookupMobileNumberMobileNumberGet**](docs/MobileNumberApi.md#lookupmobilenumbermobilenumberget) | **Get** /lookup/mobile-number/{mobile_number} | Look up operators for a given mobile number
-*MobileNumberApi* | [**LookupMobileNumberPost**](docs/MobileNumberApi.md#lookupmobilenumberpost) | **Post** /lookup/mobile-number | Look up operators for a given mobile number
-*OperatorsApi* | [**OperatorsGet**](docs/OperatorsApi.md#operatorsget) | **Get** /operators | Retrieve list of operators
-*OperatorsApi* | [**OperatorsOperatorIdGet**](docs/OperatorsApi.md#operatorsoperatoridget) | **Get** /operators/{operator_id} | Retrieve operator by ID
-*ProductsApi* | [**ProductsGet**](docs/ProductsApi.md#productsget) | **Get** /products | Retrieve list of products
-*ProductsApi* | [**ProductsProductIdGet**](docs/ProductsApi.md#productsproductidget) | **Get** /products/{product_id} | Retrieve product by ID
-*PromotionsApi* | [**PromotionsGet**](docs/PromotionsApi.md#promotionsget) | **Get** /promotions | Retrieve list of promotions
-*PromotionsApi* | [**PromotionsPromotionIdGet**](docs/PromotionsApi.md#promotionspromotionidget) | **Get** /promotions/{promotion_id} | Retrieve promotion by ID
-*ServicesApi* | [**ServicesGet**](docs/ServicesApi.md#servicesget) | **Get** /services | Retrieve list of services
-*ServicesApi* | [**ServicesServiceIdGet**](docs/ServicesApi.md#servicesserviceidget) | **Get** /services/{service_id} | Retrieve service by ID
-*StatementInquiryApi* | [**LookupStatementInquiryPost**](docs/StatementInquiryApi.md#lookupstatementinquirypost) | **Post** /lookup/statement-inquiry | Inquire statements for a given account number
-*TransactionsApi* | [**AsyncTransactionsPost**](docs/TransactionsApi.md#asynctransactionspost) | **Post** /async/transactions | Create a transaction asynchronously
-*TransactionsApi* | [**AsyncTransactionsTransactionIdConfirmPost**](docs/TransactionsApi.md#asynctransactionstransactionidconfirmpost) | **Post** /async/transactions/{transaction_id}/confirm | Confirm a transaction asynchronously
-*TransactionsApi* | [**SyncTransactionsPost**](docs/TransactionsApi.md#synctransactionspost) | **Post** /sync/transactions | Create a transaction synchronously
-*TransactionsApi* | [**SyncTransactionsTransactionIdConfirmPost**](docs/TransactionsApi.md#synctransactionstransactionidconfirmpost) | **Post** /sync/transactions/{transaction_id}/confirm | Confirm a transaction synchronously
-*TransactionsApi* | [**TransactionsGet**](docs/TransactionsApi.md#transactionsget) | **Get** /transactions | Query list of transactions
-*TransactionsApi* | [**TransactionsTransactionIdCancelPost**](docs/TransactionsApi.md#transactionstransactionidcancelpost) | **Post** /transactions/{transaction_id}/cancel | Cancel a transaction
-*TransactionsApi* | [**TransactionsTransactionIdGet**](docs/TransactionsApi.md#transactionstransactionidget) | **Get** /transactions/{transaction_id} | Query a transaction by ID
+*BalancesApi* | [**GetBalances**](docs/BalancesApi.md#getbalances) | **Get** /balances | Retrieve balances
+*BenefitsApi* | [**GetBenefitTypes**](docs/BenefitsApi.md#getbenefittypes) | **Get** /benefit-types | Retrieve list of benefit types
+*CampaignsApi* | [**GetCampaignById**](docs/CampaignsApi.md#getcampaignbyid) | **Get** /campaigns/{campaign_id} | Retrieve campaign by ID
+*CampaignsApi* | [**GetCampaigns**](docs/CampaignsApi.md#getcampaigns) | **Get** /campaigns | Retrieve list of active campaigns
+*CountriesApi* | [**GetCountries**](docs/CountriesApi.md#getcountries) | **Get** /countries | Retrieve list of countries
+*CountriesApi* | [**GetCountryByIsoCode**](docs/CountriesApi.md#getcountrybyisocode) | **Get** /countries/{country_iso_code} | Retrieve country by ISO code
+*MobileNumberApi* | [**GetLookupMobileNumber**](docs/MobileNumberApi.md#getlookupmobilenumber) | **Get** /lookup/mobile-number/{mobile_number} | Look up operators for a given mobile number
+*MobileNumberApi* | [**PostLookupMobileNumber**](docs/MobileNumberApi.md#postlookupmobilenumber) | **Post** /lookup/mobile-number | Look up operators for a given mobile number
+*OperatorsApi* | [**GetOperatorById**](docs/OperatorsApi.md#getoperatorbyid) | **Get** /operators/{operator_id} | Retrieve operator by ID
+*OperatorsApi* | [**GetOperators**](docs/OperatorsApi.md#getoperators) | **Get** /operators | Retrieve list of operators
+*ProductsApi* | [**GetProductById**](docs/ProductsApi.md#getproductbyid) | **Get** /products/{product_id} | Retrieve product by ID
+*ProductsApi* | [**GetProducts**](docs/ProductsApi.md#getproducts) | **Get** /products | Retrieve list of products
+*PromotionsApi* | [**GetPromotionById**](docs/PromotionsApi.md#getpromotionbyid) | **Get** /promotions/{promotion_id} | Retrieve promotion by ID
+*PromotionsApi* | [**GetPromotions**](docs/PromotionsApi.md#getpromotions) | **Get** /promotions | Retrieve list of promotions
+*ServicesApi* | [**GetServiceById**](docs/ServicesApi.md#getservicebyid) | **Get** /services/{service_id} | Retrieve service by ID
+*ServicesApi* | [**GetServices**](docs/ServicesApi.md#getservices) | **Get** /services | Retrieve list of services
+*StatementInquiryApi* | [**PostLookupStatementInquiry**](docs/StatementInquiryApi.md#postlookupstatementinquiry) | **Post** /lookup/statement-inquiry | Inquire statements for a given account number
+*TransactionsApi* | [**GetTransactionById**](docs/TransactionsApi.md#gettransactionbyid) | **Get** /transactions/{transaction_id} | Query a transaction by ID
+*TransactionsApi* | [**GetTransactions**](docs/TransactionsApi.md#gettransactions) | **Get** /transactions | Query list of transactions
+*TransactionsApi* | [**PostTransactionAsync**](docs/TransactionsApi.md#posttransactionasync) | **Post** /async/transactions | Create a transaction asynchronously
+*TransactionsApi* | [**PostTransactionCancel**](docs/TransactionsApi.md#posttransactioncancel) | **Post** /transactions/{transaction_id}/cancel | Cancel a transaction
+*TransactionsApi* | [**PostTransactionConfirmAsync**](docs/TransactionsApi.md#posttransactionconfirmasync) | **Post** /async/transactions/{transaction_id}/confirm | Confirm a transaction asynchronously
+*TransactionsApi* | [**PostTransactionConfirmSync**](docs/TransactionsApi.md#posttransactionconfirmsync) | **Post** /sync/transactions/{transaction_id}/confirm | Confirm a transaction synchronously
+*TransactionsApi* | [**PostTransactionSync**](docs/TransactionsApi.md#posttransactionsync) | **Post** /sync/transactions | Create a transaction synchronously
 
 
 ## Documentation For Models
 
- - [AsyncTransactionsPostRequest](docs/AsyncTransactionsPostRequest.md)
- - [AsyncTransactionsPostRequestAllOf](docs/AsyncTransactionsPostRequestAllOf.md)
  - [AvailabilityZones](docs/AvailabilityZones.md)
  - [Balance](docs/Balance.md)
  - [BenefitType](docs/BenefitType.md)
@@ -368,17 +366,19 @@ Class | Method | HTTP request | Description
  - [ErrorsErrorsInner](docs/ErrorsErrorsInner.md)
  - [FixedBenefit](docs/FixedBenefit.md)
  - [FixedBenefitAmount](docs/FixedBenefitAmount.md)
- - [LookupMobileNumberMobileNumberGet200ResponseInner](docs/LookupMobileNumberMobileNumberGet200ResponseInner.md)
- - [LookupMobileNumberMobileNumberGet200ResponseInnerAllOf](docs/LookupMobileNumberMobileNumberGet200ResponseInnerAllOf.md)
- - [LookupMobileNumberPostRequest](docs/LookupMobileNumberPostRequest.md)
- - [LookupStatementInquiryPostRequest](docs/LookupStatementInquiryPostRequest.md)
+ - [GetLookupMobileNumber200ResponseInner](docs/GetLookupMobileNumber200ResponseInner.md)
+ - [GetLookupMobileNumber200ResponseInnerAllOf](docs/GetLookupMobileNumber200ResponseInnerAllOf.md)
+ - [GetOperators200ResponseInner](docs/GetOperators200ResponseInner.md)
  - [Operator](docs/Operator.md)
- - [OperatorsGet200ResponseInner](docs/OperatorsGet200ResponseInner.md)
  - [PIN](docs/PIN.md)
  - [PINValidity](docs/PINValidity.md)
  - [Payment](docs/Payment.md)
  - [PaymentModes](docs/PaymentModes.md)
  - [PaymentPostingPeriod](docs/PaymentPostingPeriod.md)
+ - [PostLookupMobileNumberRequest](docs/PostLookupMobileNumberRequest.md)
+ - [PostLookupStatementInquiryRequest](docs/PostLookupStatementInquiryRequest.md)
+ - [PostTransactionAsyncRequest](docs/PostTransactionAsyncRequest.md)
+ - [PostTransactionAsyncRequestAllOf](docs/PostTransactionAsyncRequestAllOf.md)
  - [Product](docs/Product.md)
  - [ProductBase](docs/ProductBase.md)
  - [ProductFixedValuePinPurchase](docs/ProductFixedValuePinPurchase.md)

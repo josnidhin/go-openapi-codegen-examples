@@ -21,7 +21,7 @@ import (
 // BenefitsApiService BenefitsApi service
 type BenefitsApiService service
 
-type BenefitsApiBenefitTypesGetRequest struct {
+type BenefitsApiGetBenefitTypesRequest struct {
 	ctx        context.Context
 	ApiService *BenefitsApiService
 	page       *int32
@@ -29,29 +29,29 @@ type BenefitsApiBenefitTypesGetRequest struct {
 }
 
 // Page number
-func (r BenefitsApiBenefitTypesGetRequest) Page(page int32) BenefitsApiBenefitTypesGetRequest {
+func (r BenefitsApiGetBenefitTypesRequest) Page(page int32) BenefitsApiGetBenefitTypesRequest {
 	r.page = &page
 	return r
 }
 
 // Number of records per page
-func (r BenefitsApiBenefitTypesGetRequest) PerPage(perPage int32) BenefitsApiBenefitTypesGetRequest {
+func (r BenefitsApiGetBenefitTypesRequest) PerPage(perPage int32) BenefitsApiGetBenefitTypesRequest {
 	r.perPage = &perPage
 	return r
 }
 
-func (r BenefitsApiBenefitTypesGetRequest) Execute() ([]BenefitType, *http.Response, error) {
-	return r.ApiService.BenefitTypesGetExecute(r)
+func (r BenefitsApiGetBenefitTypesRequest) Execute() ([]BenefitType, *http.Response, error) {
+	return r.ApiService.GetBenefitTypesExecute(r)
 }
 
 /*
-BenefitTypesGet Retrieve list of benefit types
+GetBenefitTypes Retrieve list of benefit types
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return BenefitsApiBenefitTypesGetRequest
+	@return BenefitsApiGetBenefitTypesRequest
 */
-func (a *BenefitsApiService) BenefitTypesGet(ctx context.Context) BenefitsApiBenefitTypesGetRequest {
-	return BenefitsApiBenefitTypesGetRequest{
+func (a *BenefitsApiService) GetBenefitTypes(ctx context.Context) BenefitsApiGetBenefitTypesRequest {
+	return BenefitsApiGetBenefitTypesRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -60,7 +60,7 @@ func (a *BenefitsApiService) BenefitTypesGet(ctx context.Context) BenefitsApiBen
 // Execute executes the request
 //
 //	@return []BenefitType
-func (a *BenefitsApiService) BenefitTypesGetExecute(r BenefitsApiBenefitTypesGetRequest) ([]BenefitType, *http.Response, error) {
+func (a *BenefitsApiService) GetBenefitTypesExecute(r BenefitsApiGetBenefitTypesRequest) ([]BenefitType, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -68,7 +68,7 @@ func (a *BenefitsApiService) BenefitTypesGetExecute(r BenefitsApiBenefitTypesGet
 		localVarReturnValue []BenefitType
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BenefitsApiService.BenefitTypesGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BenefitsApiService.GetBenefitTypes")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

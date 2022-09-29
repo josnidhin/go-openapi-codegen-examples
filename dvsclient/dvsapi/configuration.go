@@ -105,10 +105,6 @@ func NewConfiguration() *Configuration {
 		Debug:            false,
 		Servers:          ServerConfigurations{
 			{
-				URL: "https://staging-dvs-api.transferto.dtone.com:8443/v1",
-				Description: "Staging",
-			},
-			{
 				URL: "https://preprod-dvs-api.dtone.com/v1",
 				Description: "Pre-Production",
 			},

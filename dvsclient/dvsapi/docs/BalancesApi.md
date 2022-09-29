@@ -1,16 +1,16 @@
 # \BalancesApi
 
-All URIs are relative to *https://staging-dvs-api.transferto.dtone.com:8443/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**BalancesGet**](BalancesApi.md#BalancesGet) | **Get** /balances | Retrieve balances
+[**GetBalances**](BalancesApi.md#GetBalances) | **Get** /balances | Retrieve balances
 
 
 
-## BalancesGet
+## GetBalances
 
-> []Balance BalancesGet(ctx).UnitType(unitType).Unit(unit).Page(page).PerPage(perPage).Execute()
+> []Balance GetBalances(ctx).UnitType(unitType).Unit(unit).Page(page).PerPage(perPage).Execute()
 
 Retrieve balances
 
@@ -34,13 +34,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.BalancesApi.BalancesGet(context.Background()).UnitType(unitType).Unit(unit).Page(page).PerPage(perPage).Execute()
+    resp, r, err := apiClient.BalancesApi.GetBalances(context.Background()).UnitType(unitType).Unit(unit).Page(page).PerPage(perPage).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `BalancesApi.BalancesGet``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `BalancesApi.GetBalances``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `BalancesGet`: []Balance
-    fmt.Fprintf(os.Stdout, "Response from `BalancesApi.BalancesGet`: %v\n", resp)
+    // response from `GetBalances`: []Balance
+    fmt.Fprintf(os.Stdout, "Response from `BalancesApi.GetBalances`: %v\n", resp)
 }
 ```
 
@@ -50,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiBalancesGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetBalancesRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

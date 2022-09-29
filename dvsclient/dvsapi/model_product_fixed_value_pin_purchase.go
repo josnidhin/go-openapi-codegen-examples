@@ -21,7 +21,7 @@ type ProductFixedValuePinPurchase struct {
 	Description                         string                                         `json:"description"`
 	Tags                                []string                                       `json:"tags"`
 	Service                             Service                                        `json:"service"`
-	Operator                            OperatorsGet200ResponseInner                   `json:"operator"`
+	Operator                            GetOperators200ResponseInner                   `json:"operator"`
 	Regions                             []ServiceRegion                                `json:"regions"`
 	Type                                string                                         `json:"type"`
 	Validity                            NullableProductFixedValueRechargeAllOfValidity `json:"validity"`
@@ -44,7 +44,7 @@ type ProductFixedValuePinPurchase struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProductFixedValuePinPurchase(id int32, name string, description string, tags []string, service Service, operator OperatorsGet200ResponseInner, regions []ServiceRegion, type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, availabilityZones []AvailabilityZones, source ProductFixedValueRechargeAllOfSource, destination ProductFixedValueRechargeAllOfSource, prices ProductFixedValueRechargeAllOfPrices, rates Rates, pin PIN, benefits []FixedBenefit, promotions []ProductPromotion) *ProductFixedValuePinPurchase {
+func NewProductFixedValuePinPurchase(id int32, name string, description string, tags []string, service Service, operator GetOperators200ResponseInner, regions []ServiceRegion, type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, availabilityZones []AvailabilityZones, source ProductFixedValueRechargeAllOfSource, destination ProductFixedValueRechargeAllOfSource, prices ProductFixedValueRechargeAllOfPrices, rates Rates, pin PIN, benefits []FixedBenefit, promotions []ProductPromotion) *ProductFixedValuePinPurchase {
 	this := ProductFixedValuePinPurchase{}
 	this.Id = id
 	this.Name = name
@@ -202,9 +202,9 @@ func (o *ProductFixedValuePinPurchase) SetService(v Service) {
 }
 
 // GetOperator returns the Operator field value
-func (o *ProductFixedValuePinPurchase) GetOperator() OperatorsGet200ResponseInner {
+func (o *ProductFixedValuePinPurchase) GetOperator() GetOperators200ResponseInner {
 	if o == nil {
-		var ret OperatorsGet200ResponseInner
+		var ret GetOperators200ResponseInner
 		return ret
 	}
 
@@ -213,7 +213,7 @@ func (o *ProductFixedValuePinPurchase) GetOperator() OperatorsGet200ResponseInne
 
 // GetOperatorOk returns a tuple with the Operator field value
 // and a boolean to check if the value has been set.
-func (o *ProductFixedValuePinPurchase) GetOperatorOk() (*OperatorsGet200ResponseInner, bool) {
+func (o *ProductFixedValuePinPurchase) GetOperatorOk() (*GetOperators200ResponseInner, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -221,7 +221,7 @@ func (o *ProductFixedValuePinPurchase) GetOperatorOk() (*OperatorsGet200Response
 }
 
 // SetOperator sets field value
-func (o *ProductFixedValuePinPurchase) SetOperator(v OperatorsGet200ResponseInner) {
+func (o *ProductFixedValuePinPurchase) SetOperator(v GetOperators200ResponseInner) {
 	o.Operator = v
 }
 

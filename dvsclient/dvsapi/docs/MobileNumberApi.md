@@ -1,17 +1,17 @@
 # \MobileNumberApi
 
-All URIs are relative to *https://staging-dvs-api.transferto.dtone.com:8443/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**LookupMobileNumberMobileNumberGet**](MobileNumberApi.md#LookupMobileNumberMobileNumberGet) | **Get** /lookup/mobile-number/{mobile_number} | Look up operators for a given mobile number
-[**LookupMobileNumberPost**](MobileNumberApi.md#LookupMobileNumberPost) | **Post** /lookup/mobile-number | Look up operators for a given mobile number
+[**GetLookupMobileNumber**](MobileNumberApi.md#GetLookupMobileNumber) | **Get** /lookup/mobile-number/{mobile_number} | Look up operators for a given mobile number
+[**PostLookupMobileNumber**](MobileNumberApi.md#PostLookupMobileNumber) | **Post** /lookup/mobile-number | Look up operators for a given mobile number
 
 
 
-## LookupMobileNumberMobileNumberGet
+## GetLookupMobileNumber
 
-> []LookupMobileNumberMobileNumberGet200ResponseInner LookupMobileNumberMobileNumberGet(ctx, mobileNumber).Page(page).PerPage(perPage).Execute()
+> []GetLookupMobileNumber200ResponseInner GetLookupMobileNumber(ctx, mobileNumber).Page(page).PerPage(perPage).Execute()
 
 Look up operators for a given mobile number
 
@@ -34,13 +34,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.MobileNumberApi.LookupMobileNumberMobileNumberGet(context.Background(), mobileNumber).Page(page).PerPage(perPage).Execute()
+    resp, r, err := apiClient.MobileNumberApi.GetLookupMobileNumber(context.Background(), mobileNumber).Page(page).PerPage(perPage).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `MobileNumberApi.LookupMobileNumberMobileNumberGet``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `MobileNumberApi.GetLookupMobileNumber``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `LookupMobileNumberMobileNumberGet`: []LookupMobileNumberMobileNumberGet200ResponseInner
-    fmt.Fprintf(os.Stdout, "Response from `MobileNumberApi.LookupMobileNumberMobileNumberGet`: %v\n", resp)
+    // response from `GetLookupMobileNumber`: []GetLookupMobileNumber200ResponseInner
+    fmt.Fprintf(os.Stdout, "Response from `MobileNumberApi.GetLookupMobileNumber`: %v\n", resp)
 }
 ```
 
@@ -54,7 +54,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiLookupMobileNumberMobileNumberGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetLookupMobileNumberRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -65,7 +65,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[]LookupMobileNumberMobileNumberGet200ResponseInner**](LookupMobileNumberMobileNumberGet200ResponseInner.md)
+[**[]GetLookupMobileNumber200ResponseInner**](GetLookupMobileNumber200ResponseInner.md)
 
 ### Authorization
 
@@ -81,9 +81,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## LookupMobileNumberPost
+## PostLookupMobileNumber
 
-> []LookupMobileNumberMobileNumberGet200ResponseInner LookupMobileNumberPost(ctx).LookupMobileNumberPostRequest(lookupMobileNumberPostRequest).Execute()
+> []GetLookupMobileNumber200ResponseInner PostLookupMobileNumber(ctx).PostLookupMobileNumberRequest(postLookupMobileNumberRequest).Execute()
 
 Look up operators for a given mobile number
 
@@ -100,17 +100,17 @@ import (
 )
 
 func main() {
-    lookupMobileNumberPostRequest := *openapiclient.NewLookupMobileNumberPostRequest("MobileNumber_example") // LookupMobileNumberPostRequest | 
+    postLookupMobileNumberRequest := *openapiclient.NewPostLookupMobileNumberRequest("MobileNumber_example") // PostLookupMobileNumberRequest | 
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.MobileNumberApi.LookupMobileNumberPost(context.Background()).LookupMobileNumberPostRequest(lookupMobileNumberPostRequest).Execute()
+    resp, r, err := apiClient.MobileNumberApi.PostLookupMobileNumber(context.Background()).PostLookupMobileNumberRequest(postLookupMobileNumberRequest).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `MobileNumberApi.LookupMobileNumberPost``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `MobileNumberApi.PostLookupMobileNumber``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `LookupMobileNumberPost`: []LookupMobileNumberMobileNumberGet200ResponseInner
-    fmt.Fprintf(os.Stdout, "Response from `MobileNumberApi.LookupMobileNumberPost`: %v\n", resp)
+    // response from `PostLookupMobileNumber`: []GetLookupMobileNumber200ResponseInner
+    fmt.Fprintf(os.Stdout, "Response from `MobileNumberApi.PostLookupMobileNumber`: %v\n", resp)
 }
 ```
 
@@ -120,16 +120,16 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiLookupMobileNumberPostRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiPostLookupMobileNumberRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **lookupMobileNumberPostRequest** | [**LookupMobileNumberPostRequest**](LookupMobileNumberPostRequest.md) |  | 
+ **postLookupMobileNumberRequest** | [**PostLookupMobileNumberRequest**](PostLookupMobileNumberRequest.md) |  | 
 
 ### Return type
 
-[**[]LookupMobileNumberMobileNumberGet200ResponseInner**](LookupMobileNumberMobileNumberGet200ResponseInner.md)
+[**[]GetLookupMobileNumber200ResponseInner**](GetLookupMobileNumber200ResponseInner.md)
 
 ### Authorization
 

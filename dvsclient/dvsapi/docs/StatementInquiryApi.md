@@ -1,16 +1,16 @@
 # \StatementInquiryApi
 
-All URIs are relative to *https://staging-dvs-api.transferto.dtone.com:8443/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**LookupStatementInquiryPost**](StatementInquiryApi.md#LookupStatementInquiryPost) | **Post** /lookup/statement-inquiry | Inquire statements for a given account number
+[**PostLookupStatementInquiry**](StatementInquiryApi.md#PostLookupStatementInquiry) | **Post** /lookup/statement-inquiry | Inquire statements for a given account number
 
 
 
-## LookupStatementInquiryPost
+## PostLookupStatementInquiry
 
-> []Statement LookupStatementInquiryPost(ctx).LookupStatementInquiryPostRequest(lookupStatementInquiryPostRequest).Execute()
+> []Statement PostLookupStatementInquiry(ctx).PostLookupStatementInquiryRequest(postLookupStatementInquiryRequest).Execute()
 
 Inquire statements for a given account number
 
@@ -27,17 +27,17 @@ import (
 )
 
 func main() {
-    lookupStatementInquiryPostRequest := *openapiclient.NewLookupStatementInquiryPostRequest(int32(123), "AccountNumber_example") // LookupStatementInquiryPostRequest | 
+    postLookupStatementInquiryRequest := *openapiclient.NewPostLookupStatementInquiryRequest(int32(123), "AccountNumber_example") // PostLookupStatementInquiryRequest | 
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.StatementInquiryApi.LookupStatementInquiryPost(context.Background()).LookupStatementInquiryPostRequest(lookupStatementInquiryPostRequest).Execute()
+    resp, r, err := apiClient.StatementInquiryApi.PostLookupStatementInquiry(context.Background()).PostLookupStatementInquiryRequest(postLookupStatementInquiryRequest).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `StatementInquiryApi.LookupStatementInquiryPost``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `StatementInquiryApi.PostLookupStatementInquiry``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `LookupStatementInquiryPost`: []Statement
-    fmt.Fprintf(os.Stdout, "Response from `StatementInquiryApi.LookupStatementInquiryPost`: %v\n", resp)
+    // response from `PostLookupStatementInquiry`: []Statement
+    fmt.Fprintf(os.Stdout, "Response from `StatementInquiryApi.PostLookupStatementInquiry`: %v\n", resp)
 }
 ```
 
@@ -47,12 +47,12 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiLookupStatementInquiryPostRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiPostLookupStatementInquiryRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **lookupStatementInquiryPostRequest** | [**LookupStatementInquiryPostRequest**](LookupStatementInquiryPostRequest.md) |  | 
+ **postLookupStatementInquiryRequest** | [**PostLookupStatementInquiryRequest**](PostLookupStatementInquiryRequest.md) |  | 
 
 ### Return type
 

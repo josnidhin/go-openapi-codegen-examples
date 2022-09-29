@@ -254,8 +254,6 @@ info:
   x-logo:
     url: https://dvs-api-doc.dtone.com/images/dtone.png
 servers:
-- description: Staging
-  url: https://staging-dvs-api.transferto.dtone.com:8443/v1
 - description: Pre-Production
   url: https://preprod-dvs-api.dtone.com/v1
 - description: Production
@@ -338,6 +336,7 @@ tags:
 paths:
   /services:
     get:
+      operationId: getServices
       parameters:
       - description: Page number
         explode: true
@@ -396,6 +395,7 @@ paths:
       x-mojo-to: v1#get_services
   /services/{service_id}:
     get:
+      operationId: getServiceById
       parameters:
       - explode: false
         in: path
@@ -429,6 +429,7 @@ paths:
       x-mojo-to: v1#get_service_by_id
   /countries:
     get:
+      operationId: getCountries
       parameters:
       - description: Page number
         explode: true
@@ -487,6 +488,7 @@ paths:
       x-mojo-to: v1#get_countries
   /countries/{country_iso_code}:
     get:
+      operationId: getCountryByIsoCode
       parameters:
       - explode: false
         in: path
@@ -520,6 +522,7 @@ paths:
       x-mojo-to: v1#get_country_by_iso_code
   /operators:
     get:
+      operationId: getOperators
       parameters:
       - description: Page number
         explode: true
@@ -557,7 +560,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/_operators_get_200_response_inner'
+                  $ref: '#/components/schemas/getOperators_200_response_inner'
                 type: array
           description: successful operation
           headers:
@@ -585,6 +588,7 @@ paths:
       x-mojo-to: v1#get_operators
   /operators/{operator_id}:
     get:
+      operationId: getOperatorById
       parameters:
       - explode: false
         in: path
@@ -598,7 +602,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_operators_get_200_response_inner'
+                $ref: '#/components/schemas/getOperators_200_response_inner'
           description: successful operation
         "404":
           content:
@@ -618,6 +622,7 @@ paths:
       x-mojo-to: v1#get_operator_by_id
   /benefit-types:
     get:
+      operationId: getBenefitTypes
       parameters:
       - description: Page number
         explode: true
@@ -676,6 +681,7 @@ paths:
       x-mojo-to: v1#get_benefit_types
   /promotions:
     get:
+      operationId: getPromotions
       parameters:
       - description: Page number
         explode: true
@@ -755,6 +761,7 @@ paths:
       x-mojo-to: v1#get_promotions
   /promotions/{promotion_id}:
     get:
+      operationId: getPromotionById
       parameters:
       - explode: false
         in: path
@@ -788,6 +795,7 @@ paths:
       x-mojo-to: v1#get_promotion_by_id
   /campaigns:
     get:
+      operationId: getCampaigns
       parameters:
       - description: Page number
         explode: true
@@ -867,6 +875,7 @@ paths:
       x-mojo-to: v1#get_campaigns
   /campaigns/{campaign_id}:
     get:
+      operationId: getCampaignById
       parameters:
       - explode: false
         in: path
@@ -900,6 +909,7 @@ paths:
       x-mojo-to: v1#get_campaign_by_id
   /products:
     get:
+      operationId: getProducts
       parameters:
       - explode: true
         in: query
@@ -1014,6 +1024,7 @@ paths:
       x-mojo-to: v1#get_products
   /products/{product_id}:
     get:
+      operationId: getProductById
       parameters:
       - explode: false
         in: path
@@ -1051,12 +1062,13 @@ paths:
         This endpoint lets you create a transaction in the **asynchronous** mode.
         Note that the `auto_confirm` flag can be set to simultaneously create and
         confirm a transaction in one step (i.e. HTTP request).
+      operationId: postTransactionAsync
       parameters: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/_async_transactions_post_request'
+              $ref: '#/components/schemas/postTransactionAsync_request'
       responses:
         "201":
           content:
@@ -1081,6 +1093,7 @@ paths:
         This endpoint lets you create a transaction in the **synchronous** mode. Note
         that the `auto_confirm` flag can be set to simultaneously create and confirm
         a transaction in one step (i.e. HTTP request).
+      operationId: postTransactionSync
       parameters: []
       requestBody:
         content:
@@ -1107,6 +1120,7 @@ paths:
   /transactions/{transaction_id}:
     get:
       description: This endpoint will return the details of the requested transaction.
+      operationId: getTransactionById
       parameters:
       - explode: false
         in: path
@@ -1120,7 +1134,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_async_transactions_post_request'
+                $ref: '#/components/schemas/postTransactionAsync_request'
           description: successful operation
         "404":
           content:
@@ -1145,6 +1159,7 @@ paths:
         \ parameters and/or if neither date ranges (i.e. `from_date`, `to_date`) nor\
         \ `external_id` are specified, transactions created within the last 24 hours\
         \ will be returned by default."
+      operationId: getTransactions
       parameters:
       - explode: true
         in: query
@@ -1254,7 +1269,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/_async_transactions_post_request'
+                  $ref: '#/components/schemas/postTransactionAsync_request'
                 type: array
           description: successful operation
           headers:
@@ -1292,6 +1307,7 @@ paths:
         If an **asynchronous** transaction was created without setting the `auto_confirm` flag, this endpoint will have to be called to confirm the transaction. Once successfully confirmed, the transfer order will be submitted to the operator to be processed.
 
         Please note that only unexpired transactions can be confirmed, as denoted in the `confirmation_expiration_date` field of the transaction. Beyond this, the only allowed change is to [cancel the transaction](/#tag/Transactions/paths/~1transactions~1{transaction_id}~1cancel/post), so as to release the held balance.
+      operationId: postTransactionConfirmAsync
       parameters:
       - explode: false
         in: path
@@ -1324,6 +1340,7 @@ paths:
         If a **synchronous** transaction was created without setting the `auto_confirm` flag, this endpoint will have to be called to confirm the transaction. Once successfully confirmed, the transfer order will be submitted to the operator to be processed.
 
         Please note that only unexpired transactions can be confirmed, as denoted in the `confirmation_expiration_date` field of the transaction. Beyond this, the only allowed change is to [cancel the transaction](/#tag/Transactions/paths/~1transactions~1{transaction_id}~1cancel/post), so as to release the held balance.
+      operationId: postTransactionConfirmSync
       parameters:
       - explode: false
         in: path
@@ -1354,6 +1371,7 @@ paths:
       description: "If a transaction is still in the `CREATED` state, it has not yet\
         \ been submitted to the receiving operator for processing. You can thus request\
         \ to cancel such transactions by calling this endpoint."
+      operationId: postTransactionCancel
       parameters:
       - explode: false
         in: path
@@ -1381,6 +1399,7 @@ paths:
       x-mojo-to: v1#cancel_transaction
   /balances:
     get:
+      operationId: getBalances
       parameters:
       - explode: true
         in: query
@@ -1453,6 +1472,7 @@ paths:
       x-mojo-to: v1#get_balances
   /lookup/mobile-number/{mobile_number}:
     get:
+      operationId: getLookupMobileNumber
       parameters:
       - description: Page number
         explode: true
@@ -1490,7 +1510,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/_lookup_mobile_number__mobile_number__get_200_response_inner'
+                  $ref: '#/components/schemas/getLookupMobileNumber_200_response_inner'
                 type: array
           description: successful operation
           headers:
@@ -1518,11 +1538,12 @@ paths:
       x-mojo-to: v1#lookup_mobile_number
   /lookup/mobile-number:
     post:
+      operationId: postLookupMobileNumber
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/_lookup_mobile_number_post_request'
+              $ref: '#/components/schemas/postLookupMobileNumber_request'
         required: true
       responses:
         "200":
@@ -1530,7 +1551,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/_lookup_mobile_number__mobile_number__get_200_response_inner'
+                  $ref: '#/components/schemas/getLookupMobileNumber_200_response_inner'
                 type: array
           description: successful operation
           headers:
@@ -1558,11 +1579,12 @@ paths:
       x-mojo-to: v1#lookup_mobile_number
   /lookup/statement-inquiry:
     post:
+      operationId: postLookupStatementInquiry
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/_lookup_statement_inquiry_post_request'
+              $ref: '#/components/schemas/postLookupStatementInquiry_request'
         required: true
       responses:
         "200":
@@ -1826,7 +1848,7 @@ components:
         service:
           $ref: '#/components/schemas/Service'
         operator:
-          $ref: '#/components/schemas/_operators_get_200_response_inner'
+          $ref: '#/components/schemas/getOperators_200_response_inner'
         regions:
           items:
             $ref: '#/components/schemas/ServiceRegion'
@@ -2536,21 +2558,21 @@ components:
       - BUSINESS
       - CALENDAR
       type: string
-    _operators_get_200_response_inner:
+    getOperators_200_response_inner:
       allOf:
       - $ref: '#/components/schemas/Operator'
       - additionalProperties: false
         type: object
-    _async_transactions_post_request_allOf:
+    postTransactionAsync_request_allOf:
       properties:
         callback_url:
           format: uri
           type: string
-    _async_transactions_post_request:
+    postTransactionAsync_request:
       allOf:
       - $ref: '#/components/schemas/Transaction'
-      - $ref: '#/components/schemas/_async_transactions_post_request_allOf'
-    _lookup_mobile_number__mobile_number__get_200_response_inner_allOf:
+      - $ref: '#/components/schemas/postTransactionAsync_request_allOf'
+    getLookupMobileNumber_200_response_inner_allOf:
       properties:
         identified:
           description: Indicates whether operator was identified as a direct match
@@ -2558,13 +2580,13 @@ components:
       required:
       - identified
       type: object
-    _lookup_mobile_number__mobile_number__get_200_response_inner:
+    getLookupMobileNumber_200_response_inner:
       allOf:
       - $ref: '#/components/schemas/Operator'
-      - $ref: '#/components/schemas/_lookup_mobile_number__mobile_number__get_200_response_inner_allOf'
+      - $ref: '#/components/schemas/getLookupMobileNumber_200_response_inner_allOf'
       - additionalProperties: false
         type: object
-    _lookup_mobile_number_post_request:
+    postLookupMobileNumber_request:
       properties:
         mobile_number:
           pattern: "^\\+[1-9][0-9]{6,14}$"
@@ -2585,7 +2607,7 @@ components:
       required:
       - mobile_number
       type: object
-    _lookup_statement_inquiry_post_request:
+    postLookupStatementInquiry_request:
       properties:
         product_id:
           format: int32

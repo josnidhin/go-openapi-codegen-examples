@@ -1,16 +1,16 @@
 # \BenefitsApi
 
-All URIs are relative to *https://staging-dvs-api.transferto.dtone.com:8443/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**BenefitTypesGet**](BenefitsApi.md#BenefitTypesGet) | **Get** /benefit-types | Retrieve list of benefit types
+[**GetBenefitTypes**](BenefitsApi.md#GetBenefitTypes) | **Get** /benefit-types | Retrieve list of benefit types
 
 
 
-## BenefitTypesGet
+## GetBenefitTypes
 
-> []BenefitType BenefitTypesGet(ctx).Page(page).PerPage(perPage).Execute()
+> []BenefitType GetBenefitTypes(ctx).Page(page).PerPage(perPage).Execute()
 
 Retrieve list of benefit types
 
@@ -32,13 +32,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.BenefitsApi.BenefitTypesGet(context.Background()).Page(page).PerPage(perPage).Execute()
+    resp, r, err := apiClient.BenefitsApi.GetBenefitTypes(context.Background()).Page(page).PerPage(perPage).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `BenefitsApi.BenefitTypesGet``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `BenefitsApi.GetBenefitTypes``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `BenefitTypesGet`: []BenefitType
-    fmt.Fprintf(os.Stdout, "Response from `BenefitsApi.BenefitTypesGet`: %v\n", resp)
+    // response from `GetBenefitTypes`: []BenefitType
+    fmt.Fprintf(os.Stdout, "Response from `BenefitsApi.GetBenefitTypes`: %v\n", resp)
 }
 ```
 
@@ -48,7 +48,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiBenefitTypesGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetBenefitTypesRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

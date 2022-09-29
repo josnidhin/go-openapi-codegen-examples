@@ -22,159 +22,25 @@ import (
 // OperatorsApiService OperatorsApi service
 type OperatorsApiService service
 
-type OperatorsApiOperatorsGetRequest struct {
-	ctx            context.Context
-	ApiService     *OperatorsApiService
-	page           *int32
-	perPage        *int32
-	countryIsoCode *string
-}
-
-// Page number
-func (r OperatorsApiOperatorsGetRequest) Page(page int32) OperatorsApiOperatorsGetRequest {
-	r.page = &page
-	return r
-}
-
-// Number of records per page
-func (r OperatorsApiOperatorsGetRequest) PerPage(perPage int32) OperatorsApiOperatorsGetRequest {
-	r.perPage = &perPage
-	return r
-}
-
-func (r OperatorsApiOperatorsGetRequest) CountryIsoCode(countryIsoCode string) OperatorsApiOperatorsGetRequest {
-	r.countryIsoCode = &countryIsoCode
-	return r
-}
-
-func (r OperatorsApiOperatorsGetRequest) Execute() ([]OperatorsGet200ResponseInner, *http.Response, error) {
-	return r.ApiService.OperatorsGetExecute(r)
-}
-
-/*
-OperatorsGet Retrieve list of operators
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return OperatorsApiOperatorsGetRequest
-*/
-func (a *OperatorsApiService) OperatorsGet(ctx context.Context) OperatorsApiOperatorsGetRequest {
-	return OperatorsApiOperatorsGetRequest{
-		ApiService: a,
-		ctx:        ctx,
-	}
-}
-
-// Execute executes the request
-//
-//	@return []OperatorsGet200ResponseInner
-func (a *OperatorsApiService) OperatorsGetExecute(r OperatorsApiOperatorsGetRequest) ([]OperatorsGet200ResponseInner, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue []OperatorsGet200ResponseInner
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OperatorsApiService.OperatorsGet")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/operators"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-
-	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
-	}
-	if r.perPage != nil {
-		localVarQueryParams.Add("per_page", parameterToString(*r.perPage, ""))
-	}
-	if r.countryIsoCode != nil {
-		localVarQueryParams.Add("country_iso_code", parameterToString(*r.countryIsoCode, ""))
-	}
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		var v Errors
-		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-		if err != nil {
-			newErr.error = err.Error()
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		newErr.model = v
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type OperatorsApiOperatorsOperatorIdGetRequest struct {
+type OperatorsApiGetOperatorByIdRequest struct {
 	ctx        context.Context
 	ApiService *OperatorsApiService
 	operatorId int32
 }
 
-func (r OperatorsApiOperatorsOperatorIdGetRequest) Execute() (*OperatorsGet200ResponseInner, *http.Response, error) {
-	return r.ApiService.OperatorsOperatorIdGetExecute(r)
+func (r OperatorsApiGetOperatorByIdRequest) Execute() (*GetOperators200ResponseInner, *http.Response, error) {
+	return r.ApiService.GetOperatorByIdExecute(r)
 }
 
 /*
-OperatorsOperatorIdGet Retrieve operator by ID
+GetOperatorById Retrieve operator by ID
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param operatorId
-	@return OperatorsApiOperatorsOperatorIdGetRequest
+	@return OperatorsApiGetOperatorByIdRequest
 */
-func (a *OperatorsApiService) OperatorsOperatorIdGet(ctx context.Context, operatorId int32) OperatorsApiOperatorsOperatorIdGetRequest {
-	return OperatorsApiOperatorsOperatorIdGetRequest{
+func (a *OperatorsApiService) GetOperatorById(ctx context.Context, operatorId int32) OperatorsApiGetOperatorByIdRequest {
+	return OperatorsApiGetOperatorByIdRequest{
 		ApiService: a,
 		ctx:        ctx,
 		operatorId: operatorId,
@@ -183,16 +49,16 @@ func (a *OperatorsApiService) OperatorsOperatorIdGet(ctx context.Context, operat
 
 // Execute executes the request
 //
-//	@return OperatorsGet200ResponseInner
-func (a *OperatorsApiService) OperatorsOperatorIdGetExecute(r OperatorsApiOperatorsOperatorIdGetRequest) (*OperatorsGet200ResponseInner, *http.Response, error) {
+//	@return GetOperators200ResponseInner
+func (a *OperatorsApiService) GetOperatorByIdExecute(r OperatorsApiGetOperatorByIdRequest) (*GetOperators200ResponseInner, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *OperatorsGet200ResponseInner
+		localVarReturnValue *GetOperators200ResponseInner
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OperatorsApiService.OperatorsOperatorIdGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OperatorsApiService.GetOperatorById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -255,6 +121,140 @@ func (a *OperatorsApiService) OperatorsOperatorIdGetExecute(r OperatorsApiOperat
 			}
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		var v Errors
+		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+		if err != nil {
+			newErr.error = err.Error()
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type OperatorsApiGetOperatorsRequest struct {
+	ctx            context.Context
+	ApiService     *OperatorsApiService
+	page           *int32
+	perPage        *int32
+	countryIsoCode *string
+}
+
+// Page number
+func (r OperatorsApiGetOperatorsRequest) Page(page int32) OperatorsApiGetOperatorsRequest {
+	r.page = &page
+	return r
+}
+
+// Number of records per page
+func (r OperatorsApiGetOperatorsRequest) PerPage(perPage int32) OperatorsApiGetOperatorsRequest {
+	r.perPage = &perPage
+	return r
+}
+
+func (r OperatorsApiGetOperatorsRequest) CountryIsoCode(countryIsoCode string) OperatorsApiGetOperatorsRequest {
+	r.countryIsoCode = &countryIsoCode
+	return r
+}
+
+func (r OperatorsApiGetOperatorsRequest) Execute() ([]GetOperators200ResponseInner, *http.Response, error) {
+	return r.ApiService.GetOperatorsExecute(r)
+}
+
+/*
+GetOperators Retrieve list of operators
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return OperatorsApiGetOperatorsRequest
+*/
+func (a *OperatorsApiService) GetOperators(ctx context.Context) OperatorsApiGetOperatorsRequest {
+	return OperatorsApiGetOperatorsRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+// Execute executes the request
+//
+//	@return []GetOperators200ResponseInner
+func (a *OperatorsApiService) GetOperatorsExecute(r OperatorsApiGetOperatorsRequest) ([]GetOperators200ResponseInner, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []GetOperators200ResponseInner
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OperatorsApiService.GetOperators")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/operators"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.page != nil {
+		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+	}
+	if r.perPage != nil {
+		localVarQueryParams.Add("per_page", parameterToString(*r.perPage, ""))
+	}
+	if r.countryIsoCode != nil {
+		localVarQueryParams.Add("country_iso_code", parameterToString(*r.countryIsoCode, ""))
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
 		}
 		var v Errors
 		err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))

@@ -1,17 +1,17 @@
 # \CampaignsApi
 
-All URIs are relative to *https://staging-dvs-api.transferto.dtone.com:8443/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CampaignsCampaignIdGet**](CampaignsApi.md#CampaignsCampaignIdGet) | **Get** /campaigns/{campaign_id} | Retrieve campaign by ID
-[**CampaignsGet**](CampaignsApi.md#CampaignsGet) | **Get** /campaigns | Retrieve list of active campaigns
+[**GetCampaignById**](CampaignsApi.md#GetCampaignById) | **Get** /campaigns/{campaign_id} | Retrieve campaign by ID
+[**GetCampaigns**](CampaignsApi.md#GetCampaigns) | **Get** /campaigns | Retrieve list of active campaigns
 
 
 
-## CampaignsCampaignIdGet
+## GetCampaignById
 
-> Campaign CampaignsCampaignIdGet(ctx, campaignId).Execute()
+> Campaign GetCampaignById(ctx, campaignId).Execute()
 
 Retrieve campaign by ID
 
@@ -32,13 +32,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.CampaignsApi.CampaignsCampaignIdGet(context.Background(), campaignId).Execute()
+    resp, r, err := apiClient.CampaignsApi.GetCampaignById(context.Background(), campaignId).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `CampaignsApi.CampaignsCampaignIdGet``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `CampaignsApi.GetCampaignById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `CampaignsCampaignIdGet`: Campaign
-    fmt.Fprintf(os.Stdout, "Response from `CampaignsApi.CampaignsCampaignIdGet`: %v\n", resp)
+    // response from `GetCampaignById`: Campaign
+    fmt.Fprintf(os.Stdout, "Response from `CampaignsApi.GetCampaignById`: %v\n", resp)
 }
 ```
 
@@ -52,7 +52,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCampaignsCampaignIdGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCampaignByIdRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -77,9 +77,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## CampaignsGet
+## GetCampaigns
 
-> []Campaign CampaignsGet(ctx).Page(page).PerPage(perPage).CountryIsoCode(countryIsoCode).OperatorId(operatorId).ProductId(productId).Execute()
+> []Campaign GetCampaigns(ctx).Page(page).PerPage(perPage).CountryIsoCode(countryIsoCode).OperatorId(operatorId).ProductId(productId).Execute()
 
 Retrieve list of active campaigns
 
@@ -104,13 +104,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.CampaignsApi.CampaignsGet(context.Background()).Page(page).PerPage(perPage).CountryIsoCode(countryIsoCode).OperatorId(operatorId).ProductId(productId).Execute()
+    resp, r, err := apiClient.CampaignsApi.GetCampaigns(context.Background()).Page(page).PerPage(perPage).CountryIsoCode(countryIsoCode).OperatorId(operatorId).ProductId(productId).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `CampaignsApi.CampaignsGet``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `CampaignsApi.GetCampaigns``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `CampaignsGet`: []Campaign
-    fmt.Fprintf(os.Stdout, "Response from `CampaignsApi.CampaignsGet`: %v\n", resp)
+    // response from `GetCampaigns`: []Campaign
+    fmt.Fprintf(os.Stdout, "Response from `CampaignsApi.GetCampaigns`: %v\n", resp)
 }
 ```
 
@@ -120,7 +120,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCampaignsGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCampaignsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

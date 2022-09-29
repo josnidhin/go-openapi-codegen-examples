@@ -1,90 +1,24 @@
 # \TransactionsApi
 
-All URIs are relative to *https://staging-dvs-api.transferto.dtone.com:8443/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**AsyncTransactionsPost**](TransactionsApi.md#AsyncTransactionsPost) | **Post** /async/transactions | Create a transaction asynchronously
-[**AsyncTransactionsTransactionIdConfirmPost**](TransactionsApi.md#AsyncTransactionsTransactionIdConfirmPost) | **Post** /async/transactions/{transaction_id}/confirm | Confirm a transaction asynchronously
-[**SyncTransactionsPost**](TransactionsApi.md#SyncTransactionsPost) | **Post** /sync/transactions | Create a transaction synchronously
-[**SyncTransactionsTransactionIdConfirmPost**](TransactionsApi.md#SyncTransactionsTransactionIdConfirmPost) | **Post** /sync/transactions/{transaction_id}/confirm | Confirm a transaction synchronously
-[**TransactionsGet**](TransactionsApi.md#TransactionsGet) | **Get** /transactions | Query list of transactions
-[**TransactionsTransactionIdCancelPost**](TransactionsApi.md#TransactionsTransactionIdCancelPost) | **Post** /transactions/{transaction_id}/cancel | Cancel a transaction
-[**TransactionsTransactionIdGet**](TransactionsApi.md#TransactionsTransactionIdGet) | **Get** /transactions/{transaction_id} | Query a transaction by ID
+[**GetTransactionById**](TransactionsApi.md#GetTransactionById) | **Get** /transactions/{transaction_id} | Query a transaction by ID
+[**GetTransactions**](TransactionsApi.md#GetTransactions) | **Get** /transactions | Query list of transactions
+[**PostTransactionAsync**](TransactionsApi.md#PostTransactionAsync) | **Post** /async/transactions | Create a transaction asynchronously
+[**PostTransactionCancel**](TransactionsApi.md#PostTransactionCancel) | **Post** /transactions/{transaction_id}/cancel | Cancel a transaction
+[**PostTransactionConfirmAsync**](TransactionsApi.md#PostTransactionConfirmAsync) | **Post** /async/transactions/{transaction_id}/confirm | Confirm a transaction asynchronously
+[**PostTransactionConfirmSync**](TransactionsApi.md#PostTransactionConfirmSync) | **Post** /sync/transactions/{transaction_id}/confirm | Confirm a transaction synchronously
+[**PostTransactionSync**](TransactionsApi.md#PostTransactionSync) | **Post** /sync/transactions | Create a transaction synchronously
 
 
 
-## AsyncTransactionsPost
+## GetTransactionById
 
-> Transaction AsyncTransactionsPost(ctx).AsyncTransactionsPostRequest(asyncTransactionsPostRequest).Execute()
+> PostTransactionAsyncRequest GetTransactionById(ctx, transactionId).Execute()
 
-Create a transaction asynchronously
-
-
-
-### Example
-
-```go
-package main
-
-import (
-    "context"
-    "fmt"
-    "os"
-    openapiclient "./openapi"
-)
-
-func main() {
-    asyncTransactionsPostRequest := *openapiclient.NewAsyncTransactionsPostRequest(string(123), int32(123)) // AsyncTransactionsPostRequest |  (optional)
-
-    configuration := openapiclient.NewConfiguration()
-    apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.AsyncTransactionsPost(context.Background()).AsyncTransactionsPostRequest(asyncTransactionsPostRequest).Execute()
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.AsyncTransactionsPost``: %v\n", err)
-        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-    }
-    // response from `AsyncTransactionsPost`: Transaction
-    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.AsyncTransactionsPost`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiAsyncTransactionsPostRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **asyncTransactionsPostRequest** | [**AsyncTransactionsPostRequest**](AsyncTransactionsPostRequest.md) |  | 
-
-### Return type
-
-[**Transaction**](Transaction.md)
-
-### Authorization
-
-[BasicAuth](../README.md#BasicAuth)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## AsyncTransactionsTransactionIdConfirmPost
-
-> Transaction AsyncTransactionsTransactionIdConfirmPost(ctx, transactionId).Execute()
-
-Confirm a transaction asynchronously
+Query a transaction by ID
 
 
 
@@ -105,13 +39,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.AsyncTransactionsTransactionIdConfirmPost(context.Background(), transactionId).Execute()
+    resp, r, err := apiClient.TransactionsApi.GetTransactionById(context.Background(), transactionId).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.AsyncTransactionsTransactionIdConfirmPost``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.GetTransactionById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `AsyncTransactionsTransactionIdConfirmPost`: Transaction
-    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.AsyncTransactionsTransactionIdConfirmPost`: %v\n", resp)
+    // response from `GetTransactionById`: PostTransactionAsyncRequest
+    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.GetTransactionById`: %v\n", resp)
 }
 ```
 
@@ -125,7 +59,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAsyncTransactionsTransactionIdConfirmPostRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetTransactionByIdRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -134,7 +68,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Transaction**](Transaction.md)
+[**PostTransactionAsyncRequest**](PostTransactionAsyncRequest.md)
 
 ### Authorization
 
@@ -150,145 +84,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## SyncTransactionsPost
+## GetTransactions
 
-> Transaction SyncTransactionsPost(ctx).Transaction(transaction).Execute()
-
-Create a transaction synchronously
-
-
-
-### Example
-
-```go
-package main
-
-import (
-    "context"
-    "fmt"
-    "os"
-    openapiclient "./openapi"
-)
-
-func main() {
-    transaction := *openapiclient.NewTransaction(string(123), int32(123)) // Transaction |  (optional)
-
-    configuration := openapiclient.NewConfiguration()
-    apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.SyncTransactionsPost(context.Background()).Transaction(transaction).Execute()
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.SyncTransactionsPost``: %v\n", err)
-        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-    }
-    // response from `SyncTransactionsPost`: Transaction
-    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.SyncTransactionsPost`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiSyncTransactionsPostRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **transaction** | [**Transaction**](Transaction.md) |  | 
-
-### Return type
-
-[**Transaction**](Transaction.md)
-
-### Authorization
-
-[BasicAuth](../README.md#BasicAuth)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## SyncTransactionsTransactionIdConfirmPost
-
-> Transaction SyncTransactionsTransactionIdConfirmPost(ctx, transactionId).Execute()
-
-Confirm a transaction synchronously
-
-
-
-### Example
-
-```go
-package main
-
-import (
-    "context"
-    "fmt"
-    "os"
-    openapiclient "./openapi"
-)
-
-func main() {
-    transactionId := int64(789) // int64 | 
-
-    configuration := openapiclient.NewConfiguration()
-    apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.SyncTransactionsTransactionIdConfirmPost(context.Background(), transactionId).Execute()
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.SyncTransactionsTransactionIdConfirmPost``: %v\n", err)
-        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-    }
-    // response from `SyncTransactionsTransactionIdConfirmPost`: Transaction
-    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.SyncTransactionsTransactionIdConfirmPost`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**transactionId** | **int64** |  | 
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiSyncTransactionsTransactionIdConfirmPostRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-### Return type
-
-[**Transaction**](Transaction.md)
-
-### Authorization
-
-[BasicAuth](../README.md#BasicAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## TransactionsGet
-
-> []AsyncTransactionsPostRequest TransactionsGet(ctx).ExternalId(externalId).ProductType(productType).ServiceId(serviceId).CountryIsoCode(countryIsoCode).OperatorId(operatorId).StatusId(statusId).CreditPartyMobileNumber(creditPartyMobileNumber).CreditPartyAccountNumber(creditPartyAccountNumber).FromDate(fromDate).ToDate(toDate).Page(page).PerPage(perPage).Execute()
+> []PostTransactionAsyncRequest GetTransactions(ctx).ExternalId(externalId).ProductType(productType).ServiceId(serviceId).CountryIsoCode(countryIsoCode).OperatorId(operatorId).StatusId(statusId).CreditPartyMobileNumber(creditPartyMobileNumber).CreditPartyAccountNumber(creditPartyAccountNumber).FromDate(fromDate).ToDate(toDate).Page(page).PerPage(perPage).Execute()
 
 Query list of transactions
 
@@ -323,13 +121,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.TransactionsGet(context.Background()).ExternalId(externalId).ProductType(productType).ServiceId(serviceId).CountryIsoCode(countryIsoCode).OperatorId(operatorId).StatusId(statusId).CreditPartyMobileNumber(creditPartyMobileNumber).CreditPartyAccountNumber(creditPartyAccountNumber).FromDate(fromDate).ToDate(toDate).Page(page).PerPage(perPage).Execute()
+    resp, r, err := apiClient.TransactionsApi.GetTransactions(context.Background()).ExternalId(externalId).ProductType(productType).ServiceId(serviceId).CountryIsoCode(countryIsoCode).OperatorId(operatorId).StatusId(statusId).CreditPartyMobileNumber(creditPartyMobileNumber).CreditPartyAccountNumber(creditPartyAccountNumber).FromDate(fromDate).ToDate(toDate).Page(page).PerPage(perPage).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.TransactionsGet``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.GetTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `TransactionsGet`: []AsyncTransactionsPostRequest
-    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.TransactionsGet`: %v\n", resp)
+    // response from `GetTransactions`: []PostTransactionAsyncRequest
+    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.GetTransactions`: %v\n", resp)
 }
 ```
 
@@ -339,7 +137,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiTransactionsGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetTransactionsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -359,7 +157,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[]AsyncTransactionsPostRequest**](AsyncTransactionsPostRequest.md)
+[**[]PostTransactionAsyncRequest**](PostTransactionAsyncRequest.md)
 
 ### Authorization
 
@@ -375,9 +173,75 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## TransactionsTransactionIdCancelPost
+## PostTransactionAsync
 
-> Transaction TransactionsTransactionIdCancelPost(ctx, transactionId).Execute()
+> Transaction PostTransactionAsync(ctx).PostTransactionAsyncRequest(postTransactionAsyncRequest).Execute()
+
+Create a transaction asynchronously
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    postTransactionAsyncRequest := *openapiclient.NewPostTransactionAsyncRequest(string(123), int32(123)) // PostTransactionAsyncRequest |  (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.TransactionsApi.PostTransactionAsync(context.Background()).PostTransactionAsyncRequest(postTransactionAsyncRequest).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.PostTransactionAsync``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `PostTransactionAsync`: Transaction
+    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.PostTransactionAsync`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPostTransactionAsyncRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **postTransactionAsyncRequest** | [**PostTransactionAsyncRequest**](PostTransactionAsyncRequest.md) |  | 
+
+### Return type
+
+[**Transaction**](Transaction.md)
+
+### Authorization
+
+[BasicAuth](../README.md#BasicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PostTransactionCancel
+
+> Transaction PostTransactionCancel(ctx, transactionId).Execute()
 
 Cancel a transaction
 
@@ -400,13 +264,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.TransactionsTransactionIdCancelPost(context.Background(), transactionId).Execute()
+    resp, r, err := apiClient.TransactionsApi.PostTransactionCancel(context.Background(), transactionId).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.TransactionsTransactionIdCancelPost``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.PostTransactionCancel``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `TransactionsTransactionIdCancelPost`: Transaction
-    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.TransactionsTransactionIdCancelPost`: %v\n", resp)
+    // response from `PostTransactionCancel`: Transaction
+    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.PostTransactionCancel`: %v\n", resp)
 }
 ```
 
@@ -420,7 +284,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiTransactionsTransactionIdCancelPostRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiPostTransactionCancelRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -445,11 +309,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## TransactionsTransactionIdGet
+## PostTransactionConfirmAsync
 
-> AsyncTransactionsPostRequest TransactionsTransactionIdGet(ctx, transactionId).Execute()
+> Transaction PostTransactionConfirmAsync(ctx, transactionId).Execute()
 
-Query a transaction by ID
+Confirm a transaction asynchronously
 
 
 
@@ -470,13 +334,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.TransactionsTransactionIdGet(context.Background(), transactionId).Execute()
+    resp, r, err := apiClient.TransactionsApi.PostTransactionConfirmAsync(context.Background(), transactionId).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.TransactionsTransactionIdGet``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.PostTransactionConfirmAsync``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `TransactionsTransactionIdGet`: AsyncTransactionsPostRequest
-    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.TransactionsTransactionIdGet`: %v\n", resp)
+    // response from `PostTransactionConfirmAsync`: Transaction
+    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.PostTransactionConfirmAsync`: %v\n", resp)
 }
 ```
 
@@ -490,7 +354,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiTransactionsTransactionIdGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiPostTransactionConfirmAsyncRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -499,7 +363,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**AsyncTransactionsPostRequest**](AsyncTransactionsPostRequest.md)
+[**Transaction**](Transaction.md)
 
 ### Authorization
 
@@ -508,6 +372,142 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PostTransactionConfirmSync
+
+> Transaction PostTransactionConfirmSync(ctx, transactionId).Execute()
+
+Confirm a transaction synchronously
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    transactionId := int64(789) // int64 | 
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.TransactionsApi.PostTransactionConfirmSync(context.Background(), transactionId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.PostTransactionConfirmSync``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `PostTransactionConfirmSync`: Transaction
+    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.PostTransactionConfirmSync`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**transactionId** | **int64** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPostTransactionConfirmSyncRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**Transaction**](Transaction.md)
+
+### Authorization
+
+[BasicAuth](../README.md#BasicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PostTransactionSync
+
+> Transaction PostTransactionSync(ctx).Transaction(transaction).Execute()
+
+Create a transaction synchronously
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    transaction := *openapiclient.NewTransaction(string(123), int32(123)) // Transaction |  (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.TransactionsApi.PostTransactionSync(context.Background()).Transaction(transaction).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.PostTransactionSync``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `PostTransactionSync`: Transaction
+    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.PostTransactionSync`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPostTransactionSyncRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **transaction** | [**Transaction**](Transaction.md) |  | 
+
+### Return type
+
+[**Transaction**](Transaction.md)
+
+### Authorization
+
+[BasicAuth](../README.md#BasicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
