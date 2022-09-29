@@ -254,6 +254,10 @@ info:
   x-logo:
     url: https://dvs-api-doc.dtone.com/images/dtone.png
 servers:
+- description: Development
+  url: http://127.0.0.1:8080/v1
+- description: Staging
+  url: https://staging-dvs-api.transferto.dtone.com:8443/v1
 - description: Pre-Production
   url: https://preprod-dvs-api.dtone.com/v1
 - description: Production
@@ -560,7 +564,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/getOperators_200_response_inner'
+                  $ref: '#/components/schemas/Operator'
                 type: array
           description: successful operation
           headers:
@@ -602,7 +606,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getOperators_200_response_inner'
+                $ref: '#/components/schemas/Operator'
           description: successful operation
         "404":
           content:
@@ -1068,7 +1072,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/postTransactionAsync_request'
+              $ref: '#/components/schemas/AsyncTransaction'
       responses:
         "201":
           content:
@@ -1134,7 +1138,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/postTransactionAsync_request'
+                $ref: '#/components/schemas/AsyncTransaction'
           description: successful operation
         "404":
           content:
@@ -1269,7 +1273,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/postTransactionAsync_request'
+                  $ref: '#/components/schemas/AsyncTransaction'
                 type: array
           description: successful operation
           headers:
@@ -1510,7 +1514,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/getLookupMobileNumber_200_response_inner'
+                  $ref: '#/components/schemas/LookupMobileNumber'
                 type: array
           description: successful operation
           headers:
@@ -1551,7 +1555,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/getLookupMobileNumber_200_response_inner'
+                  $ref: '#/components/schemas/LookupMobileNumber'
                 type: array
           description: successful operation
           headers:
@@ -1725,7 +1729,7 @@ components:
       - name
       - regions
       type: object
-    Operator:
+    OperatorBase:
       example:
         country:
           regions:
@@ -1762,6 +1766,11 @@ components:
       - name
       - regions
       type: object
+    Operator:
+      allOf:
+      - $ref: '#/components/schemas/OperatorBase'
+      - additionalProperties: false
+        type: object
     ServiceRegion:
       additionalProperties: false
       example:
@@ -1848,7 +1857,7 @@ components:
         service:
           $ref: '#/components/schemas/Service'
         operator:
-          $ref: '#/components/schemas/getOperators_200_response_inner'
+          $ref: '#/components/schemas/Operator'
         regions:
           items:
             $ref: '#/components/schemas/ServiceRegion'
@@ -2076,6 +2085,10 @@ components:
       - terms
       - title
       type: object
+    AsyncTransaction:
+      allOf:
+      - $ref: '#/components/schemas/Transaction'
+      - $ref: '#/components/schemas/AsyncTransaction_allOf'
     Transaction:
       example:
         benefits:
@@ -2315,6 +2328,12 @@ components:
       - retail
       - wholesale
       type: object
+    LookupMobileNumber:
+      allOf:
+      - $ref: '#/components/schemas/OperatorBase'
+      - $ref: '#/components/schemas/LookupMobileNumber_allOf'
+      - additionalProperties: false
+        type: object
     Statement:
       example:
         reference: reference
@@ -2558,34 +2577,6 @@ components:
       - BUSINESS
       - CALENDAR
       type: string
-    getOperators_200_response_inner:
-      allOf:
-      - $ref: '#/components/schemas/Operator'
-      - additionalProperties: false
-        type: object
-    postTransactionAsync_request_allOf:
-      properties:
-        callback_url:
-          format: uri
-          type: string
-    postTransactionAsync_request:
-      allOf:
-      - $ref: '#/components/schemas/Transaction'
-      - $ref: '#/components/schemas/postTransactionAsync_request_allOf'
-    getLookupMobileNumber_200_response_inner_allOf:
-      properties:
-        identified:
-          description: Indicates whether operator was identified as a direct match
-          type: boolean
-      required:
-      - identified
-      type: object
-    getLookupMobileNumber_200_response_inner:
-      allOf:
-      - $ref: '#/components/schemas/Operator'
-      - $ref: '#/components/schemas/getLookupMobileNumber_200_response_inner_allOf'
-      - additionalProperties: false
-        type: object
     postLookupMobileNumber_request:
       properties:
         mobile_number:
@@ -3315,7 +3306,7 @@ components:
         type:
           $ref: '#/components/schemas/ProductTypes'
         operator:
-          $ref: '#/components/schemas/Operator'
+          $ref: '#/components/schemas/OperatorBase'
       required:
       - description
       - id
@@ -3323,6 +3314,12 @@ components:
       - operator
       - type
       type: object
+    AsyncTransaction_allOf:
+      properties:
+        callback_url:
+          format: uri
+          type: string
+      example: null
     Transaction_source:
       additionalProperties: false
       description: Required for ranged value products and when `calculation_mode`
@@ -3667,6 +3664,15 @@ components:
           format: date
           type: string
       type: object
+    LookupMobileNumber_allOf:
+      properties:
+        identified:
+          description: Indicates whether operator was identified as a direct match
+          type: boolean
+      required:
+      - identified
+      type: object
+      example: null
     Statement_dates:
       example:
         due: 2000-01-23

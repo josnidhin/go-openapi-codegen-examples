@@ -21,7 +21,7 @@ type ProductRangedValuePayment struct {
 	Description                         string                                         `json:"description"`
 	Tags                                []string                                       `json:"tags"`
 	Service                             Service                                        `json:"service"`
-	Operator                            GetOperators200ResponseInner                   `json:"operator"`
+	Operator                            Operator                                       `json:"operator"`
 	Regions                             []ServiceRegion                                `json:"regions"`
 	Type                                string                                         `json:"type"`
 	Validity                            NullableProductFixedValueRechargeAllOfValidity `json:"validity"`
@@ -45,7 +45,7 @@ type ProductRangedValuePayment struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProductRangedValuePayment(id int32, name string, description string, tags []string, service Service, operator GetOperators200ResponseInner, regions []ServiceRegion, type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, acceptedCalculationModes []CalculationModes, availabilityZones []AvailabilityZones, source ProductRangedValueRechargeAllOfSource, destination ProductRangedValueRechargeAllOfDestination, prices ProductRangedValueRechargeAllOfPrices, rates Rates, payment Payment, benefits []RangedBenefit, promotions []ProductPromotion) *ProductRangedValuePayment {
+func NewProductRangedValuePayment(id int32, name string, description string, tags []string, service Service, operator Operator, regions []ServiceRegion, type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, acceptedCalculationModes []CalculationModes, availabilityZones []AvailabilityZones, source ProductRangedValueRechargeAllOfSource, destination ProductRangedValueRechargeAllOfDestination, prices ProductRangedValueRechargeAllOfPrices, rates Rates, payment Payment, benefits []RangedBenefit, promotions []ProductPromotion) *ProductRangedValuePayment {
 	this := ProductRangedValuePayment{}
 	this.Id = id
 	this.Name = name
@@ -204,9 +204,9 @@ func (o *ProductRangedValuePayment) SetService(v Service) {
 }
 
 // GetOperator returns the Operator field value
-func (o *ProductRangedValuePayment) GetOperator() GetOperators200ResponseInner {
+func (o *ProductRangedValuePayment) GetOperator() Operator {
 	if o == nil {
-		var ret GetOperators200ResponseInner
+		var ret Operator
 		return ret
 	}
 
@@ -215,7 +215,7 @@ func (o *ProductRangedValuePayment) GetOperator() GetOperators200ResponseInner {
 
 // GetOperatorOk returns a tuple with the Operator field value
 // and a boolean to check if the value has been set.
-func (o *ProductRangedValuePayment) GetOperatorOk() (*GetOperators200ResponseInner, bool) {
+func (o *ProductRangedValuePayment) GetOperatorOk() (*Operator, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -223,7 +223,7 @@ func (o *ProductRangedValuePayment) GetOperatorOk() (*GetOperators200ResponseInn
 }
 
 // SetOperator sets field value
-func (o *ProductRangedValuePayment) SetOperator(v GetOperators200ResponseInner) {
+func (o *ProductRangedValuePayment) SetOperator(v Operator) {
 	o.Operator = v
 }
 

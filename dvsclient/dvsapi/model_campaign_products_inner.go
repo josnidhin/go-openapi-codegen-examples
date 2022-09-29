@@ -20,14 +20,14 @@ type CampaignProductsInner struct {
 	Name        string       `json:"name"`
 	Description string       `json:"description"`
 	Type        ProductTypes `json:"type"`
-	Operator    Operator     `json:"operator"`
+	Operator    OperatorBase `json:"operator"`
 }
 
 // NewCampaignProductsInner instantiates a new CampaignProductsInner object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCampaignProductsInner(id int32, name string, description string, type_ ProductTypes, operator Operator) *CampaignProductsInner {
+func NewCampaignProductsInner(id int32, name string, description string, type_ ProductTypes, operator OperatorBase) *CampaignProductsInner {
 	this := CampaignProductsInner{}
 	this.Id = id
 	this.Name = name
@@ -142,9 +142,9 @@ func (o *CampaignProductsInner) SetType(v ProductTypes) {
 }
 
 // GetOperator returns the Operator field value
-func (o *CampaignProductsInner) GetOperator() Operator {
+func (o *CampaignProductsInner) GetOperator() OperatorBase {
 	if o == nil {
-		var ret Operator
+		var ret OperatorBase
 		return ret
 	}
 
@@ -153,7 +153,7 @@ func (o *CampaignProductsInner) GetOperator() Operator {
 
 // GetOperatorOk returns a tuple with the Operator field value
 // and a boolean to check if the value has been set.
-func (o *CampaignProductsInner) GetOperatorOk() (*Operator, bool) {
+func (o *CampaignProductsInner) GetOperatorOk() (*OperatorBase, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -161,7 +161,7 @@ func (o *CampaignProductsInner) GetOperatorOk() (*Operator, bool) {
 }
 
 // SetOperator sets field value
-func (o *CampaignProductsInner) SetOperator(v Operator) {
+func (o *CampaignProductsInner) SetOperator(v OperatorBase) {
 	o.Operator = v
 }
 

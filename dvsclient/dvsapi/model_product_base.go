@@ -16,20 +16,20 @@ import (
 
 // ProductBase struct for ProductBase
 type ProductBase struct {
-	Id          int32                        `json:"id"`
-	Name        string                       `json:"name"`
-	Description string                       `json:"description"`
-	Tags        []string                     `json:"tags"`
-	Service     Service                      `json:"service"`
-	Operator    GetOperators200ResponseInner `json:"operator"`
-	Regions     []ServiceRegion              `json:"regions"`
+	Id          int32           `json:"id"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	Tags        []string        `json:"tags"`
+	Service     Service         `json:"service"`
+	Operator    Operator        `json:"operator"`
+	Regions     []ServiceRegion `json:"regions"`
 }
 
 // NewProductBase instantiates a new ProductBase object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProductBase(id int32, name string, description string, tags []string, service Service, operator GetOperators200ResponseInner, regions []ServiceRegion) *ProductBase {
+func NewProductBase(id int32, name string, description string, tags []string, service Service, operator Operator, regions []ServiceRegion) *ProductBase {
 	this := ProductBase{}
 	this.Id = id
 	this.Name = name
@@ -172,9 +172,9 @@ func (o *ProductBase) SetService(v Service) {
 }
 
 // GetOperator returns the Operator field value
-func (o *ProductBase) GetOperator() GetOperators200ResponseInner {
+func (o *ProductBase) GetOperator() Operator {
 	if o == nil {
-		var ret GetOperators200ResponseInner
+		var ret Operator
 		return ret
 	}
 
@@ -183,7 +183,7 @@ func (o *ProductBase) GetOperator() GetOperators200ResponseInner {
 
 // GetOperatorOk returns a tuple with the Operator field value
 // and a boolean to check if the value has been set.
-func (o *ProductBase) GetOperatorOk() (*GetOperators200ResponseInner, bool) {
+func (o *ProductBase) GetOperatorOk() (*Operator, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -191,7 +191,7 @@ func (o *ProductBase) GetOperatorOk() (*GetOperators200ResponseInner, bool) {
 }
 
 // SetOperator sets field value
-func (o *ProductBase) SetOperator(v GetOperators200ResponseInner) {
+func (o *ProductBase) SetOperator(v Operator) {
 	o.Operator = v
 }
 

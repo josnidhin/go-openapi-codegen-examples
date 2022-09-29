@@ -1,4 +1,4 @@
-# AsyncTransactionsPostRequestAllOf
+# AsyncTransactionAllOf
 
 ## Properties
 
@@ -8,45 +8,45 @@ Name | Type | Description | Notes
 
 ## Methods
 
-### NewAsyncTransactionsPostRequestAllOf
+### NewAsyncTransactionAllOf
 
-`func NewAsyncTransactionsPostRequestAllOf() *AsyncTransactionsPostRequestAllOf`
+`func NewAsyncTransactionAllOf() *AsyncTransactionAllOf`
 
-NewAsyncTransactionsPostRequestAllOf instantiates a new AsyncTransactionsPostRequestAllOf object
+NewAsyncTransactionAllOf instantiates a new AsyncTransactionAllOf object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewAsyncTransactionsPostRequestAllOfWithDefaults
+### NewAsyncTransactionAllOfWithDefaults
 
-`func NewAsyncTransactionsPostRequestAllOfWithDefaults() *AsyncTransactionsPostRequestAllOf`
+`func NewAsyncTransactionAllOfWithDefaults() *AsyncTransactionAllOf`
 
-NewAsyncTransactionsPostRequestAllOfWithDefaults instantiates a new AsyncTransactionsPostRequestAllOf object
+NewAsyncTransactionAllOfWithDefaults instantiates a new AsyncTransactionAllOf object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetCallbackUrl
 
-`func (o *AsyncTransactionsPostRequestAllOf) GetCallbackUrl() string`
+`func (o *AsyncTransactionAllOf) GetCallbackUrl() string`
 
 GetCallbackUrl returns the CallbackUrl field if non-nil, zero value otherwise.
 
 ### GetCallbackUrlOk
 
-`func (o *AsyncTransactionsPostRequestAllOf) GetCallbackUrlOk() (*string, bool)`
+`func (o *AsyncTransactionAllOf) GetCallbackUrlOk() (*string, bool)`
 
 GetCallbackUrlOk returns a tuple with the CallbackUrl field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCallbackUrl
 
-`func (o *AsyncTransactionsPostRequestAllOf) SetCallbackUrl(v string)`
+`func (o *AsyncTransactionAllOf) SetCallbackUrl(v string)`
 
 SetCallbackUrl sets CallbackUrl field to given value.
 
 ### HasCallbackUrl
 
-`func (o *AsyncTransactionsPostRequestAllOf) HasCallbackUrl() bool`
+`func (o *AsyncTransactionAllOf) HasCallbackUrl() bool`
 
 HasCallbackUrl returns a boolean if a field has been set.
 

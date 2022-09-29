@@ -42,7 +42,7 @@ func (r MobileNumberApiGetLookupMobileNumberRequest) PerPage(perPage int32) Mobi
 	return r
 }
 
-func (r MobileNumberApiGetLookupMobileNumberRequest) Execute() ([]GetLookupMobileNumber200ResponseInner, *http.Response, error) {
+func (r MobileNumberApiGetLookupMobileNumberRequest) Execute() ([]LookupMobileNumber, *http.Response, error) {
 	return r.ApiService.GetLookupMobileNumberExecute(r)
 }
 
@@ -63,13 +63,13 @@ func (a *MobileNumberApiService) GetLookupMobileNumber(ctx context.Context, mobi
 
 // Execute executes the request
 //
-//	@return []GetLookupMobileNumber200ResponseInner
-func (a *MobileNumberApiService) GetLookupMobileNumberExecute(r MobileNumberApiGetLookupMobileNumberRequest) ([]GetLookupMobileNumber200ResponseInner, *http.Response, error) {
+//	@return []LookupMobileNumber
+func (a *MobileNumberApiService) GetLookupMobileNumberExecute(r MobileNumberApiGetLookupMobileNumberRequest) ([]LookupMobileNumber, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue []GetLookupMobileNumber200ResponseInner
+		localVarReturnValue []LookupMobileNumber
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MobileNumberApiService.GetLookupMobileNumber")
@@ -162,7 +162,7 @@ func (r MobileNumberApiPostLookupMobileNumberRequest) PostLookupMobileNumberRequ
 	return r
 }
 
-func (r MobileNumberApiPostLookupMobileNumberRequest) Execute() ([]GetLookupMobileNumber200ResponseInner, *http.Response, error) {
+func (r MobileNumberApiPostLookupMobileNumberRequest) Execute() ([]LookupMobileNumber, *http.Response, error) {
 	return r.ApiService.PostLookupMobileNumberExecute(r)
 }
 
@@ -181,13 +181,13 @@ func (a *MobileNumberApiService) PostLookupMobileNumber(ctx context.Context) Mob
 
 // Execute executes the request
 //
-//	@return []GetLookupMobileNumber200ResponseInner
-func (a *MobileNumberApiService) PostLookupMobileNumberExecute(r MobileNumberApiPostLookupMobileNumberRequest) ([]GetLookupMobileNumber200ResponseInner, *http.Response, error) {
+//	@return []LookupMobileNumber
+func (a *MobileNumberApiService) PostLookupMobileNumberExecute(r MobileNumberApiPostLookupMobileNumberRequest) ([]LookupMobileNumber, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue []GetLookupMobileNumber200ResponseInner
+		localVarReturnValue []LookupMobileNumber
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MobileNumberApiService.PostLookupMobileNumber")

@@ -14,182 +14,100 @@ import (
 	"encoding/json"
 )
 
-// OperatorsGet200ResponseInner struct for OperatorsGet200ResponseInner
-type OperatorsGet200ResponseInner struct {
-	Id      int32           `json:"id"`
-	Name    string          `json:"name"`
-	Country Country         `json:"country"`
-	Regions []ServiceRegion `json:"regions"`
+// AsyncTransactionAllOf struct for AsyncTransactionAllOf
+type AsyncTransactionAllOf struct {
+	CallbackUrl *string `json:"callback_url,omitempty"`
 }
 
-// NewOperatorsGet200ResponseInner instantiates a new OperatorsGet200ResponseInner object
+// NewAsyncTransactionAllOf instantiates a new AsyncTransactionAllOf object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewOperatorsGet200ResponseInner(id int32, name string, country Country, regions []ServiceRegion) *OperatorsGet200ResponseInner {
-	this := OperatorsGet200ResponseInner{}
-	this.Id = id
-	this.Name = name
-	this.Country = country
-	this.Regions = regions
+func NewAsyncTransactionAllOf() *AsyncTransactionAllOf {
+	this := AsyncTransactionAllOf{}
 	return &this
 }
 
-// NewOperatorsGet200ResponseInnerWithDefaults instantiates a new OperatorsGet200ResponseInner object
+// NewAsyncTransactionAllOfWithDefaults instantiates a new AsyncTransactionAllOf object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewOperatorsGet200ResponseInnerWithDefaults() *OperatorsGet200ResponseInner {
-	this := OperatorsGet200ResponseInner{}
+func NewAsyncTransactionAllOfWithDefaults() *AsyncTransactionAllOf {
+	this := AsyncTransactionAllOf{}
 	return &this
 }
 
-// GetId returns the Id field value
-func (o *OperatorsGet200ResponseInner) GetId() int32 {
-	if o == nil {
-		var ret int32
-		return ret
-	}
-
-	return o.Id
-}
-
-// GetIdOk returns a tuple with the Id field value
-// and a boolean to check if the value has been set.
-func (o *OperatorsGet200ResponseInner) GetIdOk() (*int32, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Id, true
-}
-
-// SetId sets field value
-func (o *OperatorsGet200ResponseInner) SetId(v int32) {
-	o.Id = v
-}
-
-// GetName returns the Name field value
-func (o *OperatorsGet200ResponseInner) GetName() string {
-	if o == nil {
+// GetCallbackUrl returns the CallbackUrl field value if set, zero value otherwise.
+func (o *AsyncTransactionAllOf) GetCallbackUrl() string {
+	if o == nil || o.CallbackUrl == nil {
 		var ret string
 		return ret
 	}
-
-	return o.Name
+	return *o.CallbackUrl
 }
 
-// GetNameOk returns a tuple with the Name field value
+// GetCallbackUrlOk returns a tuple with the CallbackUrl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *OperatorsGet200ResponseInner) GetNameOk() (*string, bool) {
-	if o == nil {
+func (o *AsyncTransactionAllOf) GetCallbackUrlOk() (*string, bool) {
+	if o == nil || o.CallbackUrl == nil {
 		return nil, false
 	}
-	return &o.Name, true
+	return o.CallbackUrl, true
 }
 
-// SetName sets field value
-func (o *OperatorsGet200ResponseInner) SetName(v string) {
-	o.Name = v
-}
-
-// GetCountry returns the Country field value
-func (o *OperatorsGet200ResponseInner) GetCountry() Country {
-	if o == nil {
-		var ret Country
-		return ret
+// HasCallbackUrl returns a boolean if a field has been set.
+func (o *AsyncTransactionAllOf) HasCallbackUrl() bool {
+	if o != nil && o.CallbackUrl != nil {
+		return true
 	}
 
-	return o.Country
+	return false
 }
 
-// GetCountryOk returns a tuple with the Country field value
-// and a boolean to check if the value has been set.
-func (o *OperatorsGet200ResponseInner) GetCountryOk() (*Country, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Country, true
+// SetCallbackUrl gets a reference to the given string and assigns it to the CallbackUrl field.
+func (o *AsyncTransactionAllOf) SetCallbackUrl(v string) {
+	o.CallbackUrl = &v
 }
 
-// SetCountry sets field value
-func (o *OperatorsGet200ResponseInner) SetCountry(v Country) {
-	o.Country = v
-}
-
-// GetRegions returns the Regions field value
-// If the value is explicit nil, the zero value for []ServiceRegion will be returned
-func (o *OperatorsGet200ResponseInner) GetRegions() []ServiceRegion {
-	if o == nil {
-		var ret []ServiceRegion
-		return ret
-	}
-
-	return o.Regions
-}
-
-// GetRegionsOk returns a tuple with the Regions field value
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *OperatorsGet200ResponseInner) GetRegionsOk() ([]ServiceRegion, bool) {
-	if o == nil || o.Regions == nil {
-		return nil, false
-	}
-	return o.Regions, true
-}
-
-// SetRegions sets field value
-func (o *OperatorsGet200ResponseInner) SetRegions(v []ServiceRegion) {
-	o.Regions = v
-}
-
-func (o OperatorsGet200ResponseInner) MarshalJSON() ([]byte, error) {
+func (o AsyncTransactionAllOf) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["country"] = o.Country
-	}
-	if o.Regions != nil {
-		toSerialize["regions"] = o.Regions
+	if o.CallbackUrl != nil {
+		toSerialize["callback_url"] = o.CallbackUrl
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableOperatorsGet200ResponseInner struct {
-	value *OperatorsGet200ResponseInner
+type NullableAsyncTransactionAllOf struct {
+	value *AsyncTransactionAllOf
 	isSet bool
 }
 
-func (v NullableOperatorsGet200ResponseInner) Get() *OperatorsGet200ResponseInner {
+func (v NullableAsyncTransactionAllOf) Get() *AsyncTransactionAllOf {
 	return v.value
 }
 
-func (v *NullableOperatorsGet200ResponseInner) Set(val *OperatorsGet200ResponseInner) {
+func (v *NullableAsyncTransactionAllOf) Set(val *AsyncTransactionAllOf) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableOperatorsGet200ResponseInner) IsSet() bool {
+func (v NullableAsyncTransactionAllOf) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableOperatorsGet200ResponseInner) Unset() {
+func (v *NullableAsyncTransactionAllOf) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableOperatorsGet200ResponseInner(val *OperatorsGet200ResponseInner) *NullableOperatorsGet200ResponseInner {
-	return &NullableOperatorsGet200ResponseInner{value: val, isSet: true}
+func NewNullableAsyncTransactionAllOf(val *AsyncTransactionAllOf) *NullableAsyncTransactionAllOf {
+	return &NullableAsyncTransactionAllOf{value: val, isSet: true}
 }
 
-func (v NullableOperatorsGet200ResponseInner) MarshalJSON() ([]byte, error) {
+func (v NullableAsyncTransactionAllOf) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableOperatorsGet200ResponseInner) UnmarshalJSON(src []byte) error {
+func (v *NullableAsyncTransactionAllOf) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

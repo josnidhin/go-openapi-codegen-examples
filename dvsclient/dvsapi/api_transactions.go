@@ -29,7 +29,7 @@ type TransactionsApiGetTransactionByIdRequest struct {
 	transactionId int64
 }
 
-func (r TransactionsApiGetTransactionByIdRequest) Execute() (*PostTransactionAsyncRequest, *http.Response, error) {
+func (r TransactionsApiGetTransactionByIdRequest) Execute() (*AsyncTransaction, *http.Response, error) {
 	return r.ApiService.GetTransactionByIdExecute(r)
 }
 
@@ -52,13 +52,13 @@ func (a *TransactionsApiService) GetTransactionById(ctx context.Context, transac
 
 // Execute executes the request
 //
-//	@return PostTransactionAsyncRequest
-func (a *TransactionsApiService) GetTransactionByIdExecute(r TransactionsApiGetTransactionByIdRequest) (*PostTransactionAsyncRequest, *http.Response, error) {
+//	@return AsyncTransaction
+func (a *TransactionsApiService) GetTransactionByIdExecute(r TransactionsApiGetTransactionByIdRequest) (*AsyncTransaction, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *PostTransactionAsyncRequest
+		localVarReturnValue *AsyncTransaction
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.GetTransactionById")
@@ -228,7 +228,7 @@ func (r TransactionsApiGetTransactionsRequest) PerPage(perPage int32) Transactio
 	return r
 }
 
-func (r TransactionsApiGetTransactionsRequest) Execute() ([]PostTransactionAsyncRequest, *http.Response, error) {
+func (r TransactionsApiGetTransactionsRequest) Execute() ([]AsyncTransaction, *http.Response, error) {
 	return r.ApiService.GetTransactionsExecute(r)
 }
 
@@ -249,13 +249,13 @@ func (a *TransactionsApiService) GetTransactions(ctx context.Context) Transactio
 
 // Execute executes the request
 //
-//	@return []PostTransactionAsyncRequest
-func (a *TransactionsApiService) GetTransactionsExecute(r TransactionsApiGetTransactionsRequest) ([]PostTransactionAsyncRequest, *http.Response, error) {
+//	@return []AsyncTransaction
+func (a *TransactionsApiService) GetTransactionsExecute(r TransactionsApiGetTransactionsRequest) ([]AsyncTransaction, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue []PostTransactionAsyncRequest
+		localVarReturnValue []AsyncTransaction
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.GetTransactions")
@@ -377,13 +377,13 @@ func (a *TransactionsApiService) GetTransactionsExecute(r TransactionsApiGetTran
 }
 
 type TransactionsApiPostTransactionAsyncRequest struct {
-	ctx                         context.Context
-	ApiService                  *TransactionsApiService
-	postTransactionAsyncRequest *PostTransactionAsyncRequest
+	ctx              context.Context
+	ApiService       *TransactionsApiService
+	asyncTransaction *AsyncTransaction
 }
 
-func (r TransactionsApiPostTransactionAsyncRequest) PostTransactionAsyncRequest(postTransactionAsyncRequest PostTransactionAsyncRequest) TransactionsApiPostTransactionAsyncRequest {
-	r.postTransactionAsyncRequest = &postTransactionAsyncRequest
+func (r TransactionsApiPostTransactionAsyncRequest) AsyncTransaction(asyncTransaction AsyncTransaction) TransactionsApiPostTransactionAsyncRequest {
+	r.asyncTransaction = &asyncTransaction
 	return r
 }
 
@@ -446,7 +446,7 @@ func (a *TransactionsApiService) PostTransactionAsyncExecute(r TransactionsApiPo
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.postTransactionAsyncRequest
+	localVarPostBody = r.asyncTransaction
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

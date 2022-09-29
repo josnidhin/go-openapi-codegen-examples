@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **Description** | **string** |  | 
 **Tags** | **[]string** |  | 
 **Service** | [**Service**](Service.md) |  | 
-**Operator** | [**GetOperators200ResponseInner**](GetOperators200ResponseInner.md) |  | 
+**Operator** | [**Operator**](Operator.md) |  | 
 **Regions** | [**[]ServiceRegion**](ServiceRegion.md) |  | 
 **Pin** | Pointer to [**TransactionProductAllOfPin**](TransactionProductAllOfPin.md) |  | [optional] 
 
@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 
 ### NewTransactionProduct
 
-`func NewTransactionProduct(id int32, name string, description string, tags []string, service Service, operator GetOperators200ResponseInner, regions []ServiceRegion, ) *TransactionProduct`
+`func NewTransactionProduct(id int32, name string, description string, tags []string, service Service, operator Operator, regions []ServiceRegion, ) *TransactionProduct`
 
 NewTransactionProduct instantiates a new TransactionProduct object
 This constructor will assign default values to properties that have it defined,
@@ -144,20 +144,20 @@ SetService sets Service field to given value.
 
 ### GetOperator
 
-`func (o *TransactionProduct) GetOperator() GetOperators200ResponseInner`
+`func (o *TransactionProduct) GetOperator() Operator`
 
 GetOperator returns the Operator field if non-nil, zero value otherwise.
 
 ### GetOperatorOk
 
-`func (o *TransactionProduct) GetOperatorOk() (*GetOperators200ResponseInner, bool)`
+`func (o *TransactionProduct) GetOperatorOk() (*Operator, bool)`
 
 GetOperatorOk returns a tuple with the Operator field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetOperator
 
-`func (o *TransactionProduct) SetOperator(v GetOperators200ResponseInner)`
+`func (o *TransactionProduct) SetOperator(v Operator)`
 
 SetOperator sets Operator field to given value.
 

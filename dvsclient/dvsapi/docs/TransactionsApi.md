@@ -1,6 +1,6 @@
 # \TransactionsApi
 
-All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
+All URIs are relative to *http://127.0.0.1:8080/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 ## GetTransactionById
 
-> PostTransactionAsyncRequest GetTransactionById(ctx, transactionId).Execute()
+> AsyncTransaction GetTransactionById(ctx, transactionId).Execute()
 
 Query a transaction by ID
 
@@ -44,7 +44,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.GetTransactionById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetTransactionById`: PostTransactionAsyncRequest
+    // response from `GetTransactionById`: AsyncTransaction
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.GetTransactionById`: %v\n", resp)
 }
 ```
@@ -68,7 +68,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PostTransactionAsyncRequest**](PostTransactionAsyncRequest.md)
+[**AsyncTransaction**](AsyncTransaction.md)
 
 ### Authorization
 
@@ -86,7 +86,7 @@ Name | Type | Description  | Notes
 
 ## GetTransactions
 
-> []PostTransactionAsyncRequest GetTransactions(ctx).ExternalId(externalId).ProductType(productType).ServiceId(serviceId).CountryIsoCode(countryIsoCode).OperatorId(operatorId).StatusId(statusId).CreditPartyMobileNumber(creditPartyMobileNumber).CreditPartyAccountNumber(creditPartyAccountNumber).FromDate(fromDate).ToDate(toDate).Page(page).PerPage(perPage).Execute()
+> []AsyncTransaction GetTransactions(ctx).ExternalId(externalId).ProductType(productType).ServiceId(serviceId).CountryIsoCode(countryIsoCode).OperatorId(operatorId).StatusId(statusId).CreditPartyMobileNumber(creditPartyMobileNumber).CreditPartyAccountNumber(creditPartyAccountNumber).FromDate(fromDate).ToDate(toDate).Page(page).PerPage(perPage).Execute()
 
 Query list of transactions
 
@@ -126,7 +126,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.GetTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetTransactions`: []PostTransactionAsyncRequest
+    // response from `GetTransactions`: []AsyncTransaction
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.GetTransactions`: %v\n", resp)
 }
 ```
@@ -157,7 +157,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[]PostTransactionAsyncRequest**](PostTransactionAsyncRequest.md)
+[**[]AsyncTransaction**](AsyncTransaction.md)
 
 ### Authorization
 
@@ -175,7 +175,7 @@ Name | Type | Description  | Notes
 
 ## PostTransactionAsync
 
-> Transaction PostTransactionAsync(ctx).PostTransactionAsyncRequest(postTransactionAsyncRequest).Execute()
+> Transaction PostTransactionAsync(ctx).AsyncTransaction(asyncTransaction).Execute()
 
 Create a transaction asynchronously
 
@@ -194,11 +194,11 @@ import (
 )
 
 func main() {
-    postTransactionAsyncRequest := *openapiclient.NewPostTransactionAsyncRequest(string(123), int32(123)) // PostTransactionAsyncRequest |  (optional)
+    asyncTransaction := *openapiclient.NewAsyncTransaction(string(123), int32(123)) // AsyncTransaction |  (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.PostTransactionAsync(context.Background()).PostTransactionAsyncRequest(postTransactionAsyncRequest).Execute()
+    resp, r, err := apiClient.TransactionsApi.PostTransactionAsync(context.Background()).AsyncTransaction(asyncTransaction).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.PostTransactionAsync``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -219,7 +219,7 @@ Other parameters are passed through a pointer to a apiPostTransactionAsyncReques
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **postTransactionAsyncRequest** | [**PostTransactionAsyncRequest**](PostTransactionAsyncRequest.md) |  | 
+ **asyncTransaction** | [**AsyncTransaction**](AsyncTransaction.md) |  | 
 
 ### Return type
 

@@ -28,7 +28,7 @@ type OperatorsApiGetOperatorByIdRequest struct {
 	operatorId int32
 }
 
-func (r OperatorsApiGetOperatorByIdRequest) Execute() (*GetOperators200ResponseInner, *http.Response, error) {
+func (r OperatorsApiGetOperatorByIdRequest) Execute() (*Operator, *http.Response, error) {
 	return r.ApiService.GetOperatorByIdExecute(r)
 }
 
@@ -49,13 +49,13 @@ func (a *OperatorsApiService) GetOperatorById(ctx context.Context, operatorId in
 
 // Execute executes the request
 //
-//	@return GetOperators200ResponseInner
-func (a *OperatorsApiService) GetOperatorByIdExecute(r OperatorsApiGetOperatorByIdRequest) (*GetOperators200ResponseInner, *http.Response, error) {
+//	@return Operator
+func (a *OperatorsApiService) GetOperatorByIdExecute(r OperatorsApiGetOperatorByIdRequest) (*Operator, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *GetOperators200ResponseInner
+		localVarReturnValue *Operator
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OperatorsApiService.GetOperatorById")
@@ -169,7 +169,7 @@ func (r OperatorsApiGetOperatorsRequest) CountryIsoCode(countryIsoCode string) O
 	return r
 }
 
-func (r OperatorsApiGetOperatorsRequest) Execute() ([]GetOperators200ResponseInner, *http.Response, error) {
+func (r OperatorsApiGetOperatorsRequest) Execute() ([]Operator, *http.Response, error) {
 	return r.ApiService.GetOperatorsExecute(r)
 }
 
@@ -188,13 +188,13 @@ func (a *OperatorsApiService) GetOperators(ctx context.Context) OperatorsApiGetO
 
 // Execute executes the request
 //
-//	@return []GetOperators200ResponseInner
-func (a *OperatorsApiService) GetOperatorsExecute(r OperatorsApiGetOperatorsRequest) ([]GetOperators200ResponseInner, *http.Response, error) {
+//	@return []Operator
+func (a *OperatorsApiService) GetOperatorsExecute(r OperatorsApiGetOperatorsRequest) ([]Operator, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue []GetOperators200ResponseInner
+		localVarReturnValue []Operator
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OperatorsApiService.GetOperators")

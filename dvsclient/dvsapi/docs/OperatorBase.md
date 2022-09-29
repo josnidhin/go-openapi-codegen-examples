@@ -1,4 +1,4 @@
-# OperatorsGet200ResponseInner
+# OperatorBase
 
 ## Properties
 
@@ -11,111 +11,111 @@ Name | Type | Description | Notes
 
 ## Methods
 
-### NewOperatorsGet200ResponseInner
+### NewOperatorBase
 
-`func NewOperatorsGet200ResponseInner(id int32, name string, country Country, regions []ServiceRegion, ) *OperatorsGet200ResponseInner`
+`func NewOperatorBase(id int32, name string, country Country, regions []ServiceRegion, ) *OperatorBase`
 
-NewOperatorsGet200ResponseInner instantiates a new OperatorsGet200ResponseInner object
+NewOperatorBase instantiates a new OperatorBase object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewOperatorsGet200ResponseInnerWithDefaults
+### NewOperatorBaseWithDefaults
 
-`func NewOperatorsGet200ResponseInnerWithDefaults() *OperatorsGet200ResponseInner`
+`func NewOperatorBaseWithDefaults() *OperatorBase`
 
-NewOperatorsGet200ResponseInnerWithDefaults instantiates a new OperatorsGet200ResponseInner object
+NewOperatorBaseWithDefaults instantiates a new OperatorBase object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetId
 
-`func (o *OperatorsGet200ResponseInner) GetId() int32`
+`func (o *OperatorBase) GetId() int32`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *OperatorsGet200ResponseInner) GetIdOk() (*int32, bool)`
+`func (o *OperatorBase) GetIdOk() (*int32, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *OperatorsGet200ResponseInner) SetId(v int32)`
+`func (o *OperatorBase) SetId(v int32)`
 
 SetId sets Id field to given value.
 
 
 ### GetName
 
-`func (o *OperatorsGet200ResponseInner) GetName() string`
+`func (o *OperatorBase) GetName() string`
 
 GetName returns the Name field if non-nil, zero value otherwise.
 
 ### GetNameOk
 
-`func (o *OperatorsGet200ResponseInner) GetNameOk() (*string, bool)`
+`func (o *OperatorBase) GetNameOk() (*string, bool)`
 
 GetNameOk returns a tuple with the Name field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetName
 
-`func (o *OperatorsGet200ResponseInner) SetName(v string)`
+`func (o *OperatorBase) SetName(v string)`
 
 SetName sets Name field to given value.
 
 
 ### GetCountry
 
-`func (o *OperatorsGet200ResponseInner) GetCountry() Country`
+`func (o *OperatorBase) GetCountry() Country`
 
 GetCountry returns the Country field if non-nil, zero value otherwise.
 
 ### GetCountryOk
 
-`func (o *OperatorsGet200ResponseInner) GetCountryOk() (*Country, bool)`
+`func (o *OperatorBase) GetCountryOk() (*Country, bool)`
 
 GetCountryOk returns a tuple with the Country field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCountry
 
-`func (o *OperatorsGet200ResponseInner) SetCountry(v Country)`
+`func (o *OperatorBase) SetCountry(v Country)`
 
 SetCountry sets Country field to given value.
 
 
 ### GetRegions
 
-`func (o *OperatorsGet200ResponseInner) GetRegions() []ServiceRegion`
+`func (o *OperatorBase) GetRegions() []ServiceRegion`
 
 GetRegions returns the Regions field if non-nil, zero value otherwise.
 
 ### GetRegionsOk
 
-`func (o *OperatorsGet200ResponseInner) GetRegionsOk() (*[]ServiceRegion, bool)`
+`func (o *OperatorBase) GetRegionsOk() (*[]ServiceRegion, bool)`
 
 GetRegionsOk returns a tuple with the Regions field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetRegions
 
-`func (o *OperatorsGet200ResponseInner) SetRegions(v []ServiceRegion)`
+`func (o *OperatorBase) SetRegions(v []ServiceRegion)`
 
 SetRegions sets Regions field to given value.
 
 
 ### SetRegionsNil
 
-`func (o *OperatorsGet200ResponseInner) SetRegionsNil(b bool)`
+`func (o *OperatorBase) SetRegionsNil(b bool)`
 
  SetRegionsNil sets the value for Regions to be an explicit nil
 
 ### UnsetRegions
-`func (o *OperatorsGet200ResponseInner) UnsetRegions()`
+`func (o *OperatorBase) UnsetRegions()`
 
 UnsetRegions ensures that no value is present for Regions, not even an explicit nil
 

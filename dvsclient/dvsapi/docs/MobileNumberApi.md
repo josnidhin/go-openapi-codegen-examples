@@ -1,6 +1,6 @@
 # \MobileNumberApi
 
-All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
+All URIs are relative to *http://127.0.0.1:8080/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## GetLookupMobileNumber
 
-> []GetLookupMobileNumber200ResponseInner GetLookupMobileNumber(ctx, mobileNumber).Page(page).PerPage(perPage).Execute()
+> []LookupMobileNumber GetLookupMobileNumber(ctx, mobileNumber).Page(page).PerPage(perPage).Execute()
 
 Look up operators for a given mobile number
 
@@ -39,7 +39,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `MobileNumberApi.GetLookupMobileNumber``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetLookupMobileNumber`: []GetLookupMobileNumber200ResponseInner
+    // response from `GetLookupMobileNumber`: []LookupMobileNumber
     fmt.Fprintf(os.Stdout, "Response from `MobileNumberApi.GetLookupMobileNumber`: %v\n", resp)
 }
 ```
@@ -65,7 +65,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[]GetLookupMobileNumber200ResponseInner**](GetLookupMobileNumber200ResponseInner.md)
+[**[]LookupMobileNumber**](LookupMobileNumber.md)
 
 ### Authorization
 
@@ -83,7 +83,7 @@ Name | Type | Description  | Notes
 
 ## PostLookupMobileNumber
 
-> []GetLookupMobileNumber200ResponseInner PostLookupMobileNumber(ctx).PostLookupMobileNumberRequest(postLookupMobileNumberRequest).Execute()
+> []LookupMobileNumber PostLookupMobileNumber(ctx).PostLookupMobileNumberRequest(postLookupMobileNumberRequest).Execute()
 
 Look up operators for a given mobile number
 
@@ -109,7 +109,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `MobileNumberApi.PostLookupMobileNumber``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `PostLookupMobileNumber`: []GetLookupMobileNumber200ResponseInner
+    // response from `PostLookupMobileNumber`: []LookupMobileNumber
     fmt.Fprintf(os.Stdout, "Response from `MobileNumberApi.PostLookupMobileNumber`: %v\n", resp)
 }
 ```
@@ -129,7 +129,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[]GetLookupMobileNumber200ResponseInner**](GetLookupMobileNumber200ResponseInner.md)
+[**[]LookupMobileNumber**](LookupMobileNumber.md)
 
 ### Authorization
 

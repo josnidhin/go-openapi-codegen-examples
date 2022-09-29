@@ -105,6 +105,14 @@ func NewConfiguration() *Configuration {
 		Debug:            false,
 		Servers:          ServerConfigurations{
 			{
+				URL: "http://127.0.0.1:8080/v1",
+				Description: "Development",
+			},
+			{
+				URL: "https://staging-dvs-api.transferto.dtone.com:8443/v1",
+				Description: "Staging",
+			},
+			{
 				URL: "https://preprod-dvs-api.dtone.com/v1",
 				Description: "Pre-Production",
 			},

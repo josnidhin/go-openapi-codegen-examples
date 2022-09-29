@@ -14,100 +14,94 @@ import (
 	"encoding/json"
 )
 
-// PostTransactionAsyncRequestAllOf struct for PostTransactionAsyncRequestAllOf
-type PostTransactionAsyncRequestAllOf struct {
-	CallbackUrl *string `json:"callback_url,omitempty"`
+// LookupMobileNumberAllOf struct for LookupMobileNumberAllOf
+type LookupMobileNumberAllOf struct {
+	// Indicates whether operator was identified as a direct match
+	Identified bool `json:"identified"`
 }
 
-// NewPostTransactionAsyncRequestAllOf instantiates a new PostTransactionAsyncRequestAllOf object
+// NewLookupMobileNumberAllOf instantiates a new LookupMobileNumberAllOf object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPostTransactionAsyncRequestAllOf() *PostTransactionAsyncRequestAllOf {
-	this := PostTransactionAsyncRequestAllOf{}
+func NewLookupMobileNumberAllOf(identified bool) *LookupMobileNumberAllOf {
+	this := LookupMobileNumberAllOf{}
+	this.Identified = identified
 	return &this
 }
 
-// NewPostTransactionAsyncRequestAllOfWithDefaults instantiates a new PostTransactionAsyncRequestAllOf object
+// NewLookupMobileNumberAllOfWithDefaults instantiates a new LookupMobileNumberAllOf object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPostTransactionAsyncRequestAllOfWithDefaults() *PostTransactionAsyncRequestAllOf {
-	this := PostTransactionAsyncRequestAllOf{}
+func NewLookupMobileNumberAllOfWithDefaults() *LookupMobileNumberAllOf {
+	this := LookupMobileNumberAllOf{}
 	return &this
 }
 
-// GetCallbackUrl returns the CallbackUrl field value if set, zero value otherwise.
-func (o *PostTransactionAsyncRequestAllOf) GetCallbackUrl() string {
-	if o == nil || o.CallbackUrl == nil {
-		var ret string
+// GetIdentified returns the Identified field value
+func (o *LookupMobileNumberAllOf) GetIdentified() bool {
+	if o == nil {
+		var ret bool
 		return ret
 	}
-	return *o.CallbackUrl
+
+	return o.Identified
 }
 
-// GetCallbackUrlOk returns a tuple with the CallbackUrl field value if set, nil otherwise
+// GetIdentifiedOk returns a tuple with the Identified field value
 // and a boolean to check if the value has been set.
-func (o *PostTransactionAsyncRequestAllOf) GetCallbackUrlOk() (*string, bool) {
-	if o == nil || o.CallbackUrl == nil {
+func (o *LookupMobileNumberAllOf) GetIdentifiedOk() (*bool, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CallbackUrl, true
+	return &o.Identified, true
 }
 
-// HasCallbackUrl returns a boolean if a field has been set.
-func (o *PostTransactionAsyncRequestAllOf) HasCallbackUrl() bool {
-	if o != nil && o.CallbackUrl != nil {
-		return true
-	}
-
-	return false
+// SetIdentified sets field value
+func (o *LookupMobileNumberAllOf) SetIdentified(v bool) {
+	o.Identified = v
 }
 
-// SetCallbackUrl gets a reference to the given string and assigns it to the CallbackUrl field.
-func (o *PostTransactionAsyncRequestAllOf) SetCallbackUrl(v string) {
-	o.CallbackUrl = &v
-}
-
-func (o PostTransactionAsyncRequestAllOf) MarshalJSON() ([]byte, error) {
+func (o LookupMobileNumberAllOf) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.CallbackUrl != nil {
-		toSerialize["callback_url"] = o.CallbackUrl
+	if true {
+		toSerialize["identified"] = o.Identified
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullablePostTransactionAsyncRequestAllOf struct {
-	value *PostTransactionAsyncRequestAllOf
+type NullableLookupMobileNumberAllOf struct {
+	value *LookupMobileNumberAllOf
 	isSet bool
 }
 
-func (v NullablePostTransactionAsyncRequestAllOf) Get() *PostTransactionAsyncRequestAllOf {
+func (v NullableLookupMobileNumberAllOf) Get() *LookupMobileNumberAllOf {
 	return v.value
 }
 
-func (v *NullablePostTransactionAsyncRequestAllOf) Set(val *PostTransactionAsyncRequestAllOf) {
+func (v *NullableLookupMobileNumberAllOf) Set(val *LookupMobileNumberAllOf) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePostTransactionAsyncRequestAllOf) IsSet() bool {
+func (v NullableLookupMobileNumberAllOf) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePostTransactionAsyncRequestAllOf) Unset() {
+func (v *NullableLookupMobileNumberAllOf) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePostTransactionAsyncRequestAllOf(val *PostTransactionAsyncRequestAllOf) *NullablePostTransactionAsyncRequestAllOf {
-	return &NullablePostTransactionAsyncRequestAllOf{value: val, isSet: true}
+func NewNullableLookupMobileNumberAllOf(val *LookupMobileNumberAllOf) *NullableLookupMobileNumberAllOf {
+	return &NullableLookupMobileNumberAllOf{value: val, isSet: true}
 }
 
-func (v NullablePostTransactionAsyncRequestAllOf) MarshalJSON() ([]byte, error) {
+func (v NullableLookupMobileNumberAllOf) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePostTransactionAsyncRequestAllOf) UnmarshalJSON(src []byte) error {
+func (v *NullableLookupMobileNumberAllOf) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

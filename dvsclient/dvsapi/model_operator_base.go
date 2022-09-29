@@ -14,175 +14,182 @@ import (
 	"encoding/json"
 )
 
-// LookupMobileNumberPostRequest struct for LookupMobileNumberPostRequest
-type LookupMobileNumberPostRequest struct {
-	MobileNumber string `json:"mobile_number"`
-	// Page number
-	Page *int32 `json:"page,omitempty"`
-	// Number of records per page
-	PerPage *int32 `json:"per_page,omitempty"`
+// OperatorBase struct for OperatorBase
+type OperatorBase struct {
+	Id      int32           `json:"id"`
+	Name    string          `json:"name"`
+	Country Country         `json:"country"`
+	Regions []ServiceRegion `json:"regions"`
 }
 
-// NewLookupMobileNumberPostRequest instantiates a new LookupMobileNumberPostRequest object
+// NewOperatorBase instantiates a new OperatorBase object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLookupMobileNumberPostRequest(mobileNumber string) *LookupMobileNumberPostRequest {
-	this := LookupMobileNumberPostRequest{}
-	this.MobileNumber = mobileNumber
-	var page int32 = 1
-	this.Page = &page
-	var perPage int32 = 50
-	this.PerPage = &perPage
+func NewOperatorBase(id int32, name string, country Country, regions []ServiceRegion) *OperatorBase {
+	this := OperatorBase{}
+	this.Id = id
+	this.Name = name
+	this.Country = country
+	this.Regions = regions
 	return &this
 }
 
-// NewLookupMobileNumberPostRequestWithDefaults instantiates a new LookupMobileNumberPostRequest object
+// NewOperatorBaseWithDefaults instantiates a new OperatorBase object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewLookupMobileNumberPostRequestWithDefaults() *LookupMobileNumberPostRequest {
-	this := LookupMobileNumberPostRequest{}
-	var page int32 = 1
-	this.Page = &page
-	var perPage int32 = 50
-	this.PerPage = &perPage
+func NewOperatorBaseWithDefaults() *OperatorBase {
+	this := OperatorBase{}
 	return &this
 }
 
-// GetMobileNumber returns the MobileNumber field value
-func (o *LookupMobileNumberPostRequest) GetMobileNumber() string {
+// GetId returns the Id field value
+func (o *OperatorBase) GetId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *OperatorBase) GetIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Id, true
+}
+
+// SetId sets field value
+func (o *OperatorBase) SetId(v int32) {
+	o.Id = v
+}
+
+// GetName returns the Name field value
+func (o *OperatorBase) GetName() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.MobileNumber
+	return o.Name
 }
 
-// GetMobileNumberOk returns a tuple with the MobileNumber field value
+// GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
-func (o *LookupMobileNumberPostRequest) GetMobileNumberOk() (*string, bool) {
+func (o *OperatorBase) GetNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.MobileNumber, true
+	return &o.Name, true
 }
 
-// SetMobileNumber sets field value
-func (o *LookupMobileNumberPostRequest) SetMobileNumber(v string) {
-	o.MobileNumber = v
+// SetName sets field value
+func (o *OperatorBase) SetName(v string) {
+	o.Name = v
 }
 
-// GetPage returns the Page field value if set, zero value otherwise.
-func (o *LookupMobileNumberPostRequest) GetPage() int32 {
-	if o == nil || o.Page == nil {
-		var ret int32
+// GetCountry returns the Country field value
+func (o *OperatorBase) GetCountry() Country {
+	if o == nil {
+		var ret Country
 		return ret
 	}
-	return *o.Page
+
+	return o.Country
 }
 
-// GetPageOk returns a tuple with the Page field value if set, nil otherwise
+// GetCountryOk returns a tuple with the Country field value
 // and a boolean to check if the value has been set.
-func (o *LookupMobileNumberPostRequest) GetPageOk() (*int32, bool) {
-	if o == nil || o.Page == nil {
+func (o *OperatorBase) GetCountryOk() (*Country, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Page, true
+	return &o.Country, true
 }
 
-// HasPage returns a boolean if a field has been set.
-func (o *LookupMobileNumberPostRequest) HasPage() bool {
-	if o != nil && o.Page != nil {
-		return true
-	}
-
-	return false
+// SetCountry sets field value
+func (o *OperatorBase) SetCountry(v Country) {
+	o.Country = v
 }
 
-// SetPage gets a reference to the given int32 and assigns it to the Page field.
-func (o *LookupMobileNumberPostRequest) SetPage(v int32) {
-	o.Page = &v
-}
-
-// GetPerPage returns the PerPage field value if set, zero value otherwise.
-func (o *LookupMobileNumberPostRequest) GetPerPage() int32 {
-	if o == nil || o.PerPage == nil {
-		var ret int32
+// GetRegions returns the Regions field value
+// If the value is explicit nil, the zero value for []ServiceRegion will be returned
+func (o *OperatorBase) GetRegions() []ServiceRegion {
+	if o == nil {
+		var ret []ServiceRegion
 		return ret
 	}
-	return *o.PerPage
+
+	return o.Regions
 }
 
-// GetPerPageOk returns a tuple with the PerPage field value if set, nil otherwise
+// GetRegionsOk returns a tuple with the Regions field value
 // and a boolean to check if the value has been set.
-func (o *LookupMobileNumberPostRequest) GetPerPageOk() (*int32, bool) {
-	if o == nil || o.PerPage == nil {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *OperatorBase) GetRegionsOk() ([]ServiceRegion, bool) {
+	if o == nil || o.Regions == nil {
 		return nil, false
 	}
-	return o.PerPage, true
+	return o.Regions, true
 }
 
-// HasPerPage returns a boolean if a field has been set.
-func (o *LookupMobileNumberPostRequest) HasPerPage() bool {
-	if o != nil && o.PerPage != nil {
-		return true
-	}
-
-	return false
+// SetRegions sets field value
+func (o *OperatorBase) SetRegions(v []ServiceRegion) {
+	o.Regions = v
 }
 
-// SetPerPage gets a reference to the given int32 and assigns it to the PerPage field.
-func (o *LookupMobileNumberPostRequest) SetPerPage(v int32) {
-	o.PerPage = &v
-}
-
-func (o LookupMobileNumberPostRequest) MarshalJSON() ([]byte, error) {
+func (o OperatorBase) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
-		toSerialize["mobile_number"] = o.MobileNumber
+		toSerialize["id"] = o.Id
 	}
-	if o.Page != nil {
-		toSerialize["page"] = o.Page
+	if true {
+		toSerialize["name"] = o.Name
 	}
-	if o.PerPage != nil {
-		toSerialize["per_page"] = o.PerPage
+	if true {
+		toSerialize["country"] = o.Country
+	}
+	if o.Regions != nil {
+		toSerialize["regions"] = o.Regions
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableLookupMobileNumberPostRequest struct {
-	value *LookupMobileNumberPostRequest
+type NullableOperatorBase struct {
+	value *OperatorBase
 	isSet bool
 }
 
-func (v NullableLookupMobileNumberPostRequest) Get() *LookupMobileNumberPostRequest {
+func (v NullableOperatorBase) Get() *OperatorBase {
 	return v.value
 }
 
-func (v *NullableLookupMobileNumberPostRequest) Set(val *LookupMobileNumberPostRequest) {
+func (v *NullableOperatorBase) Set(val *OperatorBase) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableLookupMobileNumberPostRequest) IsSet() bool {
+func (v NullableOperatorBase) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableLookupMobileNumberPostRequest) Unset() {
+func (v *NullableOperatorBase) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableLookupMobileNumberPostRequest(val *LookupMobileNumberPostRequest) *NullableLookupMobileNumberPostRequest {
-	return &NullableLookupMobileNumberPostRequest{value: val, isSet: true}
+func NewNullableOperatorBase(val *OperatorBase) *NullableOperatorBase {
+	return &NullableOperatorBase{value: val, isSet: true}
 }
 
-func (v NullableLookupMobileNumberPostRequest) MarshalJSON() ([]byte, error) {
+func (v NullableOperatorBase) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableLookupMobileNumberPostRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableOperatorBase) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

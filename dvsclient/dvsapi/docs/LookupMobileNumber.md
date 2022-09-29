@@ -1,4 +1,4 @@
-# LookupMobileNumberMobileNumberGet200ResponseInner
+# LookupMobileNumber
 
 ## Properties
 
@@ -12,129 +12,129 @@ Name | Type | Description | Notes
 
 ## Methods
 
-### NewLookupMobileNumberMobileNumberGet200ResponseInner
+### NewLookupMobileNumber
 
-`func NewLookupMobileNumberMobileNumberGet200ResponseInner(id int32, name string, country Country, regions []ServiceRegion, identified bool, ) *LookupMobileNumberMobileNumberGet200ResponseInner`
+`func NewLookupMobileNumber(id int32, name string, country Country, regions []ServiceRegion, identified bool, ) *LookupMobileNumber`
 
-NewLookupMobileNumberMobileNumberGet200ResponseInner instantiates a new LookupMobileNumberMobileNumberGet200ResponseInner object
+NewLookupMobileNumber instantiates a new LookupMobileNumber object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewLookupMobileNumberMobileNumberGet200ResponseInnerWithDefaults
+### NewLookupMobileNumberWithDefaults
 
-`func NewLookupMobileNumberMobileNumberGet200ResponseInnerWithDefaults() *LookupMobileNumberMobileNumberGet200ResponseInner`
+`func NewLookupMobileNumberWithDefaults() *LookupMobileNumber`
 
-NewLookupMobileNumberMobileNumberGet200ResponseInnerWithDefaults instantiates a new LookupMobileNumberMobileNumberGet200ResponseInner object
+NewLookupMobileNumberWithDefaults instantiates a new LookupMobileNumber object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetId
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) GetId() int32`
+`func (o *LookupMobileNumber) GetId() int32`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) GetIdOk() (*int32, bool)`
+`func (o *LookupMobileNumber) GetIdOk() (*int32, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) SetId(v int32)`
+`func (o *LookupMobileNumber) SetId(v int32)`
 
 SetId sets Id field to given value.
 
 
 ### GetName
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) GetName() string`
+`func (o *LookupMobileNumber) GetName() string`
 
 GetName returns the Name field if non-nil, zero value otherwise.
 
 ### GetNameOk
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) GetNameOk() (*string, bool)`
+`func (o *LookupMobileNumber) GetNameOk() (*string, bool)`
 
 GetNameOk returns a tuple with the Name field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetName
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) SetName(v string)`
+`func (o *LookupMobileNumber) SetName(v string)`
 
 SetName sets Name field to given value.
 
 
 ### GetCountry
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) GetCountry() Country`
+`func (o *LookupMobileNumber) GetCountry() Country`
 
 GetCountry returns the Country field if non-nil, zero value otherwise.
 
 ### GetCountryOk
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) GetCountryOk() (*Country, bool)`
+`func (o *LookupMobileNumber) GetCountryOk() (*Country, bool)`
 
 GetCountryOk returns a tuple with the Country field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCountry
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) SetCountry(v Country)`
+`func (o *LookupMobileNumber) SetCountry(v Country)`
 
 SetCountry sets Country field to given value.
 
 
 ### GetRegions
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) GetRegions() []ServiceRegion`
+`func (o *LookupMobileNumber) GetRegions() []ServiceRegion`
 
 GetRegions returns the Regions field if non-nil, zero value otherwise.
 
 ### GetRegionsOk
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) GetRegionsOk() (*[]ServiceRegion, bool)`
+`func (o *LookupMobileNumber) GetRegionsOk() (*[]ServiceRegion, bool)`
 
 GetRegionsOk returns a tuple with the Regions field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetRegions
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) SetRegions(v []ServiceRegion)`
+`func (o *LookupMobileNumber) SetRegions(v []ServiceRegion)`
 
 SetRegions sets Regions field to given value.
 
 
 ### SetRegionsNil
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) SetRegionsNil(b bool)`
+`func (o *LookupMobileNumber) SetRegionsNil(b bool)`
 
  SetRegionsNil sets the value for Regions to be an explicit nil
 
 ### UnsetRegions
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) UnsetRegions()`
+`func (o *LookupMobileNumber) UnsetRegions()`
 
 UnsetRegions ensures that no value is present for Regions, not even an explicit nil
 ### GetIdentified
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) GetIdentified() bool`
+`func (o *LookupMobileNumber) GetIdentified() bool`
 
 GetIdentified returns the Identified field if non-nil, zero value otherwise.
 
 ### GetIdentifiedOk
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) GetIdentifiedOk() (*bool, bool)`
+`func (o *LookupMobileNumber) GetIdentifiedOk() (*bool, bool)`
 
 GetIdentifiedOk returns a tuple with the Identified field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetIdentified
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInner) SetIdentified(v bool)`
+`func (o *LookupMobileNumber) SetIdentified(v bool)`
 
 SetIdentified sets Identified field to given value.
 

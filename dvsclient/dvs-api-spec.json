@@ -10,6 +10,14 @@
   },
   "servers": [
     {
+      "url": "http://127.0.0.1:8080/v1",
+      "description": "Development"
+    },
+    {
+      "url": "https://staging-dvs-api.transferto.dtone.com:8443/v1",
+      "description": "Staging"
+    },
+    {
       "url": "https://preprod-dvs-api.dtone.com/v1",
       "description": "Pre-Production"
     },
@@ -356,14 +364,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "allOf": [
-                      {
-                        "$ref": "#/components/schemas/Operator"
-                      },
-                      {
-                        "additionalProperties": false
-                      }
-                    ]
+                    "$ref": "#/components/schemas/Operator"
                   }
                 }
               }
@@ -426,14 +427,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/Operator"
-                    },
-                    {
-                      "additionalProperties": false
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Operator"
                 }
               }
             }
@@ -1000,19 +994,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/Transaction"
-                  },
-                  {
-                    "properties": {
-                      "callback_url": {
-                        "type": "string",
-                        "format": "uri"
-                      }
-                    }
-                  }
-                ]
+                "$ref": "#/components/schemas/AsyncTransaction"
               }
             }
           }
@@ -1110,19 +1092,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/Transaction"
-                    },
-                    {
-                      "properties": {
-                        "callback_url": {
-                          "type": "string",
-                          "format": "uri"
-                        }
-                      }
-                    }
-                  ]
+                  "$ref": "#/components/schemas/AsyncTransaction"
                 }
               }
             }
@@ -1259,19 +1229,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "allOf": [
-                      {
-                        "$ref": "#/components/schemas/Transaction"
-                      },
-                      {
-                        "properties": {
-                          "callback_url": {
-                            "type": "string",
-                            "format": "uri"
-                          }
-                        }
-                      }
-                    ]
+                    "$ref": "#/components/schemas/AsyncTransaction"
                   }
                 }
               }
@@ -1561,26 +1519,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "allOf": [
-                      {
-                        "$ref": "#/components/schemas/Operator"
-                      },
-                      {
-                        "type": "object",
-                        "required": [
-                          "identified"
-                        ],
-                        "properties": {
-                          "identified": {
-                            "type": "boolean",
-                            "description": "Indicates whether operator was identified as a direct match"
-                          }
-                        }
-                      },
-                      {
-                        "additionalProperties": false
-                      }
-                    ]
+                    "$ref": "#/components/schemas/LookupMobileNumber"
                   }
                 }
               }
@@ -1668,26 +1607,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "allOf": [
-                      {
-                        "$ref": "#/components/schemas/Operator"
-                      },
-                      {
-                        "type": "object",
-                        "required": [
-                          "identified"
-                        ],
-                        "properties": {
-                          "identified": {
-                            "type": "boolean",
-                            "description": "Indicates whether operator was identified as a direct match"
-                          }
-                        }
-                      },
-                      {
-                        "additionalProperties": false
-                      }
-                    ]
+                    "$ref": "#/components/schemas/LookupMobileNumber"
                   }
                 }
               }
@@ -1871,7 +1791,7 @@
         ],
         "additionalProperties": false
       },
-      "Operator": {
+      "OperatorBase": {
         "type": "object",
         "properties": {
           "id": {
@@ -1896,6 +1816,16 @@
           "name",
           "country",
           "regions"
+        ]
+      },
+      "Operator": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OperatorBase"
+          },
+          {
+            "additionalProperties": false
+          }
         ]
       },
       "ServiceRegion": {
@@ -2010,14 +1940,7 @@
             "$ref": "#/components/schemas/Service"
           },
           "operator": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Operator"
-              },
-              {
-                "additionalProperties": false
-              }
-            ]
+            "$ref": "#/components/schemas/Operator"
           },
           "regions": {
             "type": "array",
@@ -3465,7 +3388,7 @@
                   "$ref": "#/components/schemas/ProductTypes"
                 },
                 "operator": {
-                  "$ref": "#/components/schemas/Operator"
+                  "$ref": "#/components/schemas/OperatorBase"
                 }
               },
               "required": [
@@ -3488,6 +3411,21 @@
           "products"
         ],
         "additionalProperties": false
+      },
+      "AsyncTransaction": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Transaction"
+          },
+          {
+            "properties": {
+              "callback_url": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        ]
       },
       "Transaction": {
         "type": "object",
@@ -4069,6 +4007,28 @@
           "retail"
         ],
         "additionalProperties": false
+      },
+      "LookupMobileNumber": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OperatorBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "identified"
+            ],
+            "properties": {
+              "identified": {
+                "type": "boolean",
+                "description": "Indicates whether operator was identified as a direct match"
+              }
+            }
+          },
+          {
+            "additionalProperties": false
+          }
+        ]
       },
       "Statement": {
         "type": "object",

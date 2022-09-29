@@ -1,4 +1,5 @@
 .gitignore
+.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -15,6 +16,8 @@ api_statement_inquiry.go
 api_transactions.go
 client.go
 configuration.go
+docs/AsyncTransaction.md
+docs/AsyncTransactionAllOf.md
 docs/AvailabilityZones.md
 docs/Balance.md
 docs/BalancesApi.md
@@ -32,11 +35,11 @@ docs/Errors.md
 docs/ErrorsErrorsInner.md
 docs/FixedBenefit.md
 docs/FixedBenefitAmount.md
-docs/GetLookupMobileNumber200ResponseInner.md
-docs/GetLookupMobileNumber200ResponseInnerAllOf.md
-docs/GetOperators200ResponseInner.md
+docs/LookupMobileNumber.md
+docs/LookupMobileNumberAllOf.md
 docs/MobileNumberApi.md
 docs/Operator.md
+docs/OperatorBase.md
 docs/OperatorsApi.md
 docs/PIN.md
 docs/PINValidity.md
@@ -45,8 +48,6 @@ docs/PaymentModes.md
 docs/PaymentPostingPeriod.md
 docs/PostLookupMobileNumberRequest.md
 docs/PostLookupStatementInquiryRequest.md
-docs/PostTransactionAsyncRequest.md
-docs/PostTransactionAsyncRequestAllOf.md
 docs/Product.md
 docs/ProductBase.md
 docs/ProductFixedValuePinPurchase.md
@@ -118,6 +119,8 @@ docs/UnitTypes.md
 git_push.sh
 go.mod
 go.sum
+model_async_transaction.go
+model_async_transaction_all_of.go
 model_availability_zones.go
 model_balance.go
 model_benefit_type.go
@@ -131,10 +134,10 @@ model_errors.go
 model_errors_errors_inner.go
 model_fixed_benefit.go
 model_fixed_benefit_amount.go
-model_get_lookup_mobile_number_200_response_inner.go
-model_get_lookup_mobile_number_200_response_inner_all_of.go
-model_get_operators_200_response_inner.go
+model_lookup_mobile_number.go
+model_lookup_mobile_number_all_of.go
 model_operator.go
+model_operator_base.go
 model_payment.go
 model_payment_modes.go
 model_payment_posting_period.go
@@ -142,8 +145,6 @@ model_pin.go
 model_pin_validity.go
 model_post_lookup_mobile_number_request.go
 model_post_lookup_statement_inquiry_request.go
-model_post_transaction_async_request.go
-model_post_transaction_async_request_all_of.go
 model_product.go
 model_product_base.go
 model_product_fixed_value_pin_purchase.go

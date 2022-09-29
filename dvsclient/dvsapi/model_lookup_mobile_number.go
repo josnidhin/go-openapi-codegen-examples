@@ -14,32 +14,138 @@ import (
 	"encoding/json"
 )
 
-// GetLookupMobileNumber200ResponseInnerAllOf struct for GetLookupMobileNumber200ResponseInnerAllOf
-type GetLookupMobileNumber200ResponseInnerAllOf struct {
+// LookupMobileNumber struct for LookupMobileNumber
+type LookupMobileNumber struct {
+	Id      int32           `json:"id"`
+	Name    string          `json:"name"`
+	Country Country         `json:"country"`
+	Regions []ServiceRegion `json:"regions"`
 	// Indicates whether operator was identified as a direct match
 	Identified bool `json:"identified"`
 }
 
-// NewGetLookupMobileNumber200ResponseInnerAllOf instantiates a new GetLookupMobileNumber200ResponseInnerAllOf object
+// NewLookupMobileNumber instantiates a new LookupMobileNumber object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetLookupMobileNumber200ResponseInnerAllOf(identified bool) *GetLookupMobileNumber200ResponseInnerAllOf {
-	this := GetLookupMobileNumber200ResponseInnerAllOf{}
+func NewLookupMobileNumber(id int32, name string, country Country, regions []ServiceRegion, identified bool) *LookupMobileNumber {
+	this := LookupMobileNumber{}
+	this.Id = id
+	this.Name = name
+	this.Country = country
+	this.Regions = regions
 	this.Identified = identified
 	return &this
 }
 
-// NewGetLookupMobileNumber200ResponseInnerAllOfWithDefaults instantiates a new GetLookupMobileNumber200ResponseInnerAllOf object
+// NewLookupMobileNumberWithDefaults instantiates a new LookupMobileNumber object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewGetLookupMobileNumber200ResponseInnerAllOfWithDefaults() *GetLookupMobileNumber200ResponseInnerAllOf {
-	this := GetLookupMobileNumber200ResponseInnerAllOf{}
+func NewLookupMobileNumberWithDefaults() *LookupMobileNumber {
+	this := LookupMobileNumber{}
 	return &this
 }
 
+// GetId returns the Id field value
+func (o *LookupMobileNumber) GetId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *LookupMobileNumber) GetIdOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Id, true
+}
+
+// SetId sets field value
+func (o *LookupMobileNumber) SetId(v int32) {
+	o.Id = v
+}
+
+// GetName returns the Name field value
+func (o *LookupMobileNumber) GetName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Name
+}
+
+// GetNameOk returns a tuple with the Name field value
+// and a boolean to check if the value has been set.
+func (o *LookupMobileNumber) GetNameOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Name, true
+}
+
+// SetName sets field value
+func (o *LookupMobileNumber) SetName(v string) {
+	o.Name = v
+}
+
+// GetCountry returns the Country field value
+func (o *LookupMobileNumber) GetCountry() Country {
+	if o == nil {
+		var ret Country
+		return ret
+	}
+
+	return o.Country
+}
+
+// GetCountryOk returns a tuple with the Country field value
+// and a boolean to check if the value has been set.
+func (o *LookupMobileNumber) GetCountryOk() (*Country, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Country, true
+}
+
+// SetCountry sets field value
+func (o *LookupMobileNumber) SetCountry(v Country) {
+	o.Country = v
+}
+
+// GetRegions returns the Regions field value
+// If the value is explicit nil, the zero value for []ServiceRegion will be returned
+func (o *LookupMobileNumber) GetRegions() []ServiceRegion {
+	if o == nil {
+		var ret []ServiceRegion
+		return ret
+	}
+
+	return o.Regions
+}
+
+// GetRegionsOk returns a tuple with the Regions field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *LookupMobileNumber) GetRegionsOk() ([]ServiceRegion, bool) {
+	if o == nil || o.Regions == nil {
+		return nil, false
+	}
+	return o.Regions, true
+}
+
+// SetRegions sets field value
+func (o *LookupMobileNumber) SetRegions(v []ServiceRegion) {
+	o.Regions = v
+}
+
 // GetIdentified returns the Identified field value
-func (o *GetLookupMobileNumber200ResponseInnerAllOf) GetIdentified() bool {
+func (o *LookupMobileNumber) GetIdentified() bool {
 	if o == nil {
 		var ret bool
 		return ret
@@ -50,7 +156,7 @@ func (o *GetLookupMobileNumber200ResponseInnerAllOf) GetIdentified() bool {
 
 // GetIdentifiedOk returns a tuple with the Identified field value
 // and a boolean to check if the value has been set.
-func (o *GetLookupMobileNumber200ResponseInnerAllOf) GetIdentifiedOk() (*bool, bool) {
+func (o *LookupMobileNumber) GetIdentifiedOk() (*bool, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -58,50 +164,62 @@ func (o *GetLookupMobileNumber200ResponseInnerAllOf) GetIdentifiedOk() (*bool, b
 }
 
 // SetIdentified sets field value
-func (o *GetLookupMobileNumber200ResponseInnerAllOf) SetIdentified(v bool) {
+func (o *LookupMobileNumber) SetIdentified(v bool) {
 	o.Identified = v
 }
 
-func (o GetLookupMobileNumber200ResponseInnerAllOf) MarshalJSON() ([]byte, error) {
+func (o LookupMobileNumber) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["id"] = o.Id
+	}
+	if true {
+		toSerialize["name"] = o.Name
+	}
+	if true {
+		toSerialize["country"] = o.Country
+	}
+	if o.Regions != nil {
+		toSerialize["regions"] = o.Regions
+	}
 	if true {
 		toSerialize["identified"] = o.Identified
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableGetLookupMobileNumber200ResponseInnerAllOf struct {
-	value *GetLookupMobileNumber200ResponseInnerAllOf
+type NullableLookupMobileNumber struct {
+	value *LookupMobileNumber
 	isSet bool
 }
 
-func (v NullableGetLookupMobileNumber200ResponseInnerAllOf) Get() *GetLookupMobileNumber200ResponseInnerAllOf {
+func (v NullableLookupMobileNumber) Get() *LookupMobileNumber {
 	return v.value
 }
 
-func (v *NullableGetLookupMobileNumber200ResponseInnerAllOf) Set(val *GetLookupMobileNumber200ResponseInnerAllOf) {
+func (v *NullableLookupMobileNumber) Set(val *LookupMobileNumber) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableGetLookupMobileNumber200ResponseInnerAllOf) IsSet() bool {
+func (v NullableLookupMobileNumber) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableGetLookupMobileNumber200ResponseInnerAllOf) Unset() {
+func (v *NullableLookupMobileNumber) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableGetLookupMobileNumber200ResponseInnerAllOf(val *GetLookupMobileNumber200ResponseInnerAllOf) *NullableGetLookupMobileNumber200ResponseInnerAllOf {
-	return &NullableGetLookupMobileNumber200ResponseInnerAllOf{value: val, isSet: true}
+func NewNullableLookupMobileNumber(val *LookupMobileNumber) *NullableLookupMobileNumber {
+	return &NullableLookupMobileNumber{value: val, isSet: true}
 }
 
-func (v NullableGetLookupMobileNumber200ResponseInnerAllOf) MarshalJSON() ([]byte, error) {
+func (v NullableLookupMobileNumber) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableGetLookupMobileNumber200ResponseInnerAllOf) UnmarshalJSON(src []byte) error {
+func (v *NullableLookupMobileNumber) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

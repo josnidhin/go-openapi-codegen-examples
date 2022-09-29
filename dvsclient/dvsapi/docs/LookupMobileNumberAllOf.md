@@ -1,4 +1,4 @@
-# LookupMobileNumberMobileNumberGet200ResponseInnerAllOf
+# LookupMobileNumberAllOf
 
 ## Properties
 
@@ -8,39 +8,39 @@ Name | Type | Description | Notes
 
 ## Methods
 
-### NewLookupMobileNumberMobileNumberGet200ResponseInnerAllOf
+### NewLookupMobileNumberAllOf
 
-`func NewLookupMobileNumberMobileNumberGet200ResponseInnerAllOf(identified bool, ) *LookupMobileNumberMobileNumberGet200ResponseInnerAllOf`
+`func NewLookupMobileNumberAllOf(identified bool, ) *LookupMobileNumberAllOf`
 
-NewLookupMobileNumberMobileNumberGet200ResponseInnerAllOf instantiates a new LookupMobileNumberMobileNumberGet200ResponseInnerAllOf object
+NewLookupMobileNumberAllOf instantiates a new LookupMobileNumberAllOf object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewLookupMobileNumberMobileNumberGet200ResponseInnerAllOfWithDefaults
+### NewLookupMobileNumberAllOfWithDefaults
 
-`func NewLookupMobileNumberMobileNumberGet200ResponseInnerAllOfWithDefaults() *LookupMobileNumberMobileNumberGet200ResponseInnerAllOf`
+`func NewLookupMobileNumberAllOfWithDefaults() *LookupMobileNumberAllOf`
 
-NewLookupMobileNumberMobileNumberGet200ResponseInnerAllOfWithDefaults instantiates a new LookupMobileNumberMobileNumberGet200ResponseInnerAllOf object
+NewLookupMobileNumberAllOfWithDefaults instantiates a new LookupMobileNumberAllOf object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetIdentified
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInnerAllOf) GetIdentified() bool`
+`func (o *LookupMobileNumberAllOf) GetIdentified() bool`
 
 GetIdentified returns the Identified field if non-nil, zero value otherwise.
 
 ### GetIdentifiedOk
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInnerAllOf) GetIdentifiedOk() (*bool, bool)`
+`func (o *LookupMobileNumberAllOf) GetIdentifiedOk() (*bool, bool)`
 
 GetIdentifiedOk returns a tuple with the Identified field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetIdentified
 
-`func (o *LookupMobileNumberMobileNumberGet200ResponseInnerAllOf) SetIdentified(v bool)`
+`func (o *LookupMobileNumberAllOf) SetIdentified(v bool)`
 
 SetIdentified sets Identified field to given value.
 

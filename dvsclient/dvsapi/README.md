@@ -321,7 +321,7 @@ ctx = context.WithValue(context.Background(), dvsapi.ContextOperationServerVaria
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
+All URIs are relative to *http://127.0.0.1:8080/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -353,6 +353,8 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [AsyncTransaction](docs/AsyncTransaction.md)
+ - [AsyncTransactionAllOf](docs/AsyncTransactionAllOf.md)
  - [AvailabilityZones](docs/AvailabilityZones.md)
  - [Balance](docs/Balance.md)
  - [BenefitType](docs/BenefitType.md)
@@ -366,10 +368,10 @@ Class | Method | HTTP request | Description
  - [ErrorsErrorsInner](docs/ErrorsErrorsInner.md)
  - [FixedBenefit](docs/FixedBenefit.md)
  - [FixedBenefitAmount](docs/FixedBenefitAmount.md)
- - [GetLookupMobileNumber200ResponseInner](docs/GetLookupMobileNumber200ResponseInner.md)
- - [GetLookupMobileNumber200ResponseInnerAllOf](docs/GetLookupMobileNumber200ResponseInnerAllOf.md)
- - [GetOperators200ResponseInner](docs/GetOperators200ResponseInner.md)
+ - [LookupMobileNumber](docs/LookupMobileNumber.md)
+ - [LookupMobileNumberAllOf](docs/LookupMobileNumberAllOf.md)
  - [Operator](docs/Operator.md)
+ - [OperatorBase](docs/OperatorBase.md)
  - [PIN](docs/PIN.md)
  - [PINValidity](docs/PINValidity.md)
  - [Payment](docs/Payment.md)
@@ -377,8 +379,6 @@ Class | Method | HTTP request | Description
  - [PaymentPostingPeriod](docs/PaymentPostingPeriod.md)
  - [PostLookupMobileNumberRequest](docs/PostLookupMobileNumberRequest.md)
  - [PostLookupStatementInquiryRequest](docs/PostLookupStatementInquiryRequest.md)
- - [PostTransactionAsyncRequest](docs/PostTransactionAsyncRequest.md)
- - [PostTransactionAsyncRequestAllOf](docs/PostTransactionAsyncRequestAllOf.md)
  - [Product](docs/Product.md)
  - [ProductBase](docs/ProductBase.md)
  - [ProductFixedValuePinPurchase](docs/ProductFixedValuePinPurchase.md)

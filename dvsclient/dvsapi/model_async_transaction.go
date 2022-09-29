@@ -15,8 +15,8 @@ import (
 	"time"
 )
 
-// AsyncTransactionsPostRequest struct for AsyncTransactionsPostRequest
-type AsyncTransactionsPostRequest struct {
+// AsyncTransaction struct for AsyncTransaction
+type AsyncTransaction struct {
 	Id                         *int64                                  `json:"id,omitempty"`
 	ExternalId                 string                                  `json:"external_id"`
 	CreationDate               *time.Time                              `json:"creation_date,omitempty"`
@@ -45,12 +45,12 @@ type AsyncTransactionsPostRequest struct {
 	CallbackUrl                *string                                 `json:"callback_url,omitempty"`
 }
 
-// NewAsyncTransactionsPostRequest instantiates a new AsyncTransactionsPostRequest object
+// NewAsyncTransaction instantiates a new AsyncTransaction object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAsyncTransactionsPostRequest(externalId string, productId int32) *AsyncTransactionsPostRequest {
-	this := AsyncTransactionsPostRequest{}
+func NewAsyncTransaction(externalId string, productId int32) *AsyncTransaction {
+	this := AsyncTransaction{}
 	this.ExternalId = externalId
 	this.ProductId = productId
 	var autoConfirm bool = false
@@ -58,18 +58,18 @@ func NewAsyncTransactionsPostRequest(externalId string, productId int32) *AsyncT
 	return &this
 }
 
-// NewAsyncTransactionsPostRequestWithDefaults instantiates a new AsyncTransactionsPostRequest object
+// NewAsyncTransactionWithDefaults instantiates a new AsyncTransaction object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewAsyncTransactionsPostRequestWithDefaults() *AsyncTransactionsPostRequest {
-	this := AsyncTransactionsPostRequest{}
+func NewAsyncTransactionWithDefaults() *AsyncTransaction {
+	this := AsyncTransaction{}
 	var autoConfirm bool = false
 	this.AutoConfirm = &autoConfirm
 	return &this
 }
 
 // GetId returns the Id field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetId() int64 {
+func (o *AsyncTransaction) GetId() int64 {
 	if o == nil || o.Id == nil {
 		var ret int64
 		return ret
@@ -79,7 +79,7 @@ func (o *AsyncTransactionsPostRequest) GetId() int64 {
 
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetIdOk() (*int64, bool) {
+func (o *AsyncTransaction) GetIdOk() (*int64, bool) {
 	if o == nil || o.Id == nil {
 		return nil, false
 	}
@@ -87,7 +87,7 @@ func (o *AsyncTransactionsPostRequest) GetIdOk() (*int64, bool) {
 }
 
 // HasId returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasId() bool {
+func (o *AsyncTransaction) HasId() bool {
 	if o != nil && o.Id != nil {
 		return true
 	}
@@ -96,12 +96,12 @@ func (o *AsyncTransactionsPostRequest) HasId() bool {
 }
 
 // SetId gets a reference to the given int64 and assigns it to the Id field.
-func (o *AsyncTransactionsPostRequest) SetId(v int64) {
+func (o *AsyncTransaction) SetId(v int64) {
 	o.Id = &v
 }
 
 // GetExternalId returns the ExternalId field value
-func (o *AsyncTransactionsPostRequest) GetExternalId() string {
+func (o *AsyncTransaction) GetExternalId() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -112,7 +112,7 @@ func (o *AsyncTransactionsPostRequest) GetExternalId() string {
 
 // GetExternalIdOk returns a tuple with the ExternalId field value
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetExternalIdOk() (*string, bool) {
+func (o *AsyncTransaction) GetExternalIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -120,12 +120,12 @@ func (o *AsyncTransactionsPostRequest) GetExternalIdOk() (*string, bool) {
 }
 
 // SetExternalId sets field value
-func (o *AsyncTransactionsPostRequest) SetExternalId(v string) {
+func (o *AsyncTransaction) SetExternalId(v string) {
 	o.ExternalId = v
 }
 
 // GetCreationDate returns the CreationDate field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetCreationDate() time.Time {
+func (o *AsyncTransaction) GetCreationDate() time.Time {
 	if o == nil || o.CreationDate == nil {
 		var ret time.Time
 		return ret
@@ -135,7 +135,7 @@ func (o *AsyncTransactionsPostRequest) GetCreationDate() time.Time {
 
 // GetCreationDateOk returns a tuple with the CreationDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetCreationDateOk() (*time.Time, bool) {
+func (o *AsyncTransaction) GetCreationDateOk() (*time.Time, bool) {
 	if o == nil || o.CreationDate == nil {
 		return nil, false
 	}
@@ -143,7 +143,7 @@ func (o *AsyncTransactionsPostRequest) GetCreationDateOk() (*time.Time, bool) {
 }
 
 // HasCreationDate returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasCreationDate() bool {
+func (o *AsyncTransaction) HasCreationDate() bool {
 	if o != nil && o.CreationDate != nil {
 		return true
 	}
@@ -152,12 +152,12 @@ func (o *AsyncTransactionsPostRequest) HasCreationDate() bool {
 }
 
 // SetCreationDate gets a reference to the given time.Time and assigns it to the CreationDate field.
-func (o *AsyncTransactionsPostRequest) SetCreationDate(v time.Time) {
+func (o *AsyncTransaction) SetCreationDate(v time.Time) {
 	o.CreationDate = &v
 }
 
 // GetConfirmationExpirationDate returns the ConfirmationExpirationDate field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetConfirmationExpirationDate() time.Time {
+func (o *AsyncTransaction) GetConfirmationExpirationDate() time.Time {
 	if o == nil || o.ConfirmationExpirationDate == nil {
 		var ret time.Time
 		return ret
@@ -167,7 +167,7 @@ func (o *AsyncTransactionsPostRequest) GetConfirmationExpirationDate() time.Time
 
 // GetConfirmationExpirationDateOk returns a tuple with the ConfirmationExpirationDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetConfirmationExpirationDateOk() (*time.Time, bool) {
+func (o *AsyncTransaction) GetConfirmationExpirationDateOk() (*time.Time, bool) {
 	if o == nil || o.ConfirmationExpirationDate == nil {
 		return nil, false
 	}
@@ -175,7 +175,7 @@ func (o *AsyncTransactionsPostRequest) GetConfirmationExpirationDateOk() (*time.
 }
 
 // HasConfirmationExpirationDate returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasConfirmationExpirationDate() bool {
+func (o *AsyncTransaction) HasConfirmationExpirationDate() bool {
 	if o != nil && o.ConfirmationExpirationDate != nil {
 		return true
 	}
@@ -184,12 +184,12 @@ func (o *AsyncTransactionsPostRequest) HasConfirmationExpirationDate() bool {
 }
 
 // SetConfirmationExpirationDate gets a reference to the given time.Time and assigns it to the ConfirmationExpirationDate field.
-func (o *AsyncTransactionsPostRequest) SetConfirmationExpirationDate(v time.Time) {
+func (o *AsyncTransaction) SetConfirmationExpirationDate(v time.Time) {
 	o.ConfirmationExpirationDate = &v
 }
 
 // GetConfirmationDate returns the ConfirmationDate field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetConfirmationDate() time.Time {
+func (o *AsyncTransaction) GetConfirmationDate() time.Time {
 	if o == nil || o.ConfirmationDate == nil {
 		var ret time.Time
 		return ret
@@ -199,7 +199,7 @@ func (o *AsyncTransactionsPostRequest) GetConfirmationDate() time.Time {
 
 // GetConfirmationDateOk returns a tuple with the ConfirmationDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetConfirmationDateOk() (*time.Time, bool) {
+func (o *AsyncTransaction) GetConfirmationDateOk() (*time.Time, bool) {
 	if o == nil || o.ConfirmationDate == nil {
 		return nil, false
 	}
@@ -207,7 +207,7 @@ func (o *AsyncTransactionsPostRequest) GetConfirmationDateOk() (*time.Time, bool
 }
 
 // HasConfirmationDate returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasConfirmationDate() bool {
+func (o *AsyncTransaction) HasConfirmationDate() bool {
 	if o != nil && o.ConfirmationDate != nil {
 		return true
 	}
@@ -216,12 +216,12 @@ func (o *AsyncTransactionsPostRequest) HasConfirmationDate() bool {
 }
 
 // SetConfirmationDate gets a reference to the given time.Time and assigns it to the ConfirmationDate field.
-func (o *AsyncTransactionsPostRequest) SetConfirmationDate(v time.Time) {
+func (o *AsyncTransaction) SetConfirmationDate(v time.Time) {
 	o.ConfirmationDate = &v
 }
 
 // GetProductId returns the ProductId field value
-func (o *AsyncTransactionsPostRequest) GetProductId() int32 {
+func (o *AsyncTransaction) GetProductId() int32 {
 	if o == nil {
 		var ret int32
 		return ret
@@ -232,7 +232,7 @@ func (o *AsyncTransactionsPostRequest) GetProductId() int32 {
 
 // GetProductIdOk returns a tuple with the ProductId field value
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetProductIdOk() (*int32, bool) {
+func (o *AsyncTransaction) GetProductIdOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -240,12 +240,12 @@ func (o *AsyncTransactionsPostRequest) GetProductIdOk() (*int32, bool) {
 }
 
 // SetProductId sets field value
-func (o *AsyncTransactionsPostRequest) SetProductId(v int32) {
+func (o *AsyncTransaction) SetProductId(v int32) {
 	o.ProductId = v
 }
 
 // GetCalculationMode returns the CalculationMode field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetCalculationMode() CalculationModes {
+func (o *AsyncTransaction) GetCalculationMode() CalculationModes {
 	if o == nil || o.CalculationMode == nil {
 		var ret CalculationModes
 		return ret
@@ -255,7 +255,7 @@ func (o *AsyncTransactionsPostRequest) GetCalculationMode() CalculationModes {
 
 // GetCalculationModeOk returns a tuple with the CalculationMode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetCalculationModeOk() (*CalculationModes, bool) {
+func (o *AsyncTransaction) GetCalculationModeOk() (*CalculationModes, bool) {
 	if o == nil || o.CalculationMode == nil {
 		return nil, false
 	}
@@ -263,7 +263,7 @@ func (o *AsyncTransactionsPostRequest) GetCalculationModeOk() (*CalculationModes
 }
 
 // HasCalculationMode returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasCalculationMode() bool {
+func (o *AsyncTransaction) HasCalculationMode() bool {
 	if o != nil && o.CalculationMode != nil {
 		return true
 	}
@@ -272,12 +272,12 @@ func (o *AsyncTransactionsPostRequest) HasCalculationMode() bool {
 }
 
 // SetCalculationMode gets a reference to the given CalculationModes and assigns it to the CalculationMode field.
-func (o *AsyncTransactionsPostRequest) SetCalculationMode(v CalculationModes) {
+func (o *AsyncTransaction) SetCalculationMode(v CalculationModes) {
 	o.CalculationMode = &v
 }
 
 // GetSource returns the Source field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetSource() TransactionSource {
+func (o *AsyncTransaction) GetSource() TransactionSource {
 	if o == nil || o.Source.Get() == nil {
 		var ret TransactionSource
 		return ret
@@ -288,7 +288,7 @@ func (o *AsyncTransactionsPostRequest) GetSource() TransactionSource {
 // GetSourceOk returns a tuple with the Source field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetSourceOk() (*TransactionSource, bool) {
+func (o *AsyncTransaction) GetSourceOk() (*TransactionSource, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -296,7 +296,7 @@ func (o *AsyncTransactionsPostRequest) GetSourceOk() (*TransactionSource, bool) 
 }
 
 // HasSource returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasSource() bool {
+func (o *AsyncTransaction) HasSource() bool {
 	if o != nil && o.Source.IsSet() {
 		return true
 	}
@@ -305,22 +305,22 @@ func (o *AsyncTransactionsPostRequest) HasSource() bool {
 }
 
 // SetSource gets a reference to the given NullableTransactionSource and assigns it to the Source field.
-func (o *AsyncTransactionsPostRequest) SetSource(v TransactionSource) {
+func (o *AsyncTransaction) SetSource(v TransactionSource) {
 	o.Source.Set(&v)
 }
 
 // SetSourceNil sets the value for Source to be an explicit nil
-func (o *AsyncTransactionsPostRequest) SetSourceNil() {
+func (o *AsyncTransaction) SetSourceNil() {
 	o.Source.Set(nil)
 }
 
 // UnsetSource ensures that no value is present for Source, not even an explicit nil
-func (o *AsyncTransactionsPostRequest) UnsetSource() {
+func (o *AsyncTransaction) UnsetSource() {
 	o.Source.Unset()
 }
 
 // GetDestination returns the Destination field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetDestination() TransactionDestination {
+func (o *AsyncTransaction) GetDestination() TransactionDestination {
 	if o == nil || o.Destination.Get() == nil {
 		var ret TransactionDestination
 		return ret
@@ -331,7 +331,7 @@ func (o *AsyncTransactionsPostRequest) GetDestination() TransactionDestination {
 // GetDestinationOk returns a tuple with the Destination field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetDestinationOk() (*TransactionDestination, bool) {
+func (o *AsyncTransaction) GetDestinationOk() (*TransactionDestination, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -339,7 +339,7 @@ func (o *AsyncTransactionsPostRequest) GetDestinationOk() (*TransactionDestinati
 }
 
 // HasDestination returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasDestination() bool {
+func (o *AsyncTransaction) HasDestination() bool {
 	if o != nil && o.Destination.IsSet() {
 		return true
 	}
@@ -348,22 +348,22 @@ func (o *AsyncTransactionsPostRequest) HasDestination() bool {
 }
 
 // SetDestination gets a reference to the given NullableTransactionDestination and assigns it to the Destination field.
-func (o *AsyncTransactionsPostRequest) SetDestination(v TransactionDestination) {
+func (o *AsyncTransaction) SetDestination(v TransactionDestination) {
 	o.Destination.Set(&v)
 }
 
 // SetDestinationNil sets the value for Destination to be an explicit nil
-func (o *AsyncTransactionsPostRequest) SetDestinationNil() {
+func (o *AsyncTransaction) SetDestinationNil() {
 	o.Destination.Set(nil)
 }
 
 // UnsetDestination ensures that no value is present for Destination, not even an explicit nil
-func (o *AsyncTransactionsPostRequest) UnsetDestination() {
+func (o *AsyncTransaction) UnsetDestination() {
 	o.Destination.Unset()
 }
 
 // GetAutoConfirm returns the AutoConfirm field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetAutoConfirm() bool {
+func (o *AsyncTransaction) GetAutoConfirm() bool {
 	if o == nil || o.AutoConfirm == nil {
 		var ret bool
 		return ret
@@ -373,7 +373,7 @@ func (o *AsyncTransactionsPostRequest) GetAutoConfirm() bool {
 
 // GetAutoConfirmOk returns a tuple with the AutoConfirm field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetAutoConfirmOk() (*bool, bool) {
+func (o *AsyncTransaction) GetAutoConfirmOk() (*bool, bool) {
 	if o == nil || o.AutoConfirm == nil {
 		return nil, false
 	}
@@ -381,7 +381,7 @@ func (o *AsyncTransactionsPostRequest) GetAutoConfirmOk() (*bool, bool) {
 }
 
 // HasAutoConfirm returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasAutoConfirm() bool {
+func (o *AsyncTransaction) HasAutoConfirm() bool {
 	if o != nil && o.AutoConfirm != nil {
 		return true
 	}
@@ -390,12 +390,12 @@ func (o *AsyncTransactionsPostRequest) HasAutoConfirm() bool {
 }
 
 // SetAutoConfirm gets a reference to the given bool and assigns it to the AutoConfirm field.
-func (o *AsyncTransactionsPostRequest) SetAutoConfirm(v bool) {
+func (o *AsyncTransaction) SetAutoConfirm(v bool) {
 	o.AutoConfirm = &v
 }
 
 // GetStatus returns the Status field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetStatus() TransactionStatus {
+func (o *AsyncTransaction) GetStatus() TransactionStatus {
 	if o == nil || o.Status == nil {
 		var ret TransactionStatus
 		return ret
@@ -405,7 +405,7 @@ func (o *AsyncTransactionsPostRequest) GetStatus() TransactionStatus {
 
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetStatusOk() (*TransactionStatus, bool) {
+func (o *AsyncTransaction) GetStatusOk() (*TransactionStatus, bool) {
 	if o == nil || o.Status == nil {
 		return nil, false
 	}
@@ -413,7 +413,7 @@ func (o *AsyncTransactionsPostRequest) GetStatusOk() (*TransactionStatus, bool) 
 }
 
 // HasStatus returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasStatus() bool {
+func (o *AsyncTransaction) HasStatus() bool {
 	if o != nil && o.Status != nil {
 		return true
 	}
@@ -422,12 +422,12 @@ func (o *AsyncTransactionsPostRequest) HasStatus() bool {
 }
 
 // SetStatus gets a reference to the given TransactionStatus and assigns it to the Status field.
-func (o *AsyncTransactionsPostRequest) SetStatus(v TransactionStatus) {
+func (o *AsyncTransaction) SetStatus(v TransactionStatus) {
 	o.Status = &v
 }
 
 // GetOperatorReference returns the OperatorReference field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetOperatorReference() string {
+func (o *AsyncTransaction) GetOperatorReference() string {
 	if o == nil || o.OperatorReference.Get() == nil {
 		var ret string
 		return ret
@@ -438,7 +438,7 @@ func (o *AsyncTransactionsPostRequest) GetOperatorReference() string {
 // GetOperatorReferenceOk returns a tuple with the OperatorReference field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetOperatorReferenceOk() (*string, bool) {
+func (o *AsyncTransaction) GetOperatorReferenceOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -446,7 +446,7 @@ func (o *AsyncTransactionsPostRequest) GetOperatorReferenceOk() (*string, bool) 
 }
 
 // HasOperatorReference returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasOperatorReference() bool {
+func (o *AsyncTransaction) HasOperatorReference() bool {
 	if o != nil && o.OperatorReference.IsSet() {
 		return true
 	}
@@ -455,22 +455,22 @@ func (o *AsyncTransactionsPostRequest) HasOperatorReference() bool {
 }
 
 // SetOperatorReference gets a reference to the given NullableString and assigns it to the OperatorReference field.
-func (o *AsyncTransactionsPostRequest) SetOperatorReference(v string) {
+func (o *AsyncTransaction) SetOperatorReference(v string) {
 	o.OperatorReference.Set(&v)
 }
 
 // SetOperatorReferenceNil sets the value for OperatorReference to be an explicit nil
-func (o *AsyncTransactionsPostRequest) SetOperatorReferenceNil() {
+func (o *AsyncTransaction) SetOperatorReferenceNil() {
 	o.OperatorReference.Set(nil)
 }
 
 // UnsetOperatorReference ensures that no value is present for OperatorReference, not even an explicit nil
-func (o *AsyncTransactionsPostRequest) UnsetOperatorReference() {
+func (o *AsyncTransaction) UnsetOperatorReference() {
 	o.OperatorReference.Unset()
 }
 
 // GetPin returns the Pin field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetPin() TransactionPin {
+func (o *AsyncTransaction) GetPin() TransactionPin {
 	if o == nil || o.Pin.Get() == nil {
 		var ret TransactionPin
 		return ret
@@ -481,7 +481,7 @@ func (o *AsyncTransactionsPostRequest) GetPin() TransactionPin {
 // GetPinOk returns a tuple with the Pin field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetPinOk() (*TransactionPin, bool) {
+func (o *AsyncTransaction) GetPinOk() (*TransactionPin, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -489,7 +489,7 @@ func (o *AsyncTransactionsPostRequest) GetPinOk() (*TransactionPin, bool) {
 }
 
 // HasPin returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasPin() bool {
+func (o *AsyncTransaction) HasPin() bool {
 	if o != nil && o.Pin.IsSet() {
 		return true
 	}
@@ -498,22 +498,22 @@ func (o *AsyncTransactionsPostRequest) HasPin() bool {
 }
 
 // SetPin gets a reference to the given NullableTransactionPin and assigns it to the Pin field.
-func (o *AsyncTransactionsPostRequest) SetPin(v TransactionPin) {
+func (o *AsyncTransaction) SetPin(v TransactionPin) {
 	o.Pin.Set(&v)
 }
 
 // SetPinNil sets the value for Pin to be an explicit nil
-func (o *AsyncTransactionsPostRequest) SetPinNil() {
+func (o *AsyncTransaction) SetPinNil() {
 	o.Pin.Set(nil)
 }
 
 // UnsetPin ensures that no value is present for Pin, not even an explicit nil
-func (o *AsyncTransactionsPostRequest) UnsetPin() {
+func (o *AsyncTransaction) UnsetPin() {
 	o.Pin.Unset()
 }
 
 // GetProduct returns the Product field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetProduct() TransactionProduct {
+func (o *AsyncTransaction) GetProduct() TransactionProduct {
 	if o == nil || o.Product == nil {
 		var ret TransactionProduct
 		return ret
@@ -523,7 +523,7 @@ func (o *AsyncTransactionsPostRequest) GetProduct() TransactionProduct {
 
 // GetProductOk returns a tuple with the Product field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetProductOk() (*TransactionProduct, bool) {
+func (o *AsyncTransaction) GetProductOk() (*TransactionProduct, bool) {
 	if o == nil || o.Product == nil {
 		return nil, false
 	}
@@ -531,7 +531,7 @@ func (o *AsyncTransactionsPostRequest) GetProductOk() (*TransactionProduct, bool
 }
 
 // HasProduct returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasProduct() bool {
+func (o *AsyncTransaction) HasProduct() bool {
 	if o != nil && o.Product != nil {
 		return true
 	}
@@ -540,12 +540,12 @@ func (o *AsyncTransactionsPostRequest) HasProduct() bool {
 }
 
 // SetProduct gets a reference to the given TransactionProduct and assigns it to the Product field.
-func (o *AsyncTransactionsPostRequest) SetProduct(v TransactionProduct) {
+func (o *AsyncTransaction) SetProduct(v TransactionProduct) {
 	o.Product = &v
 }
 
 // GetPrices returns the Prices field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetPrices() TransactionPrices {
+func (o *AsyncTransaction) GetPrices() TransactionPrices {
 	if o == nil || o.Prices == nil {
 		var ret TransactionPrices
 		return ret
@@ -555,7 +555,7 @@ func (o *AsyncTransactionsPostRequest) GetPrices() TransactionPrices {
 
 // GetPricesOk returns a tuple with the Prices field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetPricesOk() (*TransactionPrices, bool) {
+func (o *AsyncTransaction) GetPricesOk() (*TransactionPrices, bool) {
 	if o == nil || o.Prices == nil {
 		return nil, false
 	}
@@ -563,7 +563,7 @@ func (o *AsyncTransactionsPostRequest) GetPricesOk() (*TransactionPrices, bool) 
 }
 
 // HasPrices returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasPrices() bool {
+func (o *AsyncTransaction) HasPrices() bool {
 	if o != nil && o.Prices != nil {
 		return true
 	}
@@ -572,12 +572,12 @@ func (o *AsyncTransactionsPostRequest) HasPrices() bool {
 }
 
 // SetPrices gets a reference to the given TransactionPrices and assigns it to the Prices field.
-func (o *AsyncTransactionsPostRequest) SetPrices(v TransactionPrices) {
+func (o *AsyncTransaction) SetPrices(v TransactionPrices) {
 	o.Prices = &v
 }
 
 // GetRates returns the Rates field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetRates() TransactionRates {
+func (o *AsyncTransaction) GetRates() TransactionRates {
 	if o == nil || o.Rates == nil {
 		var ret TransactionRates
 		return ret
@@ -587,7 +587,7 @@ func (o *AsyncTransactionsPostRequest) GetRates() TransactionRates {
 
 // GetRatesOk returns a tuple with the Rates field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetRatesOk() (*TransactionRates, bool) {
+func (o *AsyncTransaction) GetRatesOk() (*TransactionRates, bool) {
 	if o == nil || o.Rates == nil {
 		return nil, false
 	}
@@ -595,7 +595,7 @@ func (o *AsyncTransactionsPostRequest) GetRatesOk() (*TransactionRates, bool) {
 }
 
 // HasRates returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasRates() bool {
+func (o *AsyncTransaction) HasRates() bool {
 	if o != nil && o.Rates != nil {
 		return true
 	}
@@ -604,12 +604,12 @@ func (o *AsyncTransactionsPostRequest) HasRates() bool {
 }
 
 // SetRates gets a reference to the given TransactionRates and assigns it to the Rates field.
-func (o *AsyncTransactionsPostRequest) SetRates(v TransactionRates) {
+func (o *AsyncTransaction) SetRates(v TransactionRates) {
 	o.Rates = &v
 }
 
 // GetBenefits returns the Benefits field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetBenefits() []TransactionBenefitsInner {
+func (o *AsyncTransaction) GetBenefits() []TransactionBenefitsInner {
 	if o == nil {
 		var ret []TransactionBenefitsInner
 		return ret
@@ -620,7 +620,7 @@ func (o *AsyncTransactionsPostRequest) GetBenefits() []TransactionBenefitsInner 
 // GetBenefitsOk returns a tuple with the Benefits field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetBenefitsOk() ([]TransactionBenefitsInner, bool) {
+func (o *AsyncTransaction) GetBenefitsOk() ([]TransactionBenefitsInner, bool) {
 	if o == nil || o.Benefits == nil {
 		return nil, false
 	}
@@ -628,7 +628,7 @@ func (o *AsyncTransactionsPostRequest) GetBenefitsOk() ([]TransactionBenefitsInn
 }
 
 // HasBenefits returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasBenefits() bool {
+func (o *AsyncTransaction) HasBenefits() bool {
 	if o != nil && o.Benefits != nil {
 		return true
 	}
@@ -637,12 +637,12 @@ func (o *AsyncTransactionsPostRequest) HasBenefits() bool {
 }
 
 // SetBenefits gets a reference to the given []TransactionBenefitsInner and assigns it to the Benefits field.
-func (o *AsyncTransactionsPostRequest) SetBenefits(v []TransactionBenefitsInner) {
+func (o *AsyncTransaction) SetBenefits(v []TransactionBenefitsInner) {
 	o.Benefits = v
 }
 
 // GetPromotions returns the Promotions field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetPromotions() []ProductPromotion {
+func (o *AsyncTransaction) GetPromotions() []ProductPromotion {
 	if o == nil {
 		var ret []ProductPromotion
 		return ret
@@ -653,7 +653,7 @@ func (o *AsyncTransactionsPostRequest) GetPromotions() []ProductPromotion {
 // GetPromotionsOk returns a tuple with the Promotions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetPromotionsOk() ([]ProductPromotion, bool) {
+func (o *AsyncTransaction) GetPromotionsOk() ([]ProductPromotion, bool) {
 	if o == nil || o.Promotions == nil {
 		return nil, false
 	}
@@ -661,7 +661,7 @@ func (o *AsyncTransactionsPostRequest) GetPromotionsOk() ([]ProductPromotion, bo
 }
 
 // HasPromotions returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasPromotions() bool {
+func (o *AsyncTransaction) HasPromotions() bool {
 	if o != nil && o.Promotions != nil {
 		return true
 	}
@@ -670,12 +670,12 @@ func (o *AsyncTransactionsPostRequest) HasPromotions() bool {
 }
 
 // SetPromotions gets a reference to the given []ProductPromotion and assigns it to the Promotions field.
-func (o *AsyncTransactionsPostRequest) SetPromotions(v []ProductPromotion) {
+func (o *AsyncTransaction) SetPromotions(v []ProductPromotion) {
 	o.Promotions = v
 }
 
 // GetRequestedValues returns the RequestedValues field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetRequestedValues() TransactionRequestedValues {
+func (o *AsyncTransaction) GetRequestedValues() TransactionRequestedValues {
 	if o == nil || o.RequestedValues.Get() == nil {
 		var ret TransactionRequestedValues
 		return ret
@@ -686,7 +686,7 @@ func (o *AsyncTransactionsPostRequest) GetRequestedValues() TransactionRequested
 // GetRequestedValuesOk returns a tuple with the RequestedValues field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetRequestedValuesOk() (*TransactionRequestedValues, bool) {
+func (o *AsyncTransaction) GetRequestedValuesOk() (*TransactionRequestedValues, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -694,7 +694,7 @@ func (o *AsyncTransactionsPostRequest) GetRequestedValuesOk() (*TransactionReque
 }
 
 // HasRequestedValues returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasRequestedValues() bool {
+func (o *AsyncTransaction) HasRequestedValues() bool {
 	if o != nil && o.RequestedValues.IsSet() {
 		return true
 	}
@@ -703,22 +703,22 @@ func (o *AsyncTransactionsPostRequest) HasRequestedValues() bool {
 }
 
 // SetRequestedValues gets a reference to the given NullableTransactionRequestedValues and assigns it to the RequestedValues field.
-func (o *AsyncTransactionsPostRequest) SetRequestedValues(v TransactionRequestedValues) {
+func (o *AsyncTransaction) SetRequestedValues(v TransactionRequestedValues) {
 	o.RequestedValues.Set(&v)
 }
 
 // SetRequestedValuesNil sets the value for RequestedValues to be an explicit nil
-func (o *AsyncTransactionsPostRequest) SetRequestedValuesNil() {
+func (o *AsyncTransaction) SetRequestedValuesNil() {
 	o.RequestedValues.Set(nil)
 }
 
 // UnsetRequestedValues ensures that no value is present for RequestedValues, not even an explicit nil
-func (o *AsyncTransactionsPostRequest) UnsetRequestedValues() {
+func (o *AsyncTransaction) UnsetRequestedValues() {
 	o.RequestedValues.Unset()
 }
 
 // GetAdjustedValues returns the AdjustedValues field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetAdjustedValues() TransactionRequestedValues {
+func (o *AsyncTransaction) GetAdjustedValues() TransactionRequestedValues {
 	if o == nil || o.AdjustedValues.Get() == nil {
 		var ret TransactionRequestedValues
 		return ret
@@ -729,7 +729,7 @@ func (o *AsyncTransactionsPostRequest) GetAdjustedValues() TransactionRequestedV
 // GetAdjustedValuesOk returns a tuple with the AdjustedValues field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetAdjustedValuesOk() (*TransactionRequestedValues, bool) {
+func (o *AsyncTransaction) GetAdjustedValuesOk() (*TransactionRequestedValues, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -737,7 +737,7 @@ func (o *AsyncTransactionsPostRequest) GetAdjustedValuesOk() (*TransactionReques
 }
 
 // HasAdjustedValues returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasAdjustedValues() bool {
+func (o *AsyncTransaction) HasAdjustedValues() bool {
 	if o != nil && o.AdjustedValues.IsSet() {
 		return true
 	}
@@ -746,22 +746,22 @@ func (o *AsyncTransactionsPostRequest) HasAdjustedValues() bool {
 }
 
 // SetAdjustedValues gets a reference to the given NullableTransactionRequestedValues and assigns it to the AdjustedValues field.
-func (o *AsyncTransactionsPostRequest) SetAdjustedValues(v TransactionRequestedValues) {
+func (o *AsyncTransaction) SetAdjustedValues(v TransactionRequestedValues) {
 	o.AdjustedValues.Set(&v)
 }
 
 // SetAdjustedValuesNil sets the value for AdjustedValues to be an explicit nil
-func (o *AsyncTransactionsPostRequest) SetAdjustedValuesNil() {
+func (o *AsyncTransaction) SetAdjustedValuesNil() {
 	o.AdjustedValues.Set(nil)
 }
 
 // UnsetAdjustedValues ensures that no value is present for AdjustedValues, not even an explicit nil
-func (o *AsyncTransactionsPostRequest) UnsetAdjustedValues() {
+func (o *AsyncTransaction) UnsetAdjustedValues() {
 	o.AdjustedValues.Unset()
 }
 
 // GetSender returns the Sender field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetSender() TransactionSender {
+func (o *AsyncTransaction) GetSender() TransactionSender {
 	if o == nil || o.Sender.Get() == nil {
 		var ret TransactionSender
 		return ret
@@ -772,7 +772,7 @@ func (o *AsyncTransactionsPostRequest) GetSender() TransactionSender {
 // GetSenderOk returns a tuple with the Sender field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetSenderOk() (*TransactionSender, bool) {
+func (o *AsyncTransaction) GetSenderOk() (*TransactionSender, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -780,7 +780,7 @@ func (o *AsyncTransactionsPostRequest) GetSenderOk() (*TransactionSender, bool) 
 }
 
 // HasSender returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasSender() bool {
+func (o *AsyncTransaction) HasSender() bool {
 	if o != nil && o.Sender.IsSet() {
 		return true
 	}
@@ -789,22 +789,22 @@ func (o *AsyncTransactionsPostRequest) HasSender() bool {
 }
 
 // SetSender gets a reference to the given NullableTransactionSender and assigns it to the Sender field.
-func (o *AsyncTransactionsPostRequest) SetSender(v TransactionSender) {
+func (o *AsyncTransaction) SetSender(v TransactionSender) {
 	o.Sender.Set(&v)
 }
 
 // SetSenderNil sets the value for Sender to be an explicit nil
-func (o *AsyncTransactionsPostRequest) SetSenderNil() {
+func (o *AsyncTransaction) SetSenderNil() {
 	o.Sender.Set(nil)
 }
 
 // UnsetSender ensures that no value is present for Sender, not even an explicit nil
-func (o *AsyncTransactionsPostRequest) UnsetSender() {
+func (o *AsyncTransaction) UnsetSender() {
 	o.Sender.Unset()
 }
 
 // GetBeneficiary returns the Beneficiary field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetBeneficiary() TransactionSender {
+func (o *AsyncTransaction) GetBeneficiary() TransactionSender {
 	if o == nil || o.Beneficiary.Get() == nil {
 		var ret TransactionSender
 		return ret
@@ -815,7 +815,7 @@ func (o *AsyncTransactionsPostRequest) GetBeneficiary() TransactionSender {
 // GetBeneficiaryOk returns a tuple with the Beneficiary field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetBeneficiaryOk() (*TransactionSender, bool) {
+func (o *AsyncTransaction) GetBeneficiaryOk() (*TransactionSender, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -823,7 +823,7 @@ func (o *AsyncTransactionsPostRequest) GetBeneficiaryOk() (*TransactionSender, b
 }
 
 // HasBeneficiary returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasBeneficiary() bool {
+func (o *AsyncTransaction) HasBeneficiary() bool {
 	if o != nil && o.Beneficiary.IsSet() {
 		return true
 	}
@@ -832,22 +832,22 @@ func (o *AsyncTransactionsPostRequest) HasBeneficiary() bool {
 }
 
 // SetBeneficiary gets a reference to the given NullableTransactionSender and assigns it to the Beneficiary field.
-func (o *AsyncTransactionsPostRequest) SetBeneficiary(v TransactionSender) {
+func (o *AsyncTransaction) SetBeneficiary(v TransactionSender) {
 	o.Beneficiary.Set(&v)
 }
 
 // SetBeneficiaryNil sets the value for Beneficiary to be an explicit nil
-func (o *AsyncTransactionsPostRequest) SetBeneficiaryNil() {
+func (o *AsyncTransaction) SetBeneficiaryNil() {
 	o.Beneficiary.Set(nil)
 }
 
 // UnsetBeneficiary ensures that no value is present for Beneficiary, not even an explicit nil
-func (o *AsyncTransactionsPostRequest) UnsetBeneficiary() {
+func (o *AsyncTransaction) UnsetBeneficiary() {
 	o.Beneficiary.Unset()
 }
 
 // GetDebitPartyIdentifier returns the DebitPartyIdentifier field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *AsyncTransactionsPostRequest) GetDebitPartyIdentifier() TransactionDebitPartyIdentifier {
+func (o *AsyncTransaction) GetDebitPartyIdentifier() TransactionDebitPartyIdentifier {
 	if o == nil || o.DebitPartyIdentifier.Get() == nil {
 		var ret TransactionDebitPartyIdentifier
 		return ret
@@ -858,7 +858,7 @@ func (o *AsyncTransactionsPostRequest) GetDebitPartyIdentifier() TransactionDebi
 // GetDebitPartyIdentifierOk returns a tuple with the DebitPartyIdentifier field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *AsyncTransactionsPostRequest) GetDebitPartyIdentifierOk() (*TransactionDebitPartyIdentifier, bool) {
+func (o *AsyncTransaction) GetDebitPartyIdentifierOk() (*TransactionDebitPartyIdentifier, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -866,7 +866,7 @@ func (o *AsyncTransactionsPostRequest) GetDebitPartyIdentifierOk() (*Transaction
 }
 
 // HasDebitPartyIdentifier returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasDebitPartyIdentifier() bool {
+func (o *AsyncTransaction) HasDebitPartyIdentifier() bool {
 	if o != nil && o.DebitPartyIdentifier.IsSet() {
 		return true
 	}
@@ -875,22 +875,22 @@ func (o *AsyncTransactionsPostRequest) HasDebitPartyIdentifier() bool {
 }
 
 // SetDebitPartyIdentifier gets a reference to the given NullableTransactionDebitPartyIdentifier and assigns it to the DebitPartyIdentifier field.
-func (o *AsyncTransactionsPostRequest) SetDebitPartyIdentifier(v TransactionDebitPartyIdentifier) {
+func (o *AsyncTransaction) SetDebitPartyIdentifier(v TransactionDebitPartyIdentifier) {
 	o.DebitPartyIdentifier.Set(&v)
 }
 
 // SetDebitPartyIdentifierNil sets the value for DebitPartyIdentifier to be an explicit nil
-func (o *AsyncTransactionsPostRequest) SetDebitPartyIdentifierNil() {
+func (o *AsyncTransaction) SetDebitPartyIdentifierNil() {
 	o.DebitPartyIdentifier.Set(nil)
 }
 
 // UnsetDebitPartyIdentifier ensures that no value is present for DebitPartyIdentifier, not even an explicit nil
-func (o *AsyncTransactionsPostRequest) UnsetDebitPartyIdentifier() {
+func (o *AsyncTransaction) UnsetDebitPartyIdentifier() {
 	o.DebitPartyIdentifier.Unset()
 }
 
 // GetCreditPartyIdentifier returns the CreditPartyIdentifier field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetCreditPartyIdentifier() TransactionCreditPartyIdentifier {
+func (o *AsyncTransaction) GetCreditPartyIdentifier() TransactionCreditPartyIdentifier {
 	if o == nil || o.CreditPartyIdentifier == nil {
 		var ret TransactionCreditPartyIdentifier
 		return ret
@@ -900,7 +900,7 @@ func (o *AsyncTransactionsPostRequest) GetCreditPartyIdentifier() TransactionCre
 
 // GetCreditPartyIdentifierOk returns a tuple with the CreditPartyIdentifier field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetCreditPartyIdentifierOk() (*TransactionCreditPartyIdentifier, bool) {
+func (o *AsyncTransaction) GetCreditPartyIdentifierOk() (*TransactionCreditPartyIdentifier, bool) {
 	if o == nil || o.CreditPartyIdentifier == nil {
 		return nil, false
 	}
@@ -908,7 +908,7 @@ func (o *AsyncTransactionsPostRequest) GetCreditPartyIdentifierOk() (*Transactio
 }
 
 // HasCreditPartyIdentifier returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasCreditPartyIdentifier() bool {
+func (o *AsyncTransaction) HasCreditPartyIdentifier() bool {
 	if o != nil && o.CreditPartyIdentifier != nil {
 		return true
 	}
@@ -917,12 +917,12 @@ func (o *AsyncTransactionsPostRequest) HasCreditPartyIdentifier() bool {
 }
 
 // SetCreditPartyIdentifier gets a reference to the given TransactionCreditPartyIdentifier and assigns it to the CreditPartyIdentifier field.
-func (o *AsyncTransactionsPostRequest) SetCreditPartyIdentifier(v TransactionCreditPartyIdentifier) {
+func (o *AsyncTransaction) SetCreditPartyIdentifier(v TransactionCreditPartyIdentifier) {
 	o.CreditPartyIdentifier = &v
 }
 
 // GetStatementIdentifier returns the StatementIdentifier field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetStatementIdentifier() TransactionStatementIdentifier {
+func (o *AsyncTransaction) GetStatementIdentifier() TransactionStatementIdentifier {
 	if o == nil || o.StatementIdentifier == nil {
 		var ret TransactionStatementIdentifier
 		return ret
@@ -932,7 +932,7 @@ func (o *AsyncTransactionsPostRequest) GetStatementIdentifier() TransactionState
 
 // GetStatementIdentifierOk returns a tuple with the StatementIdentifier field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetStatementIdentifierOk() (*TransactionStatementIdentifier, bool) {
+func (o *AsyncTransaction) GetStatementIdentifierOk() (*TransactionStatementIdentifier, bool) {
 	if o == nil || o.StatementIdentifier == nil {
 		return nil, false
 	}
@@ -940,7 +940,7 @@ func (o *AsyncTransactionsPostRequest) GetStatementIdentifierOk() (*TransactionS
 }
 
 // HasStatementIdentifier returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasStatementIdentifier() bool {
+func (o *AsyncTransaction) HasStatementIdentifier() bool {
 	if o != nil && o.StatementIdentifier != nil {
 		return true
 	}
@@ -949,12 +949,12 @@ func (o *AsyncTransactionsPostRequest) HasStatementIdentifier() bool {
 }
 
 // SetStatementIdentifier gets a reference to the given TransactionStatementIdentifier and assigns it to the StatementIdentifier field.
-func (o *AsyncTransactionsPostRequest) SetStatementIdentifier(v TransactionStatementIdentifier) {
+func (o *AsyncTransaction) SetStatementIdentifier(v TransactionStatementIdentifier) {
 	o.StatementIdentifier = &v
 }
 
 // GetCallbackUrl returns the CallbackUrl field value if set, zero value otherwise.
-func (o *AsyncTransactionsPostRequest) GetCallbackUrl() string {
+func (o *AsyncTransaction) GetCallbackUrl() string {
 	if o == nil || o.CallbackUrl == nil {
 		var ret string
 		return ret
@@ -964,7 +964,7 @@ func (o *AsyncTransactionsPostRequest) GetCallbackUrl() string {
 
 // GetCallbackUrlOk returns a tuple with the CallbackUrl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AsyncTransactionsPostRequest) GetCallbackUrlOk() (*string, bool) {
+func (o *AsyncTransaction) GetCallbackUrlOk() (*string, bool) {
 	if o == nil || o.CallbackUrl == nil {
 		return nil, false
 	}
@@ -972,7 +972,7 @@ func (o *AsyncTransactionsPostRequest) GetCallbackUrlOk() (*string, bool) {
 }
 
 // HasCallbackUrl returns a boolean if a field has been set.
-func (o *AsyncTransactionsPostRequest) HasCallbackUrl() bool {
+func (o *AsyncTransaction) HasCallbackUrl() bool {
 	if o != nil && o.CallbackUrl != nil {
 		return true
 	}
@@ -981,11 +981,11 @@ func (o *AsyncTransactionsPostRequest) HasCallbackUrl() bool {
 }
 
 // SetCallbackUrl gets a reference to the given string and assigns it to the CallbackUrl field.
-func (o *AsyncTransactionsPostRequest) SetCallbackUrl(v string) {
+func (o *AsyncTransaction) SetCallbackUrl(v string) {
 	o.CallbackUrl = &v
 }
 
-func (o AsyncTransactionsPostRequest) MarshalJSON() ([]byte, error) {
+func (o AsyncTransaction) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Id != nil {
 		toSerialize["id"] = o.Id
@@ -1068,38 +1068,38 @@ func (o AsyncTransactionsPostRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableAsyncTransactionsPostRequest struct {
-	value *AsyncTransactionsPostRequest
+type NullableAsyncTransaction struct {
+	value *AsyncTransaction
 	isSet bool
 }
 
-func (v NullableAsyncTransactionsPostRequest) Get() *AsyncTransactionsPostRequest {
+func (v NullableAsyncTransaction) Get() *AsyncTransaction {
 	return v.value
 }
 
-func (v *NullableAsyncTransactionsPostRequest) Set(val *AsyncTransactionsPostRequest) {
+func (v *NullableAsyncTransaction) Set(val *AsyncTransaction) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableAsyncTransactionsPostRequest) IsSet() bool {
+func (v NullableAsyncTransaction) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableAsyncTransactionsPostRequest) Unset() {
+func (v *NullableAsyncTransaction) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableAsyncTransactionsPostRequest(val *AsyncTransactionsPostRequest) *NullableAsyncTransactionsPostRequest {
-	return &NullableAsyncTransactionsPostRequest{value: val, isSet: true}
+func NewNullableAsyncTransaction(val *AsyncTransaction) *NullableAsyncTransaction {
+	return &NullableAsyncTransaction{value: val, isSet: true}
 }
 
-func (v NullableAsyncTransactionsPostRequest) MarshalJSON() ([]byte, error) {
+func (v NullableAsyncTransaction) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableAsyncTransactionsPostRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableAsyncTransaction) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

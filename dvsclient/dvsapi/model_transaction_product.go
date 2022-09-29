@@ -16,21 +16,21 @@ import (
 
 // TransactionProduct struct for TransactionProduct
 type TransactionProduct struct {
-	Id          int32                        `json:"id"`
-	Name        string                       `json:"name"`
-	Description string                       `json:"description"`
-	Tags        []string                     `json:"tags"`
-	Service     Service                      `json:"service"`
-	Operator    GetOperators200ResponseInner `json:"operator"`
-	Regions     []ServiceRegion              `json:"regions"`
-	Pin         *TransactionProductAllOfPin  `json:"pin,omitempty"`
+	Id          int32                       `json:"id"`
+	Name        string                      `json:"name"`
+	Description string                      `json:"description"`
+	Tags        []string                    `json:"tags"`
+	Service     Service                     `json:"service"`
+	Operator    Operator                    `json:"operator"`
+	Regions     []ServiceRegion             `json:"regions"`
+	Pin         *TransactionProductAllOfPin `json:"pin,omitempty"`
 }
 
 // NewTransactionProduct instantiates a new TransactionProduct object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTransactionProduct(id int32, name string, description string, tags []string, service Service, operator GetOperators200ResponseInner, regions []ServiceRegion) *TransactionProduct {
+func NewTransactionProduct(id int32, name string, description string, tags []string, service Service, operator Operator, regions []ServiceRegion) *TransactionProduct {
 	this := TransactionProduct{}
 	this.Id = id
 	this.Name = name
@@ -173,9 +173,9 @@ func (o *TransactionProduct) SetService(v Service) {
 }
 
 // GetOperator returns the Operator field value
-func (o *TransactionProduct) GetOperator() GetOperators200ResponseInner {
+func (o *TransactionProduct) GetOperator() Operator {
 	if o == nil {
-		var ret GetOperators200ResponseInner
+		var ret Operator
 		return ret
 	}
 
@@ -184,7 +184,7 @@ func (o *TransactionProduct) GetOperator() GetOperators200ResponseInner {
 
 // GetOperatorOk returns a tuple with the Operator field value
 // and a boolean to check if the value has been set.
-func (o *TransactionProduct) GetOperatorOk() (*GetOperators200ResponseInner, bool) {
+func (o *TransactionProduct) GetOperatorOk() (*Operator, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -192,7 +192,7 @@ func (o *TransactionProduct) GetOperatorOk() (*GetOperators200ResponseInner, boo
 }
 
 // SetOperator sets field value
-func (o *TransactionProduct) SetOperator(v GetOperators200ResponseInner) {
+func (o *TransactionProduct) SetOperator(v Operator) {
 	o.Operator = v
 }
 

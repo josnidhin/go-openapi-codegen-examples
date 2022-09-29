@@ -1,6 +1,6 @@
 # \OperatorsApi
 
-All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
+All URIs are relative to *http://127.0.0.1:8080/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## GetOperatorById
 
-> GetOperators200ResponseInner GetOperatorById(ctx, operatorId).Execute()
+> Operator GetOperatorById(ctx, operatorId).Execute()
 
 Retrieve operator by ID
 
@@ -37,7 +37,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `OperatorsApi.GetOperatorById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetOperatorById`: GetOperators200ResponseInner
+    // response from `GetOperatorById`: Operator
     fmt.Fprintf(os.Stdout, "Response from `OperatorsApi.GetOperatorById`: %v\n", resp)
 }
 ```
@@ -61,7 +61,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetOperators200ResponseInner**](GetOperators200ResponseInner.md)
+[**Operator**](Operator.md)
 
 ### Authorization
 
@@ -79,7 +79,7 @@ Name | Type | Description  | Notes
 
 ## GetOperators
 
-> []GetOperators200ResponseInner GetOperators(ctx).Page(page).PerPage(perPage).CountryIsoCode(countryIsoCode).Execute()
+> []Operator GetOperators(ctx).Page(page).PerPage(perPage).CountryIsoCode(countryIsoCode).Execute()
 
 Retrieve list of operators
 
@@ -107,7 +107,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `OperatorsApi.GetOperators``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetOperators`: []GetOperators200ResponseInner
+    // response from `GetOperators`: []Operator
     fmt.Fprintf(os.Stdout, "Response from `OperatorsApi.GetOperators`: %v\n", resp)
 }
 ```
@@ -129,7 +129,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[]GetOperators200ResponseInner**](GetOperators200ResponseInner.md)
+[**[]Operator**](Operator.md)
 
 ### Authorization
 
