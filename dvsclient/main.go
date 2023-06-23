@@ -32,15 +32,15 @@ func main() {
 	logger.Printf("%+v\n", cfg.Servers)
 
 	apiClient := dvsapi.NewAPIClient(cfg)
-	balance, res, err := apiClient.BalancesApi.BalancesGet(ctx).UnitType(dvsapi.UNITTYPES_CURRENCY).Unit("USD").Execute()
+	balance, res, err := apiClient.BalancesApi.GetBalances(ctx).UnitType(dvsapi.UNITTYPES_CURRENCY).Unit("USD").Execute()
 	if err != nil {
 		logger.Printf("%+v\n", err)
 	}
 
 	logger.Printf("Balances\n%+v\n, %+v\n\n", balance, res)
 
-	lookupMobileNumberPostRequest := dvsapi.NewLookupMobileNumberPostRequest("+6598765432")
-	lookupMobileNumber, res, err := apiClient.MobileNumberApi.LookupMobileNumberPost(ctx).LookupMobileNumberPostRequest(*lookupMobileNumberPostRequest).Execute()
+	postLookupMobileNumberRequest := dvsapi.NewPostLookupMobileNumberRequest("+6598765432")
+	lookupMobileNumber, res, err := apiClient.MobileNumberApi.PostLookupMobileNumber(ctx).PostLookupMobileNumberRequest(*postLookupMobileNumberRequest).Execute()
 	if err != nil {
 		logger.Printf("%+v\n", err)
 	}
