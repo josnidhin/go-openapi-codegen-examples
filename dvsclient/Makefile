@@ -3,7 +3,7 @@
 #
 PROJECT_NAME := $(shell basename "$(PWD)")
 GO_SRC_FILES := $(shell find . -type f -name '*.go')
-GO_SRC_MAIN := $(shell find . -type f -name '*.go' ! -name '*_test.go')
+GO_SRC_MAIN := $(shell ls *.go)
 GO_ENVFLAGS=CGO_ENABLED=0
 
 include .env
