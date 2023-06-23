@@ -1,6 +1,6 @@
 # \TransactionsApi
 
-All URIs are relative to *http://127.0.0.1:8080/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 ## GetTransactionById
 
-> AsyncTransaction GetTransactionById(ctx, transactionId).Execute()
+> PostTransactionAsyncRequest GetTransactionById(ctx, transactionId).Execute()
 
 Query a transaction by ID
 
@@ -31,7 +31,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {
@@ -44,7 +44,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.GetTransactionById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetTransactionById`: AsyncTransaction
+    // response from `GetTransactionById`: PostTransactionAsyncRequest
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.GetTransactionById`: %v\n", resp)
 }
 ```
@@ -68,7 +68,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**AsyncTransaction**](AsyncTransaction.md)
+[**PostTransactionAsyncRequest**](PostTransactionAsyncRequest.md)
 
 ### Authorization
 
@@ -86,7 +86,7 @@ Name | Type | Description  | Notes
 
 ## GetTransactions
 
-> []AsyncTransaction GetTransactions(ctx).ExternalId(externalId).ProductType(productType).ServiceId(serviceId).CountryIsoCode(countryIsoCode).OperatorId(operatorId).StatusId(statusId).CreditPartyMobileNumber(creditPartyMobileNumber).CreditPartyAccountNumber(creditPartyAccountNumber).FromDate(fromDate).ToDate(toDate).Page(page).PerPage(perPage).Execute()
+> []PostTransactionAsyncRequest GetTransactions(ctx).ExternalId(externalId).ProductType(productType).ServiceId(serviceId).SubserviceId(subserviceId).CountryIsoCode(countryIsoCode).OperatorId(operatorId).StatusId(statusId).CreditPartyMobileNumber(creditPartyMobileNumber).CreditPartyAccountNumber(creditPartyAccountNumber).FromDate(fromDate).ToDate(toDate).Page(page).PerPage(perPage).Execute()
 
 Query list of transactions
 
@@ -102,13 +102,14 @@ import (
     "fmt"
     "os"
     "time"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {
     externalId := "externalId_example" // string |  (optional)
     productType := openapiclient.ProductTypes("FIXED_VALUE_RECHARGE") // ProductTypes |  (optional)
     serviceId := int32(56) // int32 |  (optional)
+    subserviceId := int32(56) // int32 |  (optional)
     countryIsoCode := "countryIsoCode_example" // string |  (optional)
     operatorId := int32(56) // int32 |  (optional)
     statusId := int32(56) // int32 |  (optional)
@@ -121,12 +122,12 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.GetTransactions(context.Background()).ExternalId(externalId).ProductType(productType).ServiceId(serviceId).CountryIsoCode(countryIsoCode).OperatorId(operatorId).StatusId(statusId).CreditPartyMobileNumber(creditPartyMobileNumber).CreditPartyAccountNumber(creditPartyAccountNumber).FromDate(fromDate).ToDate(toDate).Page(page).PerPage(perPage).Execute()
+    resp, r, err := apiClient.TransactionsApi.GetTransactions(context.Background()).ExternalId(externalId).ProductType(productType).ServiceId(serviceId).SubserviceId(subserviceId).CountryIsoCode(countryIsoCode).OperatorId(operatorId).StatusId(statusId).CreditPartyMobileNumber(creditPartyMobileNumber).CreditPartyAccountNumber(creditPartyAccountNumber).FromDate(fromDate).ToDate(toDate).Page(page).PerPage(perPage).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.GetTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetTransactions`: []AsyncTransaction
+    // response from `GetTransactions`: []PostTransactionAsyncRequest
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.GetTransactions`: %v\n", resp)
 }
 ```
@@ -145,6 +146,7 @@ Name | Type | Description  | Notes
  **externalId** | **string** |  | 
  **productType** | [**ProductTypes**](ProductTypes.md) |  | 
  **serviceId** | **int32** |  | 
+ **subserviceId** | **int32** |  | 
  **countryIsoCode** | **string** |  | 
  **operatorId** | **int32** |  | 
  **statusId** | **int32** |  | 
@@ -157,7 +159,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[]AsyncTransaction**](AsyncTransaction.md)
+[**[]PostTransactionAsyncRequest**](PostTransactionAsyncRequest.md)
 
 ### Authorization
 
@@ -175,7 +177,7 @@ Name | Type | Description  | Notes
 
 ## PostTransactionAsync
 
-> Transaction PostTransactionAsync(ctx).AsyncTransaction(asyncTransaction).Execute()
+> Transaction PostTransactionAsync(ctx).PostTransactionAsyncRequest(postTransactionAsyncRequest).Execute()
 
 Create a transaction asynchronously
 
@@ -190,15 +192,15 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {
-    asyncTransaction := *openapiclient.NewAsyncTransaction(string(123), int32(123)) // AsyncTransaction |  (optional)
+    postTransactionAsyncRequest := *openapiclient.NewPostTransactionAsyncRequest(string(123), int32(123)) // PostTransactionAsyncRequest |  (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.PostTransactionAsync(context.Background()).AsyncTransaction(asyncTransaction).Execute()
+    resp, r, err := apiClient.TransactionsApi.PostTransactionAsync(context.Background()).PostTransactionAsyncRequest(postTransactionAsyncRequest).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.PostTransactionAsync``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -219,7 +221,7 @@ Other parameters are passed through a pointer to a apiPostTransactionAsyncReques
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **asyncTransaction** | [**AsyncTransaction**](AsyncTransaction.md) |  | 
+ **postTransactionAsyncRequest** | [**PostTransactionAsyncRequest**](PostTransactionAsyncRequest.md) |  | 
 
 ### Return type
 
@@ -256,7 +258,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {
@@ -326,7 +328,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {
@@ -396,7 +398,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {
@@ -466,7 +468,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {

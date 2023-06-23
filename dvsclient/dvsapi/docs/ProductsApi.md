@@ -1,6 +1,6 @@
 # \ProductsApi
 
-All URIs are relative to *http://127.0.0.1:8080/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -24,7 +24,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {
@@ -79,7 +79,7 @@ Name | Type | Description  | Notes
 
 ## GetProducts
 
-> []Product GetProducts(ctx).Type_(type_).ServiceId(serviceId).Tags(tags).CountryIsoCode(countryIsoCode).OperatorId(operatorId).Region(region).BenefitTypes(benefitTypes).Page(page).PerPage(perPage).Execute()
+> []Product GetProducts(ctx).Type_(type_).ServiceId(serviceId).SubserviceId(subserviceId).Tags(tags).CountryIsoCode(countryIsoCode).OperatorId(operatorId).Region(region).BenefitTypes(benefitTypes).Page(page).PerPage(perPage).Execute()
 
 Retrieve list of products
 
@@ -92,12 +92,13 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {
     type_ := openapiclient.ProductTypes("FIXED_VALUE_RECHARGE") // ProductTypes |  (optional)
     serviceId := int32(56) // int32 |  (optional)
+    subserviceId := int32(56) // int32 |  (optional)
     tags := []string{"Inner_example"} // []string |  (optional)
     countryIsoCode := "countryIsoCode_example" // string |  (optional)
     operatorId := int32(56) // int32 |  (optional)
@@ -108,7 +109,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.ProductsApi.GetProducts(context.Background()).Type_(type_).ServiceId(serviceId).Tags(tags).CountryIsoCode(countryIsoCode).OperatorId(operatorId).Region(region).BenefitTypes(benefitTypes).Page(page).PerPage(perPage).Execute()
+    resp, r, err := apiClient.ProductsApi.GetProducts(context.Background()).Type_(type_).ServiceId(serviceId).SubserviceId(subserviceId).Tags(tags).CountryIsoCode(countryIsoCode).OperatorId(operatorId).Region(region).BenefitTypes(benefitTypes).Page(page).PerPage(perPage).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ProductsApi.GetProducts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -131,6 +132,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **type_** | [**ProductTypes**](ProductTypes.md) |  | 
  **serviceId** | **int32** |  | 
+ **subserviceId** | **int32** |  | 
  **tags** | **[]string** |  | 
  **countryIsoCode** | **string** |  | 
  **operatorId** | **int32** |  | 

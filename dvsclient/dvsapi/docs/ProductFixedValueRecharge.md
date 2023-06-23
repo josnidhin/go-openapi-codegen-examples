@@ -8,8 +8,8 @@ Name | Type | Description | Notes
 **Name** | **string** |  | 
 **Description** | **string** |  | 
 **Tags** | **[]string** |  | 
-**Service** | [**Service**](Service.md) |  | 
-**Operator** | [**Operator**](Operator.md) |  | 
+**Service** | [**ProductService**](ProductService.md) |  | 
+**Operator** | [**GetOperators200ResponseInner**](GetOperators200ResponseInner.md) |  | 
 **Regions** | [**[]ServiceRegion**](ServiceRegion.md) |  | 
 **Type** | **string** |  | 
 **Validity** | [**NullableProductFixedValueRechargeAllOfValidity**](ProductFixedValueRechargeAllOfValidity.md) |  | 
@@ -18,6 +18,7 @@ Name | Type | Description | Notes
 **RequiredSenderFields** | **[][]string** |  | 
 **RequiredBeneficiaryFields** | **[][]string** |  | 
 **RequiredStatementIdentifierFields** | **[][]string** |  | 
+**RequiredAdditionalIdentifierFields** | **[][]string** |  | 
 **AvailabilityZones** | [**[]AvailabilityZones**](AvailabilityZones.md) |  | 
 **Source** | [**ProductFixedValueRechargeAllOfSource**](ProductFixedValueRechargeAllOfSource.md) |  | 
 **Destination** | [**ProductFixedValueRechargeAllOfSource**](ProductFixedValueRechargeAllOfSource.md) |  | 
@@ -30,7 +31,7 @@ Name | Type | Description | Notes
 
 ### NewProductFixedValueRecharge
 
-`func NewProductFixedValueRecharge(id int32, name string, description string, tags []string, service Service, operator Operator, regions []ServiceRegion, type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, availabilityZones []AvailabilityZones, source ProductFixedValueRechargeAllOfSource, destination ProductFixedValueRechargeAllOfSource, prices ProductFixedValueRechargeAllOfPrices, rates Rates, benefits []FixedBenefit, promotions []ProductPromotion, ) *ProductFixedValueRecharge`
+`func NewProductFixedValueRecharge(id int32, name string, description string, tags []string, service ProductService, operator GetOperators200ResponseInner, regions []ServiceRegion, type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, requiredAdditionalIdentifierFields [][]string, availabilityZones []AvailabilityZones, source ProductFixedValueRechargeAllOfSource, destination ProductFixedValueRechargeAllOfSource, prices ProductFixedValueRechargeAllOfPrices, rates Rates, benefits []FixedBenefit, promotions []ProductPromotion, ) *ProductFixedValueRecharge`
 
 NewProductFixedValueRecharge instantiates a new ProductFixedValueRecharge object
 This constructor will assign default values to properties that have it defined,
@@ -137,40 +138,40 @@ SetTags sets Tags field to given value.
 UnsetTags ensures that no value is present for Tags, not even an explicit nil
 ### GetService
 
-`func (o *ProductFixedValueRecharge) GetService() Service`
+`func (o *ProductFixedValueRecharge) GetService() ProductService`
 
 GetService returns the Service field if non-nil, zero value otherwise.
 
 ### GetServiceOk
 
-`func (o *ProductFixedValueRecharge) GetServiceOk() (*Service, bool)`
+`func (o *ProductFixedValueRecharge) GetServiceOk() (*ProductService, bool)`
 
 GetServiceOk returns a tuple with the Service field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetService
 
-`func (o *ProductFixedValueRecharge) SetService(v Service)`
+`func (o *ProductFixedValueRecharge) SetService(v ProductService)`
 
 SetService sets Service field to given value.
 
 
 ### GetOperator
 
-`func (o *ProductFixedValueRecharge) GetOperator() Operator`
+`func (o *ProductFixedValueRecharge) GetOperator() GetOperators200ResponseInner`
 
 GetOperator returns the Operator field if non-nil, zero value otherwise.
 
 ### GetOperatorOk
 
-`func (o *ProductFixedValueRecharge) GetOperatorOk() (*Operator, bool)`
+`func (o *ProductFixedValueRecharge) GetOperatorOk() (*GetOperators200ResponseInner, bool)`
 
 GetOperatorOk returns a tuple with the Operator field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetOperator
 
-`func (o *ProductFixedValueRecharge) SetOperator(v Operator)`
+`func (o *ProductFixedValueRecharge) SetOperator(v GetOperators200ResponseInner)`
 
 SetOperator sets Operator field to given value.
 
@@ -395,6 +396,36 @@ SetRequiredStatementIdentifierFields sets RequiredStatementIdentifierFields fiel
 `func (o *ProductFixedValueRecharge) UnsetRequiredStatementIdentifierFields()`
 
 UnsetRequiredStatementIdentifierFields ensures that no value is present for RequiredStatementIdentifierFields, not even an explicit nil
+### GetRequiredAdditionalIdentifierFields
+
+`func (o *ProductFixedValueRecharge) GetRequiredAdditionalIdentifierFields() [][]string`
+
+GetRequiredAdditionalIdentifierFields returns the RequiredAdditionalIdentifierFields field if non-nil, zero value otherwise.
+
+### GetRequiredAdditionalIdentifierFieldsOk
+
+`func (o *ProductFixedValueRecharge) GetRequiredAdditionalIdentifierFieldsOk() (*[][]string, bool)`
+
+GetRequiredAdditionalIdentifierFieldsOk returns a tuple with the RequiredAdditionalIdentifierFields field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRequiredAdditionalIdentifierFields
+
+`func (o *ProductFixedValueRecharge) SetRequiredAdditionalIdentifierFields(v [][]string)`
+
+SetRequiredAdditionalIdentifierFields sets RequiredAdditionalIdentifierFields field to given value.
+
+
+### SetRequiredAdditionalIdentifierFieldsNil
+
+`func (o *ProductFixedValueRecharge) SetRequiredAdditionalIdentifierFieldsNil(b bool)`
+
+ SetRequiredAdditionalIdentifierFieldsNil sets the value for RequiredAdditionalIdentifierFields to be an explicit nil
+
+### UnsetRequiredAdditionalIdentifierFields
+`func (o *ProductFixedValueRecharge) UnsetRequiredAdditionalIdentifierFields()`
+
+UnsetRequiredAdditionalIdentifierFields ensures that no value is present for RequiredAdditionalIdentifierFields, not even an explicit nil
 ### GetAvailabilityZones
 
 `func (o *ProductFixedValueRecharge) GetAvailabilityZones() []AvailabilityZones`

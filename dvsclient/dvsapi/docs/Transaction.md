@@ -29,6 +29,7 @@ Name | Type | Description | Notes
 **DebitPartyIdentifier** | Pointer to [**NullableTransactionDebitPartyIdentifier**](TransactionDebitPartyIdentifier.md) |  | [optional] 
 **CreditPartyIdentifier** | Pointer to [**TransactionCreditPartyIdentifier**](TransactionCreditPartyIdentifier.md) |  | [optional] 
 **StatementIdentifier** | Pointer to [**TransactionStatementIdentifier**](TransactionStatementIdentifier.md) |  | [optional] 
+**AdditionalIdentifier** | Pointer to [**TransactionAdditionalIdentifier**](TransactionAdditionalIdentifier.md) |  | [optional] 
 
 ## Methods
 
@@ -773,6 +774,31 @@ SetStatementIdentifier sets StatementIdentifier field to given value.
 `func (o *Transaction) HasStatementIdentifier() bool`
 
 HasStatementIdentifier returns a boolean if a field has been set.
+
+### GetAdditionalIdentifier
+
+`func (o *Transaction) GetAdditionalIdentifier() TransactionAdditionalIdentifier`
+
+GetAdditionalIdentifier returns the AdditionalIdentifier field if non-nil, zero value otherwise.
+
+### GetAdditionalIdentifierOk
+
+`func (o *Transaction) GetAdditionalIdentifierOk() (*TransactionAdditionalIdentifier, bool)`
+
+GetAdditionalIdentifierOk returns a tuple with the AdditionalIdentifier field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAdditionalIdentifier
+
+`func (o *Transaction) SetAdditionalIdentifier(v TransactionAdditionalIdentifier)`
+
+SetAdditionalIdentifier sets AdditionalIdentifier field to given value.
+
+### HasAdditionalIdentifier
+
+`func (o *Transaction) HasAdditionalIdentifier() bool`
+
+HasAdditionalIdentifier returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

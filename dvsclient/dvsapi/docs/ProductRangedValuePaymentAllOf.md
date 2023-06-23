@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **RequiredSenderFields** | **[][]string** |  | 
 **RequiredBeneficiaryFields** | **[][]string** |  | 
 **RequiredStatementIdentifierFields** | **[][]string** |  | 
+**RequiredAdditionalIdentifierFields** | **[][]string** |  | 
 **AcceptedCalculationModes** | [**[]CalculationModes**](CalculationModes.md) |  | 
 **AvailabilityZones** | [**[]AvailabilityZones**](AvailabilityZones.md) |  | 
 **Source** | [**ProductRangedValueRechargeAllOfSource**](ProductRangedValueRechargeAllOfSource.md) |  | 
@@ -25,7 +26,7 @@ Name | Type | Description | Notes
 
 ### NewProductRangedValuePaymentAllOf
 
-`func NewProductRangedValuePaymentAllOf(type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, acceptedCalculationModes []CalculationModes, availabilityZones []AvailabilityZones, source ProductRangedValueRechargeAllOfSource, destination ProductRangedValueRechargeAllOfDestination, prices ProductRangedValueRechargeAllOfPrices, rates Rates, payment Payment, benefits []RangedBenefit, promotions []ProductPromotion, ) *ProductRangedValuePaymentAllOf`
+`func NewProductRangedValuePaymentAllOf(type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, requiredAdditionalIdentifierFields [][]string, acceptedCalculationModes []CalculationModes, availabilityZones []AvailabilityZones, source ProductRangedValueRechargeAllOfSource, destination ProductRangedValueRechargeAllOfDestination, prices ProductRangedValueRechargeAllOfPrices, rates Rates, payment Payment, benefits []RangedBenefit, promotions []ProductPromotion, ) *ProductRangedValuePaymentAllOf`
 
 NewProductRangedValuePaymentAllOf instantiates a new ProductRangedValuePaymentAllOf object
 This constructor will assign default values to properties that have it defined,
@@ -230,6 +231,36 @@ SetRequiredStatementIdentifierFields sets RequiredStatementIdentifierFields fiel
 `func (o *ProductRangedValuePaymentAllOf) UnsetRequiredStatementIdentifierFields()`
 
 UnsetRequiredStatementIdentifierFields ensures that no value is present for RequiredStatementIdentifierFields, not even an explicit nil
+### GetRequiredAdditionalIdentifierFields
+
+`func (o *ProductRangedValuePaymentAllOf) GetRequiredAdditionalIdentifierFields() [][]string`
+
+GetRequiredAdditionalIdentifierFields returns the RequiredAdditionalIdentifierFields field if non-nil, zero value otherwise.
+
+### GetRequiredAdditionalIdentifierFieldsOk
+
+`func (o *ProductRangedValuePaymentAllOf) GetRequiredAdditionalIdentifierFieldsOk() (*[][]string, bool)`
+
+GetRequiredAdditionalIdentifierFieldsOk returns a tuple with the RequiredAdditionalIdentifierFields field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRequiredAdditionalIdentifierFields
+
+`func (o *ProductRangedValuePaymentAllOf) SetRequiredAdditionalIdentifierFields(v [][]string)`
+
+SetRequiredAdditionalIdentifierFields sets RequiredAdditionalIdentifierFields field to given value.
+
+
+### SetRequiredAdditionalIdentifierFieldsNil
+
+`func (o *ProductRangedValuePaymentAllOf) SetRequiredAdditionalIdentifierFieldsNil(b bool)`
+
+ SetRequiredAdditionalIdentifierFieldsNil sets the value for RequiredAdditionalIdentifierFields to be an explicit nil
+
+### UnsetRequiredAdditionalIdentifierFields
+`func (o *ProductRangedValuePaymentAllOf) UnsetRequiredAdditionalIdentifierFields()`
+
+UnsetRequiredAdditionalIdentifierFields ensures that no value is present for RequiredAdditionalIdentifierFields, not even an explicit nil
 ### GetAcceptedCalculationModes
 
 `func (o *ProductRangedValuePaymentAllOf) GetAcceptedCalculationModes() []CalculationModes`

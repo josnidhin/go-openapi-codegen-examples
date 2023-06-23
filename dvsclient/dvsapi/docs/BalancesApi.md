@@ -1,6 +1,6 @@
 # \BalancesApi
 
-All URIs are relative to *http://127.0.0.1:8080/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -23,7 +23,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {

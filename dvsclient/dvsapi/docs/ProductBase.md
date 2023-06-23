@@ -8,15 +8,15 @@ Name | Type | Description | Notes
 **Name** | **string** |  | 
 **Description** | **string** |  | 
 **Tags** | **[]string** |  | 
-**Service** | [**Service**](Service.md) |  | 
-**Operator** | [**Operator**](Operator.md) |  | 
+**Service** | [**ProductService**](ProductService.md) |  | 
+**Operator** | [**GetOperators200ResponseInner**](GetOperators200ResponseInner.md) |  | 
 **Regions** | [**[]ServiceRegion**](ServiceRegion.md) |  | 
 
 ## Methods
 
 ### NewProductBase
 
-`func NewProductBase(id int32, name string, description string, tags []string, service Service, operator Operator, regions []ServiceRegion, ) *ProductBase`
+`func NewProductBase(id int32, name string, description string, tags []string, service ProductService, operator GetOperators200ResponseInner, regions []ServiceRegion, ) *ProductBase`
 
 NewProductBase instantiates a new ProductBase object
 This constructor will assign default values to properties that have it defined,
@@ -123,40 +123,40 @@ SetTags sets Tags field to given value.
 UnsetTags ensures that no value is present for Tags, not even an explicit nil
 ### GetService
 
-`func (o *ProductBase) GetService() Service`
+`func (o *ProductBase) GetService() ProductService`
 
 GetService returns the Service field if non-nil, zero value otherwise.
 
 ### GetServiceOk
 
-`func (o *ProductBase) GetServiceOk() (*Service, bool)`
+`func (o *ProductBase) GetServiceOk() (*ProductService, bool)`
 
 GetServiceOk returns a tuple with the Service field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetService
 
-`func (o *ProductBase) SetService(v Service)`
+`func (o *ProductBase) SetService(v ProductService)`
 
 SetService sets Service field to given value.
 
 
 ### GetOperator
 
-`func (o *ProductBase) GetOperator() Operator`
+`func (o *ProductBase) GetOperator() GetOperators200ResponseInner`
 
 GetOperator returns the Operator field if non-nil, zero value otherwise.
 
 ### GetOperatorOk
 
-`func (o *ProductBase) GetOperatorOk() (*Operator, bool)`
+`func (o *ProductBase) GetOperatorOk() (*GetOperators200ResponseInner, bool)`
 
 GetOperatorOk returns a tuple with the Operator field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetOperator
 
-`func (o *ProductBase) SetOperator(v Operator)`
+`func (o *ProductBase) SetOperator(v GetOperators200ResponseInner)`
 
 SetOperator sets Operator field to given value.
 

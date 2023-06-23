@@ -1,6 +1,6 @@
 # \OperatorsApi
 
-All URIs are relative to *http://127.0.0.1:8080/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## GetOperatorById
 
-> Operator GetOperatorById(ctx, operatorId).Execute()
+> GetOperators200ResponseInner GetOperatorById(ctx, operatorId).Execute()
 
 Retrieve operator by ID
 
@@ -24,7 +24,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `OperatorsApi.GetOperatorById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetOperatorById`: Operator
+    // response from `GetOperatorById`: GetOperators200ResponseInner
     fmt.Fprintf(os.Stdout, "Response from `OperatorsApi.GetOperatorById`: %v\n", resp)
 }
 ```
@@ -61,7 +61,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Operator**](Operator.md)
+[**GetOperators200ResponseInner**](GetOperators200ResponseInner.md)
 
 ### Authorization
 
@@ -79,7 +79,7 @@ Name | Type | Description  | Notes
 
 ## GetOperators
 
-> []Operator GetOperators(ctx).Page(page).PerPage(perPage).CountryIsoCode(countryIsoCode).Execute()
+> []GetOperators200ResponseInner GetOperators(ctx).Page(page).PerPage(perPage).CountryIsoCode(countryIsoCode).Execute()
 
 Retrieve list of operators
 
@@ -92,7 +92,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/josnidhin/go-openapi-codegen-examples/dvsclient/dvsapi"
 )
 
 func main() {
@@ -107,7 +107,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `OperatorsApi.GetOperators``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetOperators`: []Operator
+    // response from `GetOperators`: []GetOperators200ResponseInner
     fmt.Fprintf(os.Stdout, "Response from `OperatorsApi.GetOperators`: %v\n", resp)
 }
 ```
@@ -129,7 +129,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[]Operator**](Operator.md)
+[**[]GetOperators200ResponseInner**](GetOperators200ResponseInner.md)
 
 ### Authorization
 

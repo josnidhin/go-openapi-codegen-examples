@@ -8,8 +8,8 @@ Name | Type | Description | Notes
 **Name** | **string** |  | 
 **Description** | **string** |  | 
 **Tags** | **[]string** |  | 
-**Service** | [**Service**](Service.md) |  | 
-**Operator** | [**Operator**](Operator.md) |  | 
+**Service** | [**ProductService**](ProductService.md) |  | 
+**Operator** | [**GetOperators200ResponseInner**](GetOperators200ResponseInner.md) |  | 
 **Regions** | [**[]ServiceRegion**](ServiceRegion.md) |  | 
 **Type** | **string** |  | 
 **Validity** | [**NullableProductFixedValueRechargeAllOfValidity**](ProductFixedValueRechargeAllOfValidity.md) |  | 
@@ -18,6 +18,7 @@ Name | Type | Description | Notes
 **RequiredSenderFields** | **[][]string** |  | 
 **RequiredBeneficiaryFields** | **[][]string** |  | 
 **RequiredStatementIdentifierFields** | **[][]string** |  | 
+**RequiredAdditionalIdentifierFields** | **[][]string** |  | 
 **AvailabilityZones** | [**[]AvailabilityZones**](AvailabilityZones.md) |  | 
 **Source** | [**ProductRangedValueRechargeAllOfSource**](ProductRangedValueRechargeAllOfSource.md) |  | 
 **Destination** | [**ProductRangedValueRechargeAllOfDestination**](ProductRangedValueRechargeAllOfDestination.md) |  | 
@@ -33,7 +34,7 @@ Name | Type | Description | Notes
 
 ### NewProduct
 
-`func NewProduct(id int32, name string, description string, tags []string, service Service, operator Operator, regions []ServiceRegion, type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, availabilityZones []AvailabilityZones, source ProductRangedValueRechargeAllOfSource, destination ProductRangedValueRechargeAllOfDestination, prices ProductRangedValueRechargeAllOfPrices, rates Rates, benefits []RangedBenefit, promotions []ProductPromotion, acceptedCalculationModes []CalculationModes, pin PIN, payment Payment, ) *Product`
+`func NewProduct(id int32, name string, description string, tags []string, service ProductService, operator GetOperators200ResponseInner, regions []ServiceRegion, type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, requiredAdditionalIdentifierFields [][]string, availabilityZones []AvailabilityZones, source ProductRangedValueRechargeAllOfSource, destination ProductRangedValueRechargeAllOfDestination, prices ProductRangedValueRechargeAllOfPrices, rates Rates, benefits []RangedBenefit, promotions []ProductPromotion, acceptedCalculationModes []CalculationModes, pin PIN, payment Payment, ) *Product`
 
 NewProduct instantiates a new Product object
 This constructor will assign default values to properties that have it defined,
@@ -140,40 +141,40 @@ SetTags sets Tags field to given value.
 UnsetTags ensures that no value is present for Tags, not even an explicit nil
 ### GetService
 
-`func (o *Product) GetService() Service`
+`func (o *Product) GetService() ProductService`
 
 GetService returns the Service field if non-nil, zero value otherwise.
 
 ### GetServiceOk
 
-`func (o *Product) GetServiceOk() (*Service, bool)`
+`func (o *Product) GetServiceOk() (*ProductService, bool)`
 
 GetServiceOk returns a tuple with the Service field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetService
 
-`func (o *Product) SetService(v Service)`
+`func (o *Product) SetService(v ProductService)`
 
 SetService sets Service field to given value.
 
 
 ### GetOperator
 
-`func (o *Product) GetOperator() Operator`
+`func (o *Product) GetOperator() GetOperators200ResponseInner`
 
 GetOperator returns the Operator field if non-nil, zero value otherwise.
 
 ### GetOperatorOk
 
-`func (o *Product) GetOperatorOk() (*Operator, bool)`
+`func (o *Product) GetOperatorOk() (*GetOperators200ResponseInner, bool)`
 
 GetOperatorOk returns a tuple with the Operator field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetOperator
 
-`func (o *Product) SetOperator(v Operator)`
+`func (o *Product) SetOperator(v GetOperators200ResponseInner)`
 
 SetOperator sets Operator field to given value.
 
@@ -398,6 +399,36 @@ SetRequiredStatementIdentifierFields sets RequiredStatementIdentifierFields fiel
 `func (o *Product) UnsetRequiredStatementIdentifierFields()`
 
 UnsetRequiredStatementIdentifierFields ensures that no value is present for RequiredStatementIdentifierFields, not even an explicit nil
+### GetRequiredAdditionalIdentifierFields
+
+`func (o *Product) GetRequiredAdditionalIdentifierFields() [][]string`
+
+GetRequiredAdditionalIdentifierFields returns the RequiredAdditionalIdentifierFields field if non-nil, zero value otherwise.
+
+### GetRequiredAdditionalIdentifierFieldsOk
+
+`func (o *Product) GetRequiredAdditionalIdentifierFieldsOk() (*[][]string, bool)`
+
+GetRequiredAdditionalIdentifierFieldsOk returns a tuple with the RequiredAdditionalIdentifierFields field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRequiredAdditionalIdentifierFields
+
+`func (o *Product) SetRequiredAdditionalIdentifierFields(v [][]string)`
+
+SetRequiredAdditionalIdentifierFields sets RequiredAdditionalIdentifierFields field to given value.
+
+
+### SetRequiredAdditionalIdentifierFieldsNil
+
+`func (o *Product) SetRequiredAdditionalIdentifierFieldsNil(b bool)`
+
+ SetRequiredAdditionalIdentifierFieldsNil sets the value for RequiredAdditionalIdentifierFields to be an explicit nil
+
+### UnsetRequiredAdditionalIdentifierFields
+`func (o *Product) UnsetRequiredAdditionalIdentifierFields()`
+
+UnsetRequiredAdditionalIdentifierFields ensures that no value is present for RequiredAdditionalIdentifierFields, not even an explicit nil
 ### GetAvailabilityZones
 
 `func (o *Product) GetAvailabilityZones() []AvailabilityZones`

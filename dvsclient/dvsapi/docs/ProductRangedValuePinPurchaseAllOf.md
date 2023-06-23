@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **RequiredSenderFields** | **[][]string** |  | 
 **RequiredBeneficiaryFields** | **[][]string** |  | 
 **RequiredStatementIdentifierFields** | **[][]string** |  | 
+**RequiredAdditionalIdentifierFields** | **[][]string** |  | 
 **AcceptedCalculationModes** | [**[]CalculationModes**](CalculationModes.md) |  | 
 **AvailabilityZones** | [**[]AvailabilityZones**](AvailabilityZones.md) |  | 
 **Source** | [**ProductRangedValueRechargeAllOfSource**](ProductRangedValueRechargeAllOfSource.md) |  | 
@@ -25,7 +26,7 @@ Name | Type | Description | Notes
 
 ### NewProductRangedValuePinPurchaseAllOf
 
-`func NewProductRangedValuePinPurchaseAllOf(type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, acceptedCalculationModes []CalculationModes, availabilityZones []AvailabilityZones, source ProductRangedValueRechargeAllOfSource, destination ProductRangedValueRechargeAllOfDestination, prices ProductRangedValueRechargeAllOfPrices, rates Rates, pin PIN, benefits []RangedBenefit, promotions []ProductPromotion, ) *ProductRangedValuePinPurchaseAllOf`
+`func NewProductRangedValuePinPurchaseAllOf(type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, requiredAdditionalIdentifierFields [][]string, acceptedCalculationModes []CalculationModes, availabilityZones []AvailabilityZones, source ProductRangedValueRechargeAllOfSource, destination ProductRangedValueRechargeAllOfDestination, prices ProductRangedValueRechargeAllOfPrices, rates Rates, pin PIN, benefits []RangedBenefit, promotions []ProductPromotion, ) *ProductRangedValuePinPurchaseAllOf`
 
 NewProductRangedValuePinPurchaseAllOf instantiates a new ProductRangedValuePinPurchaseAllOf object
 This constructor will assign default values to properties that have it defined,
@@ -240,6 +241,36 @@ SetRequiredStatementIdentifierFields sets RequiredStatementIdentifierFields fiel
 `func (o *ProductRangedValuePinPurchaseAllOf) UnsetRequiredStatementIdentifierFields()`
 
 UnsetRequiredStatementIdentifierFields ensures that no value is present for RequiredStatementIdentifierFields, not even an explicit nil
+### GetRequiredAdditionalIdentifierFields
+
+`func (o *ProductRangedValuePinPurchaseAllOf) GetRequiredAdditionalIdentifierFields() [][]string`
+
+GetRequiredAdditionalIdentifierFields returns the RequiredAdditionalIdentifierFields field if non-nil, zero value otherwise.
+
+### GetRequiredAdditionalIdentifierFieldsOk
+
+`func (o *ProductRangedValuePinPurchaseAllOf) GetRequiredAdditionalIdentifierFieldsOk() (*[][]string, bool)`
+
+GetRequiredAdditionalIdentifierFieldsOk returns a tuple with the RequiredAdditionalIdentifierFields field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRequiredAdditionalIdentifierFields
+
+`func (o *ProductRangedValuePinPurchaseAllOf) SetRequiredAdditionalIdentifierFields(v [][]string)`
+
+SetRequiredAdditionalIdentifierFields sets RequiredAdditionalIdentifierFields field to given value.
+
+
+### SetRequiredAdditionalIdentifierFieldsNil
+
+`func (o *ProductRangedValuePinPurchaseAllOf) SetRequiredAdditionalIdentifierFieldsNil(b bool)`
+
+ SetRequiredAdditionalIdentifierFieldsNil sets the value for RequiredAdditionalIdentifierFields to be an explicit nil
+
+### UnsetRequiredAdditionalIdentifierFields
+`func (o *ProductRangedValuePinPurchaseAllOf) UnsetRequiredAdditionalIdentifierFields()`
+
+UnsetRequiredAdditionalIdentifierFields ensures that no value is present for RequiredAdditionalIdentifierFields, not even an explicit nil
 ### GetAcceptedCalculationModes
 
 `func (o *ProductRangedValuePinPurchaseAllOf) GetAcceptedCalculationModes() []CalculationModes`

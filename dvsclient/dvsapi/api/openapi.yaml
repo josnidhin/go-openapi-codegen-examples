@@ -32,7 +32,7 @@ info:
 
     You can generate sandbox API keys from your [DT Shop](https://dtshop.dtone.com/account?tab=developer) account, under the **Pre-Production API Keys** section.
 
-    All transactions on the sandbox environment are simulated: no real transaction goes through. To simulate different responses, the last three digits of the recipient mobile number (i.e. `credit_party_identifier.mobile_number`) will have to be replaced with one of the following suffixes:
+    All transactions on the sandbox environment are simulated: no real transaction goes through. To simulate different responses, the last three digits of the `credit_party_identifier` (i.e. `mobile_number` or `account_number`, depending on the `required_credit_party_identifier_fields` of a given [Product](/#tag/Products)) will have to be replaced with one of the following suffixes:
 
     | Suffix              | Transaction Status                        | Example       |
     | ---                 | ---                                       | ---           |
@@ -40,7 +40,7 @@ info:
     | `101`, `201`, `301` | `COMPLETED` (PIN-based)                   | `+6595123201` |
     | `102`, `202`, `302` | `DECLINED-INVALID-CREDIT-PARTY`           | `+6595123102` |
     | `103`, `203`, `303` | `DECLINED-BARRED-CREDIT-PARTY`            | `+6595123103` |
-    | `104`, `204`, `304` | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE` | `+6595123205` |
+    | `104`, `204`, `304` | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE` | `+6595123204` |
     | `105`, `205`, `305` | `DECLINED-DUPLICATED-TRANSACTION`         | `+6595123105` |
     | `106`, `206`, `306` | `DECLINED`                                | `+6595123206` |
     | `107`, `207`, `307` | `DECLINED-EXCEPTION`                      | `+6595123107` |
@@ -144,38 +144,40 @@ info:
     | `404`  | Not Found: Resource doesn't exist                  |
     | `429`  | Too Many Requests                                  |
     | `500`  | Server Error: Error occurred on DT One             |
+    | `503`  | Service Unavailable                                |
 
     ### API Error Codes
 
-    | Code      | Description                                       |
-    | ---       | ---                                               |
-    | `1000400` | Bad Request                                       |
-    | `1000401` | Unauthorized                                      |
-    | `1000404` | Resource not found                                |
-    | `1000429` | Too many requests                                 |
-    | `1003001` | Product is not available in your account          |
-    | `1003002` | Requested product amount is out of range          |
-    | `1003003` | Requested product unit is invalid                 |
-    | `1003101` | Benefits not defined for available products       |
-    | `1003201` | Promotion not found                               |
-    | `1003301` | Campaign not found                                |
-    | `1005003` | Credit party mobile number is invalid             |
-    | `1005004` | Service not found                                 |
-    | `1005005` | Country not found                                 |
-    | `1005006` | Operator not found                                |
-    | `1005503` | Sender mobile number is invalid                   |
-    | `1006001` | Insufficient balance                              |
-    | `1006003` | Debit party mobile number is invalid              |
-    | `1006009` | Account balance not found                         |
-    | `1006503` | Beneficiary mobile number is invalid              |
-    | `1007001` | Transaction external ID has already been used     |
-    | `1007002` | Transaction has already been confirmed            |
-    | `1007004` | Transaction can no longer be confirmed            |
-    | `1007005` | Transaction has already been cancelled            |
-    | `1007007` | Transaction can no longer be cancelled            |
-    | `1007500` | Method not supported by operator                  |
-    | `1008004` | Transaction not found                             |
-    | `1009001` | Unexpected error, please contact our support team |
+    | Code      | Description                                       | HTTP Status |
+    | ---       | ---                                               | ---         |
+    | `1000400` | Bad Request                                       | `400`       |
+    | `1000401` | Unauthorized                                      | `401`       |
+    | `1000404` | Resource not found                                | `404`       |
+    | `1000429` | Too many requests                                 | `429`       |
+    | `1003001` | Product is not available in your account          | `404`       |
+    | `1003002` | Requested product amount is out of range          | `400`       |
+    | `1003003` | Requested product unit is invalid                 | `400`       |
+    | `1003101` | Benefits not defined for available products       | `404`       |
+    | `1003201` | Promotion not found                               | `404`       |
+    | `1003301` | Campaign not found                                | `404`       |
+    | `1005003` | Credit party mobile number is invalid             | `400`       |
+    | `1005004` | Service not found                                 | `404`       |
+    | `1005005` | Country not found                                 | `404`       |
+    | `1005006` | Operator not found                                | `404`       |
+    | `1005503` | Sender mobile number is invalid                   | `400`       |
+    | `1006001` | Insufficient balance                              | `400`       |
+    | `1006003` | Debit party mobile number is invalid              | `400`       |
+    | `1006009` | Account balance not found                         | `404`       |
+    | `1006503` | Beneficiary mobile number is invalid              | `400`       |
+    | `1007001` | Transaction external ID has already been used     | `400`       |
+    | `1007002` | Transaction has already been confirmed            | `400`       |
+    | `1007004` | Transaction can no longer be confirmed            | `400`       |
+    | `1007005` | Transaction has already been cancelled            | `400`       |
+    | `1007007` | Transaction can no longer be cancelled            | `400`       |
+    | `1007500` | Method not supported by operator                  | `400`       |
+    | `1008004` | Transaction not found                             | `404`       |
+    | `1009001` | Unexpected error, please contact our support team | `500`       |
+    | `1009503` | Service unavailable, please retry later           | `503`       |
 
     ### Transaction Status
 
@@ -250,14 +252,10 @@ info:
 
     <!-- ReDoc-Inject: <security-definitions> -->
   title: Digital Value Services API
-  version: 1.11.0
+  version: 1.14.0
   x-logo:
     url: https://dvs-api-doc.dtone.com/images/dtone.png
 servers:
-- description: Development
-  url: http://127.0.0.1:8080/v1
-- description: Staging
-  url: https://staging-dvs-api.transferto.dtone.com:8443/v1
 - description: Pre-Production
   url: https://preprod-dvs-api.dtone.com/v1
 - description: Production
@@ -272,8 +270,8 @@ tags:
     | ---            | ---                                       |
     | Mobile         | Airtime Top Ups, Mobile Data Bundles, SMS |
     | Internet       | Broadband, Wi-Fi Recharge                 |
-    | Utilities      | Electricity, Water, Utilities             |
-    | Gift Cards     | Vouchers, Groceries, Gift Cards           |
+    | Utilities      | Electricity, Water, Gas                   |
+    | Gift Cards     | Vouchers, Groceries, General Gift Cards   |
     | Landline       | Landline                                  |
     | Television     | Television                                |
     | Insurance      | Insurance                                 |
@@ -281,6 +279,15 @@ tags:
     | VoIP           | VoIP Credits                              |
     | Finance        | Financial Services and Institutions       |
     | Government     | Government Agencies                       |
+    | Education      | Educational Institutions                  |
+
+    Some services are further subdivided into subservices. The current list of services and the corresponding subservices underneath are as follows:
+
+    | Service        | Subservices                                                                                                                    |
+    | ---            | ---                                                                                                                            |
+    | Mobile         | &bull; Airtime<br/>&bull; Bundle<br/>&bull; Data                                                                               |
+    | Utilities      | &bull; Electricity<br/>&bull; Water<br/>&bull; Gas                                                                             |
+    | Gift Cards     | &bull; Retail<br/>&bull; Gaming<br/>&bull; Cash Cards<br/>&bull; Food<br/>&bull; Entertainment<br/>&bull; Travel and Transport |
   name: Services
 - description: |
     Products are available across various geographical boundaries. These endpoints provide the means to enumerate available countries, which can then be used to filter against the list of [available products](#tag/Products/paths/~1products/get) in your account.
@@ -564,7 +571,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Operator'
+                  $ref: '#/components/schemas/getOperators_200_response_inner'
                 type: array
           description: successful operation
           headers:
@@ -606,7 +613,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Operator'
+                $ref: '#/components/schemas/getOperators_200_response_inner'
           description: successful operation
         "404":
           content:
@@ -927,7 +934,14 @@ paths:
         name: service_id
         required: false
         schema:
-          type: integer
+          $ref: '#/components/schemas/ServiceID'
+        style: form
+      - explode: true
+        in: query
+        name: subservice_id
+        required: false
+        schema:
+          $ref: '#/components/schemas/SubServiceID'
         style: form
       - explode: false
         in: query
@@ -952,7 +966,7 @@ paths:
         name: operator_id
         required: false
         schema:
-          type: integer
+          $ref: '#/components/schemas/OperatorID'
         style: form
       - explode: true
         in: query
@@ -1072,7 +1086,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AsyncTransaction'
+              $ref: '#/components/schemas/postTransactionAsync_request'
       responses:
         "201":
           content:
@@ -1138,7 +1152,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AsyncTransaction'
+                $ref: '#/components/schemas/postTransactionAsync_request'
           description: successful operation
         "404":
           content:
@@ -1185,7 +1199,14 @@ paths:
         name: service_id
         required: false
         schema:
-          type: integer
+          $ref: '#/components/schemas/ServiceID'
+        style: form
+      - explode: true
+        in: query
+        name: subservice_id
+        required: false
+        schema:
+          $ref: '#/components/schemas/SubServiceID'
         style: form
       - explode: true
         in: query
@@ -1199,7 +1220,7 @@ paths:
         name: operator_id
         required: false
         schema:
-          type: integer
+          $ref: '#/components/schemas/OperatorID'
         style: form
       - explode: true
         in: query
@@ -1273,7 +1294,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/AsyncTransaction'
+                  $ref: '#/components/schemas/postTransactionAsync_request'
                 type: array
           description: successful operation
           headers:
@@ -1514,7 +1535,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/LookupMobileNumber'
+                  $ref: '#/components/schemas/getLookupMobileNumber_200_response_inner'
                 type: array
           description: successful operation
           headers:
@@ -1555,7 +1576,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/LookupMobileNumber'
+                  $ref: '#/components/schemas/getLookupMobileNumber_200_response_inner'
                 type: array
           description: successful operation
           headers:
@@ -1729,7 +1750,7 @@ components:
       - name
       - regions
       type: object
-    OperatorBase:
+    Operator:
       example:
         country:
           regions:
@@ -1766,11 +1787,6 @@ components:
       - name
       - regions
       type: object
-    Operator:
-      allOf:
-      - $ref: '#/components/schemas/OperatorBase'
-      - additionalProperties: false
-        type: object
     ServiceRegion:
       additionalProperties: false
       example:
@@ -1855,9 +1871,9 @@ components:
           type: array
           uniqueItems: true
         service:
-          $ref: '#/components/schemas/Service'
+          $ref: '#/components/schemas/ProductService'
         operator:
-          $ref: '#/components/schemas/Operator'
+          $ref: '#/components/schemas/getOperators_200_response_inner'
         regions:
           items:
             $ref: '#/components/schemas/ServiceRegion'
@@ -1917,6 +1933,21 @@ components:
       - $ref: '#/components/schemas/ProductFixedValuePinPurchase'
       - $ref: '#/components/schemas/ProductRangedValuePinPurchase'
       - $ref: '#/components/schemas/ProductRangedValuePayment'
+    ProductService:
+      additionalProperties: false
+      properties:
+        id:
+          format: int32
+          minimum: 1
+          type: integer
+        name:
+          type: string
+        subservice:
+          $ref: '#/components/schemas/ProductService_subservice'
+      required:
+      - id
+      - name
+      type: object
     ProductPromotion:
       additionalProperties: false
       example:
@@ -2085,10 +2116,6 @@ components:
       - terms
       - title
       type: object
-    AsyncTransaction:
-      allOf:
-      - $ref: '#/components/schemas/Transaction'
-      - $ref: '#/components/schemas/AsyncTransaction_allOf'
     Transaction:
       example:
         benefits:
@@ -2101,6 +2128,8 @@ components:
           amount: 6.027456183070403
           unit_type: null
         external_id: ""
+        additional_identifier:
+          purchaser_id: purchaser_id
         confirmation_date: 2000-01-23T04:56:07.000+00:00
         source:
           unit: unit
@@ -2279,6 +2308,8 @@ components:
           $ref: '#/components/schemas/Transaction_credit_party_identifier'
         statement_identifier:
           $ref: '#/components/schemas/Transaction_statement_identifier'
+        additional_identifier:
+          $ref: '#/components/schemas/Transaction_additional_identifier'
       required:
       - external_id
       - product_id
@@ -2328,12 +2359,6 @@ components:
       - retail
       - wholesale
       type: object
-    LookupMobileNumber:
-      allOf:
-      - $ref: '#/components/schemas/OperatorBase'
-      - $ref: '#/components/schemas/LookupMobileNumber_allOf'
-      - additionalProperties: false
-        type: object
     Statement:
       example:
         reference: reference
@@ -2387,11 +2412,20 @@ components:
       minLength: 1
       pattern: \S
       type: string
+    PurchaserID:
+      description: "Anonymized ID related to the purchase for compliance reasons (e.g.\
+        \ terminal, POS, agent, end user, etc.)"
+      pattern: "^[a-zA-Z0-9\\-]{8,36}$"
+      type: string
     NonEmptyString:
       minLength: 1
       pattern: \S
       type: string
     ServiceID:
+      format: int32
+      minimum: 1
+      type: integer
+    SubServiceID:
       format: int32
       minimum: 1
       type: integer
@@ -2577,6 +2611,34 @@ components:
       - BUSINESS
       - CALENDAR
       type: string
+    getOperators_200_response_inner:
+      allOf:
+      - $ref: '#/components/schemas/Operator'
+      - additionalProperties: false
+        type: object
+    postTransactionAsync_request_allOf:
+      properties:
+        callback_url:
+          format: uri
+          type: string
+    postTransactionAsync_request:
+      allOf:
+      - $ref: '#/components/schemas/Transaction'
+      - $ref: '#/components/schemas/postTransactionAsync_request_allOf'
+    getLookupMobileNumber_200_response_inner_allOf:
+      properties:
+        identified:
+          description: Indicates whether operator was identified as a direct match
+          type: boolean
+      required:
+      - identified
+      type: object
+    getLookupMobileNumber_200_response_inner:
+      allOf:
+      - $ref: '#/components/schemas/Operator'
+      - $ref: '#/components/schemas/getLookupMobileNumber_200_response_inner_allOf'
+      - additionalProperties: false
+        type: object
     postLookupMobileNumber_request:
       properties:
         mobile_number:
@@ -2749,6 +2811,13 @@ components:
             type: array
           nullable: true
           type: array
+        required_additional_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
         availability_zones:
           items:
             $ref: '#/components/schemas/AvailabilityZones'
@@ -2778,6 +2847,7 @@ components:
       - prices
       - promotions
       - rates
+      - required_additional_identifier_fields
       - required_beneficiary_fields
       - required_credit_party_identifier_fields
       - required_debit_party_identifier_fields
@@ -2910,6 +2980,13 @@ components:
             type: array
           nullable: true
           type: array
+        required_additional_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
         accepted_calculation_modes:
           items:
             $ref: '#/components/schemas/CalculationModes'
@@ -2944,6 +3021,7 @@ components:
       - prices
       - promotions
       - rates
+      - required_additional_identifier_fields
       - required_beneficiary_fields
       - required_credit_party_identifier_fields
       - required_debit_party_identifier_fields
@@ -2997,6 +3075,13 @@ components:
             type: array
           nullable: true
           type: array
+        required_additional_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
         availability_zones:
           items:
             $ref: '#/components/schemas/AvailabilityZones'
@@ -3029,6 +3114,7 @@ components:
       - prices
       - promotions
       - rates
+      - required_additional_identifier_fields
       - required_beneficiary_fields
       - required_credit_party_identifier_fields
       - required_debit_party_identifier_fields
@@ -3082,6 +3168,13 @@ components:
             type: array
           nullable: true
           type: array
+        required_additional_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
         accepted_calculation_modes:
           items:
             $ref: '#/components/schemas/CalculationModes'
@@ -3119,6 +3212,7 @@ components:
       - prices
       - promotions
       - rates
+      - required_additional_identifier_fields
       - required_beneficiary_fields
       - required_credit_party_identifier_fields
       - required_debit_party_identifier_fields
@@ -3171,6 +3265,13 @@ components:
             type: array
           nullable: true
           type: array
+        required_additional_identifier_fields:
+          items:
+            items:
+              type: string
+            type: array
+          nullable: true
+          type: array
         accepted_calculation_modes:
           items:
             $ref: '#/components/schemas/CalculationModes'
@@ -3208,6 +3309,7 @@ components:
       - prices
       - promotions
       - rates
+      - required_additional_identifier_fields
       - required_beneficiary_fields
       - required_credit_party_identifier_fields
       - required_debit_party_identifier_fields
@@ -3218,6 +3320,16 @@ components:
       - validity
       type: object
       example: null
+    ProductService_subservice:
+      nullable: true
+      properties:
+        id:
+          format: int32
+          minimum: 1
+          type: integer
+        name:
+          type: string
+      type: object
     Promotion_operator_country:
       example:
         name: name
@@ -3306,7 +3418,7 @@ components:
         type:
           $ref: '#/components/schemas/ProductTypes'
         operator:
-          $ref: '#/components/schemas/OperatorBase'
+          $ref: '#/components/schemas/Operator'
       required:
       - description
       - id
@@ -3314,12 +3426,6 @@ components:
       - operator
       - type
       type: object
-    AsyncTransaction_allOf:
-      properties:
-        callback_url:
-          format: uri
-          type: string
-      example: null
     Transaction_source:
       additionalProperties: false
       description: Required for ranged value products and when `calculation_mode`
@@ -3347,7 +3453,7 @@ components:
     Transaction_destination:
       additionalProperties: false
       description: Required for ranged value products and when `calculation_mode`
-        is set to `DESTINATION_MODE`
+        is set to `DESTINATION_AMOUNT`
       example:
         unit: unit
         amount: 6.027456183070403
@@ -3664,15 +3770,16 @@ components:
           format: date
           type: string
       type: object
-    LookupMobileNumber_allOf:
+    Transaction_additional_identifier:
+      example:
+        purchaser_id: purchaser_id
       properties:
-        identified:
-          description: Indicates whether operator was identified as a direct match
-          type: boolean
-      required:
-      - identified
+        purchaser_id:
+          description: "Anonymized ID related to the purchase for compliance reasons\
+            \ (e.g. terminal, POS, agent, end user, etc.)"
+          pattern: "^[a-zA-Z0-9\\-]{8,36}$"
+          type: string
       type: object
-      example: null
     Statement_dates:
       example:
         due: 2000-01-23

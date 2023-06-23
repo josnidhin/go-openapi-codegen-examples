@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **RequiredSenderFields** | **[][]string** |  | 
 **RequiredBeneficiaryFields** | **[][]string** |  | 
 **RequiredStatementIdentifierFields** | **[][]string** |  | 
+**RequiredAdditionalIdentifierFields** | **[][]string** |  | 
 **AvailabilityZones** | [**[]AvailabilityZones**](AvailabilityZones.md) |  | 
 **Source** | [**ProductFixedValueRechargeAllOfSource**](ProductFixedValueRechargeAllOfSource.md) |  | 
 **Destination** | [**ProductFixedValueRechargeAllOfSource**](ProductFixedValueRechargeAllOfSource.md) |  | 
@@ -24,7 +25,7 @@ Name | Type | Description | Notes
 
 ### NewProductFixedValuePinPurchaseAllOf
 
-`func NewProductFixedValuePinPurchaseAllOf(type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, availabilityZones []AvailabilityZones, source ProductFixedValueRechargeAllOfSource, destination ProductFixedValueRechargeAllOfSource, prices ProductFixedValueRechargeAllOfPrices, rates Rates, pin PIN, benefits []FixedBenefit, promotions []ProductPromotion, ) *ProductFixedValuePinPurchaseAllOf`
+`func NewProductFixedValuePinPurchaseAllOf(type_ string, validity NullableProductFixedValueRechargeAllOfValidity, requiredDebitPartyIdentifierFields [][]string, requiredCreditPartyIdentifierFields [][]string, requiredSenderFields [][]string, requiredBeneficiaryFields [][]string, requiredStatementIdentifierFields [][]string, requiredAdditionalIdentifierFields [][]string, availabilityZones []AvailabilityZones, source ProductFixedValueRechargeAllOfSource, destination ProductFixedValueRechargeAllOfSource, prices ProductFixedValueRechargeAllOfPrices, rates Rates, pin PIN, benefits []FixedBenefit, promotions []ProductPromotion, ) *ProductFixedValuePinPurchaseAllOf`
 
 NewProductFixedValuePinPurchaseAllOf instantiates a new ProductFixedValuePinPurchaseAllOf object
 This constructor will assign default values to properties that have it defined,
@@ -239,6 +240,36 @@ SetRequiredStatementIdentifierFields sets RequiredStatementIdentifierFields fiel
 `func (o *ProductFixedValuePinPurchaseAllOf) UnsetRequiredStatementIdentifierFields()`
 
 UnsetRequiredStatementIdentifierFields ensures that no value is present for RequiredStatementIdentifierFields, not even an explicit nil
+### GetRequiredAdditionalIdentifierFields
+
+`func (o *ProductFixedValuePinPurchaseAllOf) GetRequiredAdditionalIdentifierFields() [][]string`
+
+GetRequiredAdditionalIdentifierFields returns the RequiredAdditionalIdentifierFields field if non-nil, zero value otherwise.
+
+### GetRequiredAdditionalIdentifierFieldsOk
+
+`func (o *ProductFixedValuePinPurchaseAllOf) GetRequiredAdditionalIdentifierFieldsOk() (*[][]string, bool)`
+
+GetRequiredAdditionalIdentifierFieldsOk returns a tuple with the RequiredAdditionalIdentifierFields field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRequiredAdditionalIdentifierFields
+
+`func (o *ProductFixedValuePinPurchaseAllOf) SetRequiredAdditionalIdentifierFields(v [][]string)`
+
+SetRequiredAdditionalIdentifierFields sets RequiredAdditionalIdentifierFields field to given value.
+
+
+### SetRequiredAdditionalIdentifierFieldsNil
+
+`func (o *ProductFixedValuePinPurchaseAllOf) SetRequiredAdditionalIdentifierFieldsNil(b bool)`
+
+ SetRequiredAdditionalIdentifierFieldsNil sets the value for RequiredAdditionalIdentifierFields to be an explicit nil
+
+### UnsetRequiredAdditionalIdentifierFields
+`func (o *ProductFixedValuePinPurchaseAllOf) UnsetRequiredAdditionalIdentifierFields()`
+
+UnsetRequiredAdditionalIdentifierFields ensures that no value is present for RequiredAdditionalIdentifierFields, not even an explicit nil
 ### GetAvailabilityZones
 
 `func (o *ProductFixedValuePinPurchaseAllOf) GetAvailabilityZones() []AvailabilityZones`

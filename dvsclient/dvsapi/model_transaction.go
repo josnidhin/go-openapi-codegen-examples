@@ -1,9 +1,9 @@
 /*
 Digital Value Services API
 
-# Overview  Welcome to the Digital Value Services (DVS) API reference.  This API serves as the primary gateway to facilitate digital value transfers through [DT One](https://www.dtone.com), a leading global network covering more than 160 countries and 550 mobile operators.  The Digital Value Services API is organized according to [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) principles, using [JSON](https://en.wikipedia.org/wiki/JSON) as format for data interchange, and provides the following services:   - [Discovery Services](#tag/Services)   - [Transaction Services](#tag/Transactions)   - [Account Services](#tag/Balances)   - [Look-Up Services](#tag/Mobile-Number)  If you have any questions and/or suggestions related to our API, please do not hesitate to send an email to the [DVS API support team](mailto:dvs-api-support@dtone.com).  ## Integration Libraries  Officially supported [SDK](https://en.wikipedia.org/wiki/Software_development_kit)s are available for the following languages:  * [Java](https://github.com/dtone/dtone-dvs-api-java-client) * [Node.js](https://www.npmjs.com/package/@dtone/dvs)  These SDKs offer an accelerated path to developing your applications as an alternative to accessing the REST API directly.  Separately, we would love to hear from you! If you have any questions and/or suggestions related to our SDKs, please do not hesitate to create corresponding [GitHub issues](https://guides.github.com/features/issues/) or send an email to the [DVS Open Source team](mailto:opensource@dtone.com).  ## Sandbox  A sandbox environment is available for testing integrations with the DVS API. It is available at [https://preprod-dvs-api.dtone.com/v1/](https://preprod-dvs-api.dtone.com/v1/).  You can generate sandbox API keys from your [DT Shop](https://dtshop.dtone.com/account?tab=developer) account, under the **Pre-Production API Keys** section.  All transactions on the sandbox environment are simulated: no real transaction goes through. To simulate different responses, the last three digits of the recipient mobile number (i.e. `credit_party_identifier.mobile_number`) will have to be replaced with one of the following suffixes:  | Suffix              | Transaction Status                        | Example       | | ---                 | ---                                       | ---           | | `100`, `200`, `300` | `COMPLETED` (PIN-less)                    | `+6595123100` | | `101`, `201`, `301` | `COMPLETED` (PIN-based)                   | `+6595123201` | | `102`, `202`, `302` | `DECLINED-INVALID-CREDIT-PARTY`           | `+6595123102` | | `103`, `203`, `303` | `DECLINED-BARRED-CREDIT-PARTY`            | `+6595123103` | | `104`, `204`, `304` | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE` | `+6595123205` | | `105`, `205`, `305` | `DECLINED-DUPLICATED-TRANSACTION`         | `+6595123105` | | `106`, `206`, `306` | `DECLINED`                                | `+6595123206` | | `107`, `207`, `307` | `DECLINED-EXCEPTION`                      | `+6595123107` |  The different suffixes for a given transaction status can be used to simulate delays, as follows:   * `10X` suffix will take at least 3 seconds to finish   * `20X` suffix will take at least 20 seconds to finish   * `30X` suffix will take at least 5 minutes to finish  Please note that there are products that do not require any credit party identifier such as Gift Cards. For these products, the simulated transaction will always be in `COMPLETED` status.  ## Versioning  Endpoints of the API are prefixed with a corresponding version number.  This is done to provide complete isolation between implementations and to ensure that subsequent major changes to the API will never affect existing integrations.  When a new version of the API is available and you are keen to upgrade, testing in the sandbox environment to ensure that everything works well with your implementation before switching to the production environment comes highly recommended.  Feel free to [contact us](mailto:dvs-api-support@dtone.com) should you have any questions and/or are in need of assistance during your tests.  ## Transactions  The main purpose of this API is to deliver value (e.g. mobile airtime top-up, data bundles, etc.) to a beneficiary. This is what we call a \"transaction\".  During the course of a transfer, a transaction undergoes various status changes (or transitions) as illustrated below.  ![transaction states](/images/transaction_states.png)  As changes in transaction status occur, updates are sent in real-time when a callback URL is provided. In conjunction, transaction status can be queried through one of two means: via the returned `id` or a provided `external_id`.  The latter serves as your unique reference and provides a utility to retrieve transaction details when exceptions occur, such as when the supposed API response was not received, as an example.  ## Balances  Transactions can be created through the platform as long as there is enough balance available in your account. A given balance is composed of the following:  | Balance   | Description                                              | | ---       | ---                                                      | | Available | Balance amount available for use                         | | Holding   | Amount being held while transactions are being processed |  As a given transaction goes through various changes in status as outlined [here](#section/Overview/Transactions), corresponding balance movements will be made. The following table illustrates the relationship between transaction status and balance movements:  | Transaction Status                  | Balance Movement | Description                                                | | ---                                 | ---              | ---                                                        | | `CREATED`                           | Authorize        | Transfer wholesale price and fee from available to holding | | `CANCELLED`, `REJECTED`, `DECLINED` | Void             | Amount authorized in holding moves back to available       | | `COMPLETED`                         | Capture          | Amount authorized in holding is captured, i.e. debited     | | `REVERSED`                          | Reverse          | Debited amount is reversed back into available             |  ## Flow  Once a product has been selected through one of the [discovery methods](/#tag/Services) provided by the API, the actual transfer (i.e. transaction) can be performed in either one of the following modes:   - Asynchronous (recommended)   - Synchronous  Each mode is accessible via a specific endpoint.  As soon as a transaction is confirmed, the transfer order will be sent to the operator for immediate processing. During this time, the transaction will remain in a `CONFIRMED` status until the final status is received from the operator.  ### Asynchronous Mode  When a transaction is created and confirmed in an asynchronous fashion, the HTTP connection won't have to be kept open. This preserves system resources on your applications. As such, performing transactions **asynchronously** is **recommended**.  ### Synchronous Mode  When a transaction is created and confirmed in a synchronous fashion, the HTTP connection will be kept open in an attempt to capture the final status from the receiving operator so it can be returned in the API response. The processing time usually takes just a few seconds. However, with some receiving operators, it may take longer.  Our system will keep the HTTP connection open for up to 180 seconds (this value can be configured upon request) and will return a status before closing this connection. This status can be in one of the final status (e.g. `COMPLETED`, `DECLINED`) or not (e.g. `SUBMITTED`). In the latter case, this denotes the transaction is still being processed by the receiving operator.  **Note:** your application does not have to wait for the connection to close, it can listen for a shorter period of time and query the final status later on (refer to the \"Final Status\" section below for more details).  ### Final Status  Regardless of the processing mode, the application should be designed to capture the final status of a transaction. This can be done through one of the following means:   - Checking the status of a specific transaction via the corresponding API method (\"pull\" mechanism)   - Configuring a callback URL passed in the request when creating a transaction (\"push\" mechanism)  ## Callbacks  As a transaction is being processed, changes in status will be notified in real-time if a callback URL was provided. Even though one callback per transaction is expected (i.e. change to either `COMPLETED` or `DECLINED`), a manual reversal from the [DT One](https://dtone.com/) team, which may happen in very rare occasions, will also trigger a callback to inform your application of a change in transaction status to `REVERSED`.  This callback endpoint must be implemented by the sending partner, which should expect an HTTP `POST` request containing a transaction object represented in [JSON](https://en.wikipedia.org/wiki/JSON). As callbacks will be sent from the [DT One](https://dtone.com/) servers, these endpoints will have to be publicly-accessible in most cases. During development, a service such as [ngrok](https://ngrok.com/) can be used to expose local servers to the internet.  Upon successful receipt of data, the callback endpoint should respond with an HTTP `2XX` status. In the event that the platform did not receive a successful status, callback notifications will be retried several times, beyond which, the transaction status will have to be queried through the API.  ## Status and Errors  ### HTTP Status Codes  [DT One](https://dtone.com/) uses standard HTTP response codes to indicate whether an API request was successful or not.  | Status | Description                                        | | ---    | ---                                                | | `200`  | OK                                                 | | `201`  | Created: Resource created                          | | `202`  | Accepted: Request has been accepted for processing | | `400`  | Bad Request: Request was malformed                 | | `401`  | Unauthorized: Credentials missing or invalid       | | `404`  | Not Found: Resource doesn't exist                  | | `429`  | Too Many Requests                                  | | `500`  | Server Error: Error occurred on DT One             |  ### API Error Codes  | Code      | Description                                       | | ---       | ---                                               | | `1000400` | Bad Request                                       | | `1000401` | Unauthorized                                      | | `1000404` | Resource not found                                | | `1000429` | Too many requests                                 | | `1003001` | Product is not available in your account          | | `1003002` | Requested product amount is out of range          | | `1003003` | Requested product unit is invalid                 | | `1003101` | Benefits not defined for available products       | | `1003201` | Promotion not found                               | | `1003301` | Campaign not found                                | | `1005003` | Credit party mobile number is invalid             | | `1005004` | Service not found                                 | | `1005005` | Country not found                                 | | `1005006` | Operator not found                                | | `1005503` | Sender mobile number is invalid                   | | `1006001` | Insufficient balance                              | | `1006003` | Debit party mobile number is invalid              | | `1006009` | Account balance not found                         | | `1006503` | Beneficiary mobile number is invalid              | | `1007001` | Transaction external ID has already been used     | | `1007002` | Transaction has already been confirmed            | | `1007004` | Transaction can no longer be confirmed            | | `1007005` | Transaction has already been cancelled            | | `1007007` | Transaction can no longer be cancelled            | | `1007500` | Method not supported by operator                  | | `1008004` | Transaction not found                             | | `1009001` | Unexpected error, please contact our support team |  ### Transaction Status  | Class       | Status                                          | Description                                                            | | ---         | ---                                             | ---                                                                    | | `CREATED`   | `CREATED`                                       | Created                                                                | | `CONFIRMED` | `CONFIRMED`                                     | Confirmed                                                              | | `REJECTED`  | `REJECTED`                                      | Rejected                                                               | | `REJECTED`  | `REJECTED-INVALID-CREDIT-PARTY`                 | Rejected - Credit party is invalid                                     | | `REJECTED`  | `REJECTED-BARRED-CREDIT-PARTY`                  | Rejected - Credit party is barred                                      | | `REJECTED`  | `REJECTED-INELIGIBLE-CREDIT-PARTY`              | Rejected - Credit party is ineligible for chosen product               | | `REJECTED`  | `REJECTED-INVALID-DEBIT-PARTY`                  | Rejected - Debit party is invalid                                      | | `REJECTED`  | `REJECTED-BARRED-DEBIT-PARTY`                   | Rejected - Debit party is barred                                       | | `REJECTED`  | `REJECTED-LIMITATIONS-ON-CREDIT-PARTY-AMOUNT`   | Rejected - Limitations on credit party cumulative transaction amount   | | `REJECTED`  | `REJECTED-LIMITATIONS-ON-CREDIT-PARTY-QUANTITY` | Rejected - Limitations on credit party cumulative transaction quantity | | `REJECTED`  | `REJECTED-OPERATOR-CURRENTLY-UNAVAILABLE`       | Rejected - Operator currently unavailable                              | | `REJECTED`  | `REJECTED-INSUFFICIENT-BALANCE`                 | Rejected - Insufficient balance                                        | | `CANCELLED` | `CANCELLED`                                     | Cancelled                                                              | | `SUBMITTED` | `SUBMITTED`                                     | Submitted                                                              | | `COMPLETED` | `COMPLETED`                                     | Completed                                                              | | `REVERSED`  | `REVERSED`                                      | Reversed                                                               | | `DECLINED`  | `DECLINED`                                      | Declined (no additional information available)                         | | `DECLINED`  | `DECLINED-INVALID-CREDIT-PARTY`                 | Declined - Credit party is invalid                                     | | `DECLINED`  | `DECLINED-BARRED-CREDIT-PARTY`                  | Declined - Credit party is barred                                      | | `DECLINED`  | `DECLINED-INELIGIBLE-CREDIT-PARTY`              | Declined - Credit party is ineligible for chosen product               | | `DECLINED`  | `DECLINED-INVALID-DEBIT-PARTY`                  | Declined - Debit party is invalid                                      | | `DECLINED`  | `DECLINED-BARRED-DEBIT-PARTY`                   | Declined - Debit party is barred                                       | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-OPERATOR-AMOUNT`       | Declined - Limitations on operator cumulative transaction amount       | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CREDIT-PARTY-AMOUNT`   | Declined - Limitations on credit party cumulative transaction amount   | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CUSTOMER-AMOUNT`       | Declined - Limitations on customer cumulative transaction amount       | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-OPERATOR-QUANTITY`     | Declined - Limitations on operator cumulative transaction quantity     | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CREDIT-PARTY-QUANTITY` | Declined - Limitations on credit party cumulative transaction quantity | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CUSTOMER-QUANTITY`     | Declined - Limitations on customer cumulative transaction quantity     | | `DECLINED`  | `DECLINED-DUPLICATED-TRANSACTION`               | Declined - Duplicated transaction                                      | | `DECLINED`  | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE`       | Declined - Operator currently unavailable                              |  `REJECTED` and `DECLINED` status classes both denote unsuccessful transactions. The primary distinction between these two relates to the party that determined the failure:   * `REJECTED` are issued by the DVS platform based on various business rules (e.g. insufficient balance, limitations, etc)   * `DECLINED` are issued by the operators  Separately, it is recommended to define application logic based on **classes**, while additional distinction and/or insight are reflected on the actual **status**.  ## Pagination  API resources supporting bulk fetches via \"list\" API methods will be returned in a paginated fashion.  ### Input Parameters  | Field      | Required | Type    | Description                                      | | ---        | ---      | ---     | ---                                              | | `page`     | No       | Integer | Page number                                      | | `per_page` | No       | Integer | Number of results per page (default 50, max 100) |  ### Output Headers  | Field           | Description                   | | ---             | ---                           | | `X-Total`       | Total number of records       | | `X-Total-Pages` | Total number of pages         | | `X-Per-Page`    | Number of records per page    | | `X-Page`        | Current page number           | | `X-Next-Page`   | Next page number (if any)     | | `X-Prev-Page`   | Previous page number (if any) |  ## Rate Limiting  The API endpoints have rate limiting in place to protect our service from excessive number of requests.  If the limit is reached, an [HTTP error 429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) will be returned by the server.  # Authentication  <!-- ReDoc-Inject: <security-definitions> -->
+# Overview  Welcome to the Digital Value Services (DVS) API reference.  This API serves as the primary gateway to facilitate digital value transfers through [DT One](https://www.dtone.com), a leading global network covering more than 160 countries and 550 mobile operators.  The Digital Value Services API is organized according to [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) principles, using [JSON](https://en.wikipedia.org/wiki/JSON) as format for data interchange, and provides the following services:   - [Discovery Services](#tag/Services)   - [Transaction Services](#tag/Transactions)   - [Account Services](#tag/Balances)   - [Look-Up Services](#tag/Mobile-Number)  If you have any questions and/or suggestions related to our API, please do not hesitate to send an email to the [DVS API support team](mailto:dvs-api-support@dtone.com).  ## Integration Libraries  Officially supported [SDK](https://en.wikipedia.org/wiki/Software_development_kit)s are available for the following languages:  * [Java](https://github.com/dtone/dtone-dvs-api-java-client) * [Node.js](https://www.npmjs.com/package/@dtone/dvs)  These SDKs offer an accelerated path to developing your applications as an alternative to accessing the REST API directly.  Separately, we would love to hear from you! If you have any questions and/or suggestions related to our SDKs, please do not hesitate to create corresponding [GitHub issues](https://guides.github.com/features/issues/) or send an email to the [DVS Open Source team](mailto:opensource@dtone.com).  ## Sandbox  A sandbox environment is available for testing integrations with the DVS API. It is available at [https://preprod-dvs-api.dtone.com/v1/](https://preprod-dvs-api.dtone.com/v1/).  You can generate sandbox API keys from your [DT Shop](https://dtshop.dtone.com/account?tab=developer) account, under the **Pre-Production API Keys** section.  All transactions on the sandbox environment are simulated: no real transaction goes through. To simulate different responses, the last three digits of the `credit_party_identifier` (i.e. `mobile_number` or `account_number`, depending on the `required_credit_party_identifier_fields` of a given [Product](/#tag/Products)) will have to be replaced with one of the following suffixes:  | Suffix              | Transaction Status                        | Example       | | ---                 | ---                                       | ---           | | `100`, `200`, `300` | `COMPLETED` (PIN-less)                    | `+6595123100` | | `101`, `201`, `301` | `COMPLETED` (PIN-based)                   | `+6595123201` | | `102`, `202`, `302` | `DECLINED-INVALID-CREDIT-PARTY`           | `+6595123102` | | `103`, `203`, `303` | `DECLINED-BARRED-CREDIT-PARTY`            | `+6595123103` | | `104`, `204`, `304` | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE` | `+6595123204` | | `105`, `205`, `305` | `DECLINED-DUPLICATED-TRANSACTION`         | `+6595123105` | | `106`, `206`, `306` | `DECLINED`                                | `+6595123206` | | `107`, `207`, `307` | `DECLINED-EXCEPTION`                      | `+6595123107` |  The different suffixes for a given transaction status can be used to simulate delays, as follows:   * `10X` suffix will take at least 3 seconds to finish   * `20X` suffix will take at least 20 seconds to finish   * `30X` suffix will take at least 5 minutes to finish  Please note that there are products that do not require any credit party identifier such as Gift Cards. For these products, the simulated transaction will always be in `COMPLETED` status.  ## Versioning  Endpoints of the API are prefixed with a corresponding version number.  This is done to provide complete isolation between implementations and to ensure that subsequent major changes to the API will never affect existing integrations.  When a new version of the API is available and you are keen to upgrade, testing in the sandbox environment to ensure that everything works well with your implementation before switching to the production environment comes highly recommended.  Feel free to [contact us](mailto:dvs-api-support@dtone.com) should you have any questions and/or are in need of assistance during your tests.  ## Transactions  The main purpose of this API is to deliver value (e.g. mobile airtime top-up, data bundles, etc.) to a beneficiary. This is what we call a \"transaction\".  During the course of a transfer, a transaction undergoes various status changes (or transitions) as illustrated below.  ![transaction states](/images/transaction_states.png)  As changes in transaction status occur, updates are sent in real-time when a callback URL is provided. In conjunction, transaction status can be queried through one of two means: via the returned `id` or a provided `external_id`.  The latter serves as your unique reference and provides a utility to retrieve transaction details when exceptions occur, such as when the supposed API response was not received, as an example.  ## Balances  Transactions can be created through the platform as long as there is enough balance available in your account. A given balance is composed of the following:  | Balance   | Description                                              | | ---       | ---                                                      | | Available | Balance amount available for use                         | | Holding   | Amount being held while transactions are being processed |  As a given transaction goes through various changes in status as outlined [here](#section/Overview/Transactions), corresponding balance movements will be made. The following table illustrates the relationship between transaction status and balance movements:  | Transaction Status                  | Balance Movement | Description                                                | | ---                                 | ---              | ---                                                        | | `CREATED`                           | Authorize        | Transfer wholesale price and fee from available to holding | | `CANCELLED`, `REJECTED`, `DECLINED` | Void             | Amount authorized in holding moves back to available       | | `COMPLETED`                         | Capture          | Amount authorized in holding is captured, i.e. debited     | | `REVERSED`                          | Reverse          | Debited amount is reversed back into available             |  ## Flow  Once a product has been selected through one of the [discovery methods](/#tag/Services) provided by the API, the actual transfer (i.e. transaction) can be performed in either one of the following modes:   - Asynchronous (recommended)   - Synchronous  Each mode is accessible via a specific endpoint.  As soon as a transaction is confirmed, the transfer order will be sent to the operator for immediate processing. During this time, the transaction will remain in a `CONFIRMED` status until the final status is received from the operator.  ### Asynchronous Mode  When a transaction is created and confirmed in an asynchronous fashion, the HTTP connection won't have to be kept open. This preserves system resources on your applications. As such, performing transactions **asynchronously** is **recommended**.  ### Synchronous Mode  When a transaction is created and confirmed in a synchronous fashion, the HTTP connection will be kept open in an attempt to capture the final status from the receiving operator so it can be returned in the API response. The processing time usually takes just a few seconds. However, with some receiving operators, it may take longer.  Our system will keep the HTTP connection open for up to 180 seconds (this value can be configured upon request) and will return a status before closing this connection. This status can be in one of the final status (e.g. `COMPLETED`, `DECLINED`) or not (e.g. `SUBMITTED`). In the latter case, this denotes the transaction is still being processed by the receiving operator.  **Note:** your application does not have to wait for the connection to close, it can listen for a shorter period of time and query the final status later on (refer to the \"Final Status\" section below for more details).  ### Final Status  Regardless of the processing mode, the application should be designed to capture the final status of a transaction. This can be done through one of the following means:   - Checking the status of a specific transaction via the corresponding API method (\"pull\" mechanism)   - Configuring a callback URL passed in the request when creating a transaction (\"push\" mechanism)  ## Callbacks  As a transaction is being processed, changes in status will be notified in real-time if a callback URL was provided. Even though one callback per transaction is expected (i.e. change to either `COMPLETED` or `DECLINED`), a manual reversal from the [DT One](https://dtone.com/) team, which may happen in very rare occasions, will also trigger a callback to inform your application of a change in transaction status to `REVERSED`.  This callback endpoint must be implemented by the sending partner, which should expect an HTTP `POST` request containing a transaction object represented in [JSON](https://en.wikipedia.org/wiki/JSON). As callbacks will be sent from the [DT One](https://dtone.com/) servers, these endpoints will have to be publicly-accessible in most cases. During development, a service such as [ngrok](https://ngrok.com/) can be used to expose local servers to the internet.  Upon successful receipt of data, the callback endpoint should respond with an HTTP `2XX` status. In the event that the platform did not receive a successful status, callback notifications will be retried several times, beyond which, the transaction status will have to be queried through the API.  ## Status and Errors  ### HTTP Status Codes  [DT One](https://dtone.com/) uses standard HTTP response codes to indicate whether an API request was successful or not.  | Status | Description                                        | | ---    | ---                                                | | `200`  | OK                                                 | | `201`  | Created: Resource created                          | | `202`  | Accepted: Request has been accepted for processing | | `400`  | Bad Request: Request was malformed                 | | `401`  | Unauthorized: Credentials missing or invalid       | | `404`  | Not Found: Resource doesn't exist                  | | `429`  | Too Many Requests                                  | | `500`  | Server Error: Error occurred on DT One             | | `503`  | Service Unavailable                                |  ### API Error Codes  | Code      | Description                                       | HTTP Status | | ---       | ---                                               | ---         | | `1000400` | Bad Request                                       | `400`       | | `1000401` | Unauthorized                                      | `401`       | | `1000404` | Resource not found                                | `404`       | | `1000429` | Too many requests                                 | `429`       | | `1003001` | Product is not available in your account          | `404`       | | `1003002` | Requested product amount is out of range          | `400`       | | `1003003` | Requested product unit is invalid                 | `400`       | | `1003101` | Benefits not defined for available products       | `404`       | | `1003201` | Promotion not found                               | `404`       | | `1003301` | Campaign not found                                | `404`       | | `1005003` | Credit party mobile number is invalid             | `400`       | | `1005004` | Service not found                                 | `404`       | | `1005005` | Country not found                                 | `404`       | | `1005006` | Operator not found                                | `404`       | | `1005503` | Sender mobile number is invalid                   | `400`       | | `1006001` | Insufficient balance                              | `400`       | | `1006003` | Debit party mobile number is invalid              | `400`       | | `1006009` | Account balance not found                         | `404`       | | `1006503` | Beneficiary mobile number is invalid              | `400`       | | `1007001` | Transaction external ID has already been used     | `400`       | | `1007002` | Transaction has already been confirmed            | `400`       | | `1007004` | Transaction can no longer be confirmed            | `400`       | | `1007005` | Transaction has already been cancelled            | `400`       | | `1007007` | Transaction can no longer be cancelled            | `400`       | | `1007500` | Method not supported by operator                  | `400`       | | `1008004` | Transaction not found                             | `404`       | | `1009001` | Unexpected error, please contact our support team | `500`       | | `1009503` | Service unavailable, please retry later           | `503`       |  ### Transaction Status  | Class       | Status                                          | Description                                                            | | ---         | ---                                             | ---                                                                    | | `CREATED`   | `CREATED`                                       | Created                                                                | | `CONFIRMED` | `CONFIRMED`                                     | Confirmed                                                              | | `REJECTED`  | `REJECTED`                                      | Rejected                                                               | | `REJECTED`  | `REJECTED-INVALID-CREDIT-PARTY`                 | Rejected - Credit party is invalid                                     | | `REJECTED`  | `REJECTED-BARRED-CREDIT-PARTY`                  | Rejected - Credit party is barred                                      | | `REJECTED`  | `REJECTED-INELIGIBLE-CREDIT-PARTY`              | Rejected - Credit party is ineligible for chosen product               | | `REJECTED`  | `REJECTED-INVALID-DEBIT-PARTY`                  | Rejected - Debit party is invalid                                      | | `REJECTED`  | `REJECTED-BARRED-DEBIT-PARTY`                   | Rejected - Debit party is barred                                       | | `REJECTED`  | `REJECTED-LIMITATIONS-ON-CREDIT-PARTY-AMOUNT`   | Rejected - Limitations on credit party cumulative transaction amount   | | `REJECTED`  | `REJECTED-LIMITATIONS-ON-CREDIT-PARTY-QUANTITY` | Rejected - Limitations on credit party cumulative transaction quantity | | `REJECTED`  | `REJECTED-OPERATOR-CURRENTLY-UNAVAILABLE`       | Rejected - Operator currently unavailable                              | | `REJECTED`  | `REJECTED-INSUFFICIENT-BALANCE`                 | Rejected - Insufficient balance                                        | | `CANCELLED` | `CANCELLED`                                     | Cancelled                                                              | | `SUBMITTED` | `SUBMITTED`                                     | Submitted                                                              | | `COMPLETED` | `COMPLETED`                                     | Completed                                                              | | `REVERSED`  | `REVERSED`                                      | Reversed                                                               | | `DECLINED`  | `DECLINED`                                      | Declined (no additional information available)                         | | `DECLINED`  | `DECLINED-INVALID-CREDIT-PARTY`                 | Declined - Credit party is invalid                                     | | `DECLINED`  | `DECLINED-BARRED-CREDIT-PARTY`                  | Declined - Credit party is barred                                      | | `DECLINED`  | `DECLINED-INELIGIBLE-CREDIT-PARTY`              | Declined - Credit party is ineligible for chosen product               | | `DECLINED`  | `DECLINED-INVALID-DEBIT-PARTY`                  | Declined - Debit party is invalid                                      | | `DECLINED`  | `DECLINED-BARRED-DEBIT-PARTY`                   | Declined - Debit party is barred                                       | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-OPERATOR-AMOUNT`       | Declined - Limitations on operator cumulative transaction amount       | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CREDIT-PARTY-AMOUNT`   | Declined - Limitations on credit party cumulative transaction amount   | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CUSTOMER-AMOUNT`       | Declined - Limitations on customer cumulative transaction amount       | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-OPERATOR-QUANTITY`     | Declined - Limitations on operator cumulative transaction quantity     | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CREDIT-PARTY-QUANTITY` | Declined - Limitations on credit party cumulative transaction quantity | | `DECLINED`  | `DECLINED-LIMITATIONS-ON-CUSTOMER-QUANTITY`     | Declined - Limitations on customer cumulative transaction quantity     | | `DECLINED`  | `DECLINED-DUPLICATED-TRANSACTION`               | Declined - Duplicated transaction                                      | | `DECLINED`  | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE`       | Declined - Operator currently unavailable                              |  `REJECTED` and `DECLINED` status classes both denote unsuccessful transactions. The primary distinction between these two relates to the party that determined the failure:   * `REJECTED` are issued by the DVS platform based on various business rules (e.g. insufficient balance, limitations, etc)   * `DECLINED` are issued by the operators  Separately, it is recommended to define application logic based on **classes**, while additional distinction and/or insight are reflected on the actual **status**.  ## Pagination  API resources supporting bulk fetches via \"list\" API methods will be returned in a paginated fashion.  ### Input Parameters  | Field      | Required | Type    | Description                                      | | ---        | ---      | ---     | ---                                              | | `page`     | No       | Integer | Page number                                      | | `per_page` | No       | Integer | Number of results per page (default 50, max 100) |  ### Output Headers  | Field           | Description                   | | ---             | ---                           | | `X-Total`       | Total number of records       | | `X-Total-Pages` | Total number of pages         | | `X-Per-Page`    | Number of records per page    | | `X-Page`        | Current page number           | | `X-Next-Page`   | Next page number (if any)     | | `X-Prev-Page`   | Previous page number (if any) |  ## Rate Limiting  The API endpoints have rate limiting in place to protect our service from excessive number of requests.  If the limit is reached, an [HTTP error 429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) will be returned by the server.  # Authentication  <!-- ReDoc-Inject: <security-definitions> -->
 
-API version: 1.11.0
+API version: 1.14.0
 */
 
 // Code generated by OpenAPI Generator (https://openapi-generator.tech); DO NOT EDIT.
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the Transaction type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Transaction{}
 
 // Transaction struct for Transaction
 type Transaction struct {
@@ -42,6 +45,7 @@ type Transaction struct {
 	DebitPartyIdentifier       NullableTransactionDebitPartyIdentifier `json:"debit_party_identifier,omitempty"`
 	CreditPartyIdentifier      *TransactionCreditPartyIdentifier       `json:"credit_party_identifier,omitempty"`
 	StatementIdentifier        *TransactionStatementIdentifier         `json:"statement_identifier,omitempty"`
+	AdditionalIdentifier       *TransactionAdditionalIdentifier        `json:"additional_identifier,omitempty"`
 }
 
 // NewTransaction instantiates a new Transaction object
@@ -69,7 +73,7 @@ func NewTransactionWithDefaults() *Transaction {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *Transaction) GetId() int64 {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret int64
 		return ret
 	}
@@ -79,7 +83,7 @@ func (o *Transaction) GetId() int64 {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetIdOk() (*int64, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -87,7 +91,7 @@ func (o *Transaction) GetIdOk() (*int64, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *Transaction) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -125,7 +129,7 @@ func (o *Transaction) SetExternalId(v string) {
 
 // GetCreationDate returns the CreationDate field value if set, zero value otherwise.
 func (o *Transaction) GetCreationDate() time.Time {
-	if o == nil || o.CreationDate == nil {
+	if o == nil || IsNil(o.CreationDate) {
 		var ret time.Time
 		return ret
 	}
@@ -135,7 +139,7 @@ func (o *Transaction) GetCreationDate() time.Time {
 // GetCreationDateOk returns a tuple with the CreationDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetCreationDateOk() (*time.Time, bool) {
-	if o == nil || o.CreationDate == nil {
+	if o == nil || IsNil(o.CreationDate) {
 		return nil, false
 	}
 	return o.CreationDate, true
@@ -143,7 +147,7 @@ func (o *Transaction) GetCreationDateOk() (*time.Time, bool) {
 
 // HasCreationDate returns a boolean if a field has been set.
 func (o *Transaction) HasCreationDate() bool {
-	if o != nil && o.CreationDate != nil {
+	if o != nil && !IsNil(o.CreationDate) {
 		return true
 	}
 
@@ -157,7 +161,7 @@ func (o *Transaction) SetCreationDate(v time.Time) {
 
 // GetConfirmationExpirationDate returns the ConfirmationExpirationDate field value if set, zero value otherwise.
 func (o *Transaction) GetConfirmationExpirationDate() time.Time {
-	if o == nil || o.ConfirmationExpirationDate == nil {
+	if o == nil || IsNil(o.ConfirmationExpirationDate) {
 		var ret time.Time
 		return ret
 	}
@@ -167,7 +171,7 @@ func (o *Transaction) GetConfirmationExpirationDate() time.Time {
 // GetConfirmationExpirationDateOk returns a tuple with the ConfirmationExpirationDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetConfirmationExpirationDateOk() (*time.Time, bool) {
-	if o == nil || o.ConfirmationExpirationDate == nil {
+	if o == nil || IsNil(o.ConfirmationExpirationDate) {
 		return nil, false
 	}
 	return o.ConfirmationExpirationDate, true
@@ -175,7 +179,7 @@ func (o *Transaction) GetConfirmationExpirationDateOk() (*time.Time, bool) {
 
 // HasConfirmationExpirationDate returns a boolean if a field has been set.
 func (o *Transaction) HasConfirmationExpirationDate() bool {
-	if o != nil && o.ConfirmationExpirationDate != nil {
+	if o != nil && !IsNil(o.ConfirmationExpirationDate) {
 		return true
 	}
 
@@ -189,7 +193,7 @@ func (o *Transaction) SetConfirmationExpirationDate(v time.Time) {
 
 // GetConfirmationDate returns the ConfirmationDate field value if set, zero value otherwise.
 func (o *Transaction) GetConfirmationDate() time.Time {
-	if o == nil || o.ConfirmationDate == nil {
+	if o == nil || IsNil(o.ConfirmationDate) {
 		var ret time.Time
 		return ret
 	}
@@ -199,7 +203,7 @@ func (o *Transaction) GetConfirmationDate() time.Time {
 // GetConfirmationDateOk returns a tuple with the ConfirmationDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetConfirmationDateOk() (*time.Time, bool) {
-	if o == nil || o.ConfirmationDate == nil {
+	if o == nil || IsNil(o.ConfirmationDate) {
 		return nil, false
 	}
 	return o.ConfirmationDate, true
@@ -207,7 +211,7 @@ func (o *Transaction) GetConfirmationDateOk() (*time.Time, bool) {
 
 // HasConfirmationDate returns a boolean if a field has been set.
 func (o *Transaction) HasConfirmationDate() bool {
-	if o != nil && o.ConfirmationDate != nil {
+	if o != nil && !IsNil(o.ConfirmationDate) {
 		return true
 	}
 
@@ -245,7 +249,7 @@ func (o *Transaction) SetProductId(v int32) {
 
 // GetCalculationMode returns the CalculationMode field value if set, zero value otherwise.
 func (o *Transaction) GetCalculationMode() CalculationModes {
-	if o == nil || o.CalculationMode == nil {
+	if o == nil || IsNil(o.CalculationMode) {
 		var ret CalculationModes
 		return ret
 	}
@@ -255,7 +259,7 @@ func (o *Transaction) GetCalculationMode() CalculationModes {
 // GetCalculationModeOk returns a tuple with the CalculationMode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetCalculationModeOk() (*CalculationModes, bool) {
-	if o == nil || o.CalculationMode == nil {
+	if o == nil || IsNil(o.CalculationMode) {
 		return nil, false
 	}
 	return o.CalculationMode, true
@@ -263,7 +267,7 @@ func (o *Transaction) GetCalculationModeOk() (*CalculationModes, bool) {
 
 // HasCalculationMode returns a boolean if a field has been set.
 func (o *Transaction) HasCalculationMode() bool {
-	if o != nil && o.CalculationMode != nil {
+	if o != nil && !IsNil(o.CalculationMode) {
 		return true
 	}
 
@@ -277,7 +281,7 @@ func (o *Transaction) SetCalculationMode(v CalculationModes) {
 
 // GetSource returns the Source field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Transaction) GetSource() TransactionSource {
-	if o == nil || o.Source.Get() == nil {
+	if o == nil || IsNil(o.Source.Get()) {
 		var ret TransactionSource
 		return ret
 	}
@@ -320,7 +324,7 @@ func (o *Transaction) UnsetSource() {
 
 // GetDestination returns the Destination field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Transaction) GetDestination() TransactionDestination {
-	if o == nil || o.Destination.Get() == nil {
+	if o == nil || IsNil(o.Destination.Get()) {
 		var ret TransactionDestination
 		return ret
 	}
@@ -363,7 +367,7 @@ func (o *Transaction) UnsetDestination() {
 
 // GetAutoConfirm returns the AutoConfirm field value if set, zero value otherwise.
 func (o *Transaction) GetAutoConfirm() bool {
-	if o == nil || o.AutoConfirm == nil {
+	if o == nil || IsNil(o.AutoConfirm) {
 		var ret bool
 		return ret
 	}
@@ -373,7 +377,7 @@ func (o *Transaction) GetAutoConfirm() bool {
 // GetAutoConfirmOk returns a tuple with the AutoConfirm field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetAutoConfirmOk() (*bool, bool) {
-	if o == nil || o.AutoConfirm == nil {
+	if o == nil || IsNil(o.AutoConfirm) {
 		return nil, false
 	}
 	return o.AutoConfirm, true
@@ -381,7 +385,7 @@ func (o *Transaction) GetAutoConfirmOk() (*bool, bool) {
 
 // HasAutoConfirm returns a boolean if a field has been set.
 func (o *Transaction) HasAutoConfirm() bool {
-	if o != nil && o.AutoConfirm != nil {
+	if o != nil && !IsNil(o.AutoConfirm) {
 		return true
 	}
 
@@ -395,7 +399,7 @@ func (o *Transaction) SetAutoConfirm(v bool) {
 
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *Transaction) GetStatus() TransactionStatus {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		var ret TransactionStatus
 		return ret
 	}
@@ -405,7 +409,7 @@ func (o *Transaction) GetStatus() TransactionStatus {
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetStatusOk() (*TransactionStatus, bool) {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		return nil, false
 	}
 	return o.Status, true
@@ -413,7 +417,7 @@ func (o *Transaction) GetStatusOk() (*TransactionStatus, bool) {
 
 // HasStatus returns a boolean if a field has been set.
 func (o *Transaction) HasStatus() bool {
-	if o != nil && o.Status != nil {
+	if o != nil && !IsNil(o.Status) {
 		return true
 	}
 
@@ -427,7 +431,7 @@ func (o *Transaction) SetStatus(v TransactionStatus) {
 
 // GetOperatorReference returns the OperatorReference field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Transaction) GetOperatorReference() string {
-	if o == nil || o.OperatorReference.Get() == nil {
+	if o == nil || IsNil(o.OperatorReference.Get()) {
 		var ret string
 		return ret
 	}
@@ -470,7 +474,7 @@ func (o *Transaction) UnsetOperatorReference() {
 
 // GetPin returns the Pin field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Transaction) GetPin() TransactionPin {
-	if o == nil || o.Pin.Get() == nil {
+	if o == nil || IsNil(o.Pin.Get()) {
 		var ret TransactionPin
 		return ret
 	}
@@ -513,7 +517,7 @@ func (o *Transaction) UnsetPin() {
 
 // GetProduct returns the Product field value if set, zero value otherwise.
 func (o *Transaction) GetProduct() TransactionProduct {
-	if o == nil || o.Product == nil {
+	if o == nil || IsNil(o.Product) {
 		var ret TransactionProduct
 		return ret
 	}
@@ -523,7 +527,7 @@ func (o *Transaction) GetProduct() TransactionProduct {
 // GetProductOk returns a tuple with the Product field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetProductOk() (*TransactionProduct, bool) {
-	if o == nil || o.Product == nil {
+	if o == nil || IsNil(o.Product) {
 		return nil, false
 	}
 	return o.Product, true
@@ -531,7 +535,7 @@ func (o *Transaction) GetProductOk() (*TransactionProduct, bool) {
 
 // HasProduct returns a boolean if a field has been set.
 func (o *Transaction) HasProduct() bool {
-	if o != nil && o.Product != nil {
+	if o != nil && !IsNil(o.Product) {
 		return true
 	}
 
@@ -545,7 +549,7 @@ func (o *Transaction) SetProduct(v TransactionProduct) {
 
 // GetPrices returns the Prices field value if set, zero value otherwise.
 func (o *Transaction) GetPrices() TransactionPrices {
-	if o == nil || o.Prices == nil {
+	if o == nil || IsNil(o.Prices) {
 		var ret TransactionPrices
 		return ret
 	}
@@ -555,7 +559,7 @@ func (o *Transaction) GetPrices() TransactionPrices {
 // GetPricesOk returns a tuple with the Prices field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetPricesOk() (*TransactionPrices, bool) {
-	if o == nil || o.Prices == nil {
+	if o == nil || IsNil(o.Prices) {
 		return nil, false
 	}
 	return o.Prices, true
@@ -563,7 +567,7 @@ func (o *Transaction) GetPricesOk() (*TransactionPrices, bool) {
 
 // HasPrices returns a boolean if a field has been set.
 func (o *Transaction) HasPrices() bool {
-	if o != nil && o.Prices != nil {
+	if o != nil && !IsNil(o.Prices) {
 		return true
 	}
 
@@ -577,7 +581,7 @@ func (o *Transaction) SetPrices(v TransactionPrices) {
 
 // GetRates returns the Rates field value if set, zero value otherwise.
 func (o *Transaction) GetRates() TransactionRates {
-	if o == nil || o.Rates == nil {
+	if o == nil || IsNil(o.Rates) {
 		var ret TransactionRates
 		return ret
 	}
@@ -587,7 +591,7 @@ func (o *Transaction) GetRates() TransactionRates {
 // GetRatesOk returns a tuple with the Rates field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetRatesOk() (*TransactionRates, bool) {
-	if o == nil || o.Rates == nil {
+	if o == nil || IsNil(o.Rates) {
 		return nil, false
 	}
 	return o.Rates, true
@@ -595,7 +599,7 @@ func (o *Transaction) GetRatesOk() (*TransactionRates, bool) {
 
 // HasRates returns a boolean if a field has been set.
 func (o *Transaction) HasRates() bool {
-	if o != nil && o.Rates != nil {
+	if o != nil && !IsNil(o.Rates) {
 		return true
 	}
 
@@ -620,7 +624,7 @@ func (o *Transaction) GetBenefits() []TransactionBenefitsInner {
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Transaction) GetBenefitsOk() ([]TransactionBenefitsInner, bool) {
-	if o == nil || o.Benefits == nil {
+	if o == nil || IsNil(o.Benefits) {
 		return nil, false
 	}
 	return o.Benefits, true
@@ -628,7 +632,7 @@ func (o *Transaction) GetBenefitsOk() ([]TransactionBenefitsInner, bool) {
 
 // HasBenefits returns a boolean if a field has been set.
 func (o *Transaction) HasBenefits() bool {
-	if o != nil && o.Benefits != nil {
+	if o != nil && IsNil(o.Benefits) {
 		return true
 	}
 
@@ -653,7 +657,7 @@ func (o *Transaction) GetPromotions() []ProductPromotion {
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Transaction) GetPromotionsOk() ([]ProductPromotion, bool) {
-	if o == nil || o.Promotions == nil {
+	if o == nil || IsNil(o.Promotions) {
 		return nil, false
 	}
 	return o.Promotions, true
@@ -661,7 +665,7 @@ func (o *Transaction) GetPromotionsOk() ([]ProductPromotion, bool) {
 
 // HasPromotions returns a boolean if a field has been set.
 func (o *Transaction) HasPromotions() bool {
-	if o != nil && o.Promotions != nil {
+	if o != nil && IsNil(o.Promotions) {
 		return true
 	}
 
@@ -675,7 +679,7 @@ func (o *Transaction) SetPromotions(v []ProductPromotion) {
 
 // GetRequestedValues returns the RequestedValues field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Transaction) GetRequestedValues() TransactionRequestedValues {
-	if o == nil || o.RequestedValues.Get() == nil {
+	if o == nil || IsNil(o.RequestedValues.Get()) {
 		var ret TransactionRequestedValues
 		return ret
 	}
@@ -718,7 +722,7 @@ func (o *Transaction) UnsetRequestedValues() {
 
 // GetAdjustedValues returns the AdjustedValues field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Transaction) GetAdjustedValues() TransactionRequestedValues {
-	if o == nil || o.AdjustedValues.Get() == nil {
+	if o == nil || IsNil(o.AdjustedValues.Get()) {
 		var ret TransactionRequestedValues
 		return ret
 	}
@@ -761,7 +765,7 @@ func (o *Transaction) UnsetAdjustedValues() {
 
 // GetSender returns the Sender field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Transaction) GetSender() TransactionSender {
-	if o == nil || o.Sender.Get() == nil {
+	if o == nil || IsNil(o.Sender.Get()) {
 		var ret TransactionSender
 		return ret
 	}
@@ -804,7 +808,7 @@ func (o *Transaction) UnsetSender() {
 
 // GetBeneficiary returns the Beneficiary field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Transaction) GetBeneficiary() TransactionSender {
-	if o == nil || o.Beneficiary.Get() == nil {
+	if o == nil || IsNil(o.Beneficiary.Get()) {
 		var ret TransactionSender
 		return ret
 	}
@@ -847,7 +851,7 @@ func (o *Transaction) UnsetBeneficiary() {
 
 // GetDebitPartyIdentifier returns the DebitPartyIdentifier field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Transaction) GetDebitPartyIdentifier() TransactionDebitPartyIdentifier {
-	if o == nil || o.DebitPartyIdentifier.Get() == nil {
+	if o == nil || IsNil(o.DebitPartyIdentifier.Get()) {
 		var ret TransactionDebitPartyIdentifier
 		return ret
 	}
@@ -890,7 +894,7 @@ func (o *Transaction) UnsetDebitPartyIdentifier() {
 
 // GetCreditPartyIdentifier returns the CreditPartyIdentifier field value if set, zero value otherwise.
 func (o *Transaction) GetCreditPartyIdentifier() TransactionCreditPartyIdentifier {
-	if o == nil || o.CreditPartyIdentifier == nil {
+	if o == nil || IsNil(o.CreditPartyIdentifier) {
 		var ret TransactionCreditPartyIdentifier
 		return ret
 	}
@@ -900,7 +904,7 @@ func (o *Transaction) GetCreditPartyIdentifier() TransactionCreditPartyIdentifie
 // GetCreditPartyIdentifierOk returns a tuple with the CreditPartyIdentifier field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetCreditPartyIdentifierOk() (*TransactionCreditPartyIdentifier, bool) {
-	if o == nil || o.CreditPartyIdentifier == nil {
+	if o == nil || IsNil(o.CreditPartyIdentifier) {
 		return nil, false
 	}
 	return o.CreditPartyIdentifier, true
@@ -908,7 +912,7 @@ func (o *Transaction) GetCreditPartyIdentifierOk() (*TransactionCreditPartyIdent
 
 // HasCreditPartyIdentifier returns a boolean if a field has been set.
 func (o *Transaction) HasCreditPartyIdentifier() bool {
-	if o != nil && o.CreditPartyIdentifier != nil {
+	if o != nil && !IsNil(o.CreditPartyIdentifier) {
 		return true
 	}
 
@@ -922,7 +926,7 @@ func (o *Transaction) SetCreditPartyIdentifier(v TransactionCreditPartyIdentifie
 
 // GetStatementIdentifier returns the StatementIdentifier field value if set, zero value otherwise.
 func (o *Transaction) GetStatementIdentifier() TransactionStatementIdentifier {
-	if o == nil || o.StatementIdentifier == nil {
+	if o == nil || IsNil(o.StatementIdentifier) {
 		var ret TransactionStatementIdentifier
 		return ret
 	}
@@ -932,7 +936,7 @@ func (o *Transaction) GetStatementIdentifier() TransactionStatementIdentifier {
 // GetStatementIdentifierOk returns a tuple with the StatementIdentifier field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Transaction) GetStatementIdentifierOk() (*TransactionStatementIdentifier, bool) {
-	if o == nil || o.StatementIdentifier == nil {
+	if o == nil || IsNil(o.StatementIdentifier) {
 		return nil, false
 	}
 	return o.StatementIdentifier, true
@@ -940,7 +944,7 @@ func (o *Transaction) GetStatementIdentifierOk() (*TransactionStatementIdentifie
 
 // HasStatementIdentifier returns a boolean if a field has been set.
 func (o *Transaction) HasStatementIdentifier() bool {
-	if o != nil && o.StatementIdentifier != nil {
+	if o != nil && !IsNil(o.StatementIdentifier) {
 		return true
 	}
 
@@ -952,27 +956,57 @@ func (o *Transaction) SetStatementIdentifier(v TransactionStatementIdentifier) {
 	o.StatementIdentifier = &v
 }
 
+// GetAdditionalIdentifier returns the AdditionalIdentifier field value if set, zero value otherwise.
+func (o *Transaction) GetAdditionalIdentifier() TransactionAdditionalIdentifier {
+	if o == nil || IsNil(o.AdditionalIdentifier) {
+		var ret TransactionAdditionalIdentifier
+		return ret
+	}
+	return *o.AdditionalIdentifier
+}
+
+// GetAdditionalIdentifierOk returns a tuple with the AdditionalIdentifier field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Transaction) GetAdditionalIdentifierOk() (*TransactionAdditionalIdentifier, bool) {
+	if o == nil || IsNil(o.AdditionalIdentifier) {
+		return nil, false
+	}
+	return o.AdditionalIdentifier, true
+}
+
+// HasAdditionalIdentifier returns a boolean if a field has been set.
+func (o *Transaction) HasAdditionalIdentifier() bool {
+	if o != nil && !IsNil(o.AdditionalIdentifier) {
+		return true
+	}
+
+	return false
+}
+
+// SetAdditionalIdentifier gets a reference to the given TransactionAdditionalIdentifier and assigns it to the AdditionalIdentifier field.
+func (o *Transaction) SetAdditionalIdentifier(v TransactionAdditionalIdentifier) {
+	o.AdditionalIdentifier = &v
+}
+
 func (o Transaction) MarshalJSON() ([]byte, error) {
+	toSerialize, err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o Transaction) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
+	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
-	if true {
-		toSerialize["external_id"] = o.ExternalId
-	}
-	if o.CreationDate != nil {
-		toSerialize["creation_date"] = o.CreationDate
-	}
-	if o.ConfirmationExpirationDate != nil {
-		toSerialize["confirmation_expiration_date"] = o.ConfirmationExpirationDate
-	}
-	if o.ConfirmationDate != nil {
-		toSerialize["confirmation_date"] = o.ConfirmationDate
-	}
-	if true {
-		toSerialize["product_id"] = o.ProductId
-	}
-	if o.CalculationMode != nil {
+	toSerialize["external_id"] = o.ExternalId
+	// skip: creation_date is readOnly
+	// skip: confirmation_expiration_date is readOnly
+	// skip: confirmation_date is readOnly
+	toSerialize["product_id"] = o.ProductId
+	if !IsNil(o.CalculationMode) {
 		toSerialize["calculation_mode"] = o.CalculationMode
 	}
 	if o.Source.IsSet() {
@@ -981,10 +1015,10 @@ func (o Transaction) MarshalJSON() ([]byte, error) {
 	if o.Destination.IsSet() {
 		toSerialize["destination"] = o.Destination.Get()
 	}
-	if o.AutoConfirm != nil {
+	if !IsNil(o.AutoConfirm) {
 		toSerialize["auto_confirm"] = o.AutoConfirm
 	}
-	if o.Status != nil {
+	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
 	if o.OperatorReference.IsSet() {
@@ -993,13 +1027,13 @@ func (o Transaction) MarshalJSON() ([]byte, error) {
 	if o.Pin.IsSet() {
 		toSerialize["pin"] = o.Pin.Get()
 	}
-	if o.Product != nil {
+	if !IsNil(o.Product) {
 		toSerialize["product"] = o.Product
 	}
-	if o.Prices != nil {
+	if !IsNil(o.Prices) {
 		toSerialize["prices"] = o.Prices
 	}
-	if o.Rates != nil {
+	if !IsNil(o.Rates) {
 		toSerialize["rates"] = o.Rates
 	}
 	if o.Benefits != nil {
@@ -1023,13 +1057,16 @@ func (o Transaction) MarshalJSON() ([]byte, error) {
 	if o.DebitPartyIdentifier.IsSet() {
 		toSerialize["debit_party_identifier"] = o.DebitPartyIdentifier.Get()
 	}
-	if o.CreditPartyIdentifier != nil {
+	if !IsNil(o.CreditPartyIdentifier) {
 		toSerialize["credit_party_identifier"] = o.CreditPartyIdentifier
 	}
-	if o.StatementIdentifier != nil {
+	if !IsNil(o.StatementIdentifier) {
 		toSerialize["statement_identifier"] = o.StatementIdentifier
 	}
-	return json.Marshal(toSerialize)
+	if !IsNil(o.AdditionalIdentifier) {
+		toSerialize["additional_identifier"] = o.AdditionalIdentifier
+	}
+	return toSerialize, nil
 }
 
 type NullableTransaction struct {

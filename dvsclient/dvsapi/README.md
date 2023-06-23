@@ -31,7 +31,7 @@ A sandbox environment is available for testing integrations with the DVS API. It
 
 You can generate sandbox API keys from your [DT Shop](https://dtshop.dtone.com/account?tab=developer) account, under the **Pre-Production API Keys** section.
 
-All transactions on the sandbox environment are simulated: no real transaction goes through. To simulate different responses, the last three digits of the recipient mobile number (i.e. `credit_party_identifier.mobile_number`) will have to be replaced with one of the following suffixes:
+All transactions on the sandbox environment are simulated: no real transaction goes through. To simulate different responses, the last three digits of the `credit_party_identifier` (i.e. `mobile_number` or `account_number`, depending on the `required_credit_party_identifier_fields` of a given [Product](/#tag/Products)) will have to be replaced with one of the following suffixes:
 
 | Suffix              | Transaction Status                        | Example       |
 | ---                 | ---                                       | ---           |
@@ -39,7 +39,7 @@ All transactions on the sandbox environment are simulated: no real transaction g
 | `101`, `201`, `301` | `COMPLETED` (PIN-based)                   | `+6595123201` |
 | `102`, `202`, `302` | `DECLINED-INVALID-CREDIT-PARTY`           | `+6595123102` |
 | `103`, `203`, `303` | `DECLINED-BARRED-CREDIT-PARTY`            | `+6595123103` |
-| `104`, `204`, `304` | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE` | `+6595123205` |
+| `104`, `204`, `304` | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE` | `+6595123204` |
 | `105`, `205`, `305` | `DECLINED-DUPLICATED-TRANSACTION`         | `+6595123105` |
 | `106`, `206`, `306` | `DECLINED`                                | `+6595123206` |
 | `107`, `207`, `307` | `DECLINED-EXCEPTION`                      | `+6595123107` |
@@ -143,38 +143,40 @@ Upon successful receipt of data, the callback endpoint should respond with an HT
 | `404`  | Not Found: Resource doesn't exist                  |
 | `429`  | Too Many Requests                                  |
 | `500`  | Server Error: Error occurred on DT One             |
+| `503`  | Service Unavailable                                |
 
 ### API Error Codes
 
-| Code      | Description                                       |
-| ---       | ---                                               |
-| `1000400` | Bad Request                                       |
-| `1000401` | Unauthorized                                      |
-| `1000404` | Resource not found                                |
-| `1000429` | Too many requests                                 |
-| `1003001` | Product is not available in your account          |
-| `1003002` | Requested product amount is out of range          |
-| `1003003` | Requested product unit is invalid                 |
-| `1003101` | Benefits not defined for available products       |
-| `1003201` | Promotion not found                               |
-| `1003301` | Campaign not found                                |
-| `1005003` | Credit party mobile number is invalid             |
-| `1005004` | Service not found                                 |
-| `1005005` | Country not found                                 |
-| `1005006` | Operator not found                                |
-| `1005503` | Sender mobile number is invalid                   |
-| `1006001` | Insufficient balance                              |
-| `1006003` | Debit party mobile number is invalid              |
-| `1006009` | Account balance not found                         |
-| `1006503` | Beneficiary mobile number is invalid              |
-| `1007001` | Transaction external ID has already been used     |
-| `1007002` | Transaction has already been confirmed            |
-| `1007004` | Transaction can no longer be confirmed            |
-| `1007005` | Transaction has already been cancelled            |
-| `1007007` | Transaction can no longer be cancelled            |
-| `1007500` | Method not supported by operator                  |
-| `1008004` | Transaction not found                             |
-| `1009001` | Unexpected error, please contact our support team |
+| Code      | Description                                       | HTTP Status |
+| ---       | ---                                               | ---         |
+| `1000400` | Bad Request                                       | `400`       |
+| `1000401` | Unauthorized                                      | `401`       |
+| `1000404` | Resource not found                                | `404`       |
+| `1000429` | Too many requests                                 | `429`       |
+| `1003001` | Product is not available in your account          | `404`       |
+| `1003002` | Requested product amount is out of range          | `400`       |
+| `1003003` | Requested product unit is invalid                 | `400`       |
+| `1003101` | Benefits not defined for available products       | `404`       |
+| `1003201` | Promotion not found                               | `404`       |
+| `1003301` | Campaign not found                                | `404`       |
+| `1005003` | Credit party mobile number is invalid             | `400`       |
+| `1005004` | Service not found                                 | `404`       |
+| `1005005` | Country not found                                 | `404`       |
+| `1005006` | Operator not found                                | `404`       |
+| `1005503` | Sender mobile number is invalid                   | `400`       |
+| `1006001` | Insufficient balance                              | `400`       |
+| `1006003` | Debit party mobile number is invalid              | `400`       |
+| `1006009` | Account balance not found                         | `404`       |
+| `1006503` | Beneficiary mobile number is invalid              | `400`       |
+| `1007001` | Transaction external ID has already been used     | `400`       |
+| `1007002` | Transaction has already been confirmed            | `400`       |
+| `1007004` | Transaction can no longer be confirmed            | `400`       |
+| `1007005` | Transaction has already been cancelled            | `400`       |
+| `1007007` | Transaction can no longer be cancelled            | `400`       |
+| `1007500` | Method not supported by operator                  | `400`       |
+| `1008004` | Transaction not found                             | `404`       |
+| `1009001` | Unexpected error, please contact our support team | `500`       |
+| `1009503` | Service unavailable, please retry later           | `503`       |
 
 ### Transaction Status
 
@@ -252,7 +254,7 @@ If the limit is reached, an [HTTP error 429](https://developer.mozilla.org/en-US
 ## Overview
 This API client was generated by the [OpenAPI Generator](https://openapi-generator.tech) project.  By using the [OpenAPI-spec](https://www.openapis.org/) from a remote server, you can easily generate an API client.
 
-- API version: 1.11.0
+- API version: 1.14.0
 - Package version: 1.0.0
 - Build package: org.openapitools.codegen.languages.GoClientCodegen
 
@@ -262,7 +264,6 @@ Install the following dependencies:
 
 ```shell
 go get github.com/stretchr/testify/assert
-go get golang.org/x/oauth2
 go get golang.org/x/net/context
 ```
 
@@ -321,7 +322,7 @@ ctx = context.WithValue(context.Background(), dvsapi.ContextOperationServerVaria
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://127.0.0.1:8080/v1*
+All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -353,8 +354,6 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
- - [AsyncTransaction](docs/AsyncTransaction.md)
- - [AsyncTransactionAllOf](docs/AsyncTransactionAllOf.md)
  - [AvailabilityZones](docs/AvailabilityZones.md)
  - [Balance](docs/Balance.md)
  - [BenefitType](docs/BenefitType.md)
@@ -368,10 +367,10 @@ Class | Method | HTTP request | Description
  - [ErrorsErrorsInner](docs/ErrorsErrorsInner.md)
  - [FixedBenefit](docs/FixedBenefit.md)
  - [FixedBenefitAmount](docs/FixedBenefitAmount.md)
- - [LookupMobileNumber](docs/LookupMobileNumber.md)
- - [LookupMobileNumberAllOf](docs/LookupMobileNumberAllOf.md)
+ - [GetLookupMobileNumber200ResponseInner](docs/GetLookupMobileNumber200ResponseInner.md)
+ - [GetLookupMobileNumber200ResponseInnerAllOf](docs/GetLookupMobileNumber200ResponseInnerAllOf.md)
+ - [GetOperators200ResponseInner](docs/GetOperators200ResponseInner.md)
  - [Operator](docs/Operator.md)
- - [OperatorBase](docs/OperatorBase.md)
  - [PIN](docs/PIN.md)
  - [PINValidity](docs/PINValidity.md)
  - [Payment](docs/Payment.md)
@@ -379,6 +378,8 @@ Class | Method | HTTP request | Description
  - [PaymentPostingPeriod](docs/PaymentPostingPeriod.md)
  - [PostLookupMobileNumberRequest](docs/PostLookupMobileNumberRequest.md)
  - [PostLookupStatementInquiryRequest](docs/PostLookupStatementInquiryRequest.md)
+ - [PostTransactionAsyncRequest](docs/PostTransactionAsyncRequest.md)
+ - [PostTransactionAsyncRequestAllOf](docs/PostTransactionAsyncRequestAllOf.md)
  - [Product](docs/Product.md)
  - [ProductBase](docs/ProductBase.md)
  - [ProductFixedValuePinPurchase](docs/ProductFixedValuePinPurchase.md)
@@ -402,6 +403,8 @@ Class | Method | HTTP request | Description
  - [ProductRangedValueRechargeAllOfPricesRetail](docs/ProductRangedValueRechargeAllOfPricesRetail.md)
  - [ProductRangedValueRechargeAllOfPricesWholesale](docs/ProductRangedValueRechargeAllOfPricesWholesale.md)
  - [ProductRangedValueRechargeAllOfSource](docs/ProductRangedValueRechargeAllOfSource.md)
+ - [ProductService](docs/ProductService.md)
+ - [ProductServiceSubservice](docs/ProductServiceSubservice.md)
  - [ProductTypes](docs/ProductTypes.md)
  - [Promotion](docs/Promotion.md)
  - [PromotionOperator](docs/PromotionOperator.md)
@@ -422,6 +425,7 @@ Class | Method | HTTP request | Description
  - [TimeUnitTypes](docs/TimeUnitTypes.md)
  - [TimeUnits](docs/TimeUnits.md)
  - [Transaction](docs/Transaction.md)
+ - [TransactionAdditionalIdentifier](docs/TransactionAdditionalIdentifier.md)
  - [TransactionBenefitsInner](docs/TransactionBenefitsInner.md)
  - [TransactionCreditPartyIdentifier](docs/TransactionCreditPartyIdentifier.md)
  - [TransactionDebitPartyIdentifier](docs/TransactionDebitPartyIdentifier.md)
@@ -447,7 +451,7 @@ Class | Method | HTTP request | Description
 ## Documentation For Authorization
 
 
-
+Authentication schemes defined for the API:
 ### BasicAuth
 
 - **Type**: HTTP basic authentication

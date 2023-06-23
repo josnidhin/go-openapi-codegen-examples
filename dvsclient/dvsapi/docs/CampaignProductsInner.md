@@ -8,13 +8,13 @@ Name | Type | Description | Notes
 **Name** | **string** |  | 
 **Description** | **string** |  | 
 **Type** | [**ProductTypes**](ProductTypes.md) |  | 
-**Operator** | [**OperatorBase**](OperatorBase.md) |  | 
+**Operator** | [**Operator**](Operator.md) |  | 
 
 ## Methods
 
 ### NewCampaignProductsInner
 
-`func NewCampaignProductsInner(id int32, name string, description string, type_ ProductTypes, operator OperatorBase, ) *CampaignProductsInner`
+`func NewCampaignProductsInner(id int32, name string, description string, type_ ProductTypes, operator Operator, ) *CampaignProductsInner`
 
 NewCampaignProductsInner instantiates a new CampaignProductsInner object
 This constructor will assign default values to properties that have it defined,
@@ -111,20 +111,20 @@ SetType sets Type field to given value.
 
 ### GetOperator
 
-`func (o *CampaignProductsInner) GetOperator() OperatorBase`
+`func (o *CampaignProductsInner) GetOperator() Operator`
 
 GetOperator returns the Operator field if non-nil, zero value otherwise.
 
 ### GetOperatorOk
 
-`func (o *CampaignProductsInner) GetOperatorOk() (*OperatorBase, bool)`
+`func (o *CampaignProductsInner) GetOperatorOk() (*Operator, bool)`
 
 GetOperatorOk returns a tuple with the Operator field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetOperator
 
-`func (o *CampaignProductsInner) SetOperator(v OperatorBase)`
+`func (o *CampaignProductsInner) SetOperator(v Operator)`
 
 SetOperator sets Operator field to given value.
 
