@@ -48,9 +48,9 @@ build:
 generate-dvsapi:
 	docker run -it --rm \
 	--volume "$(PWD):/local" \
-	--volume "/usr/local/go:/usr/local/go" \
-	--env GO_POST_PROCESS_FILE="/usr/local/go/bin/gofmt -w" \
-	openapitools/openapi-generator-cli:v6.2.0 generate \
+	--volume "$(GOROOT):/usr/local/go" \
+	--env GO_POST_PROCESS_FILE="/usr/local/go/bin/gofmt -s -l -w" \
+	openapitools/openapi-generator-cli:v6.6.0 generate \
 	--enable-post-process-file \
 	--git-host github.com \
 	--git-user-id josnidhin \
@@ -64,3 +64,4 @@ generate-dvsapi:
 	sudo chown -R $(USER):$(USER) dvsapi
 	chmod -R g+w dvsapi
 	rm dvsapi/go.mod dvsapi/go.sum
+	gofmt -s -l -w dvsapi
