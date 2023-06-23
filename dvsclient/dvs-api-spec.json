@@ -2,21 +2,13 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Digital Value Services API",
-    "version": "1.11.0",
+    "version": "1.14.0",
     "x-logo": {
       "url": "https://dvs-api-doc.dtone.com/images/dtone.png"
     },
-    "description": "# Overview\n\nWelcome to the Digital Value Services (DVS) API reference.\n\nThis API serves as the primary gateway to facilitate digital value transfers through [DT One](https://www.dtone.com), a leading global network covering more than 160 countries and 550 mobile operators.\n\nThe Digital Value Services API is organized according to [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) principles, using [JSON](https://en.wikipedia.org/wiki/JSON) as format for data interchange, and provides the following services:\n  - [Discovery Services](#tag/Services)\n  - [Transaction Services](#tag/Transactions)\n  - [Account Services](#tag/Balances)\n  - [Look-Up Services](#tag/Mobile-Number)\n\nIf you have any questions and/or suggestions related to our API, please do not hesitate to send an email to the [DVS API support team](mailto:dvs-api-support@dtone.com).\n\n## Integration Libraries\n\nOfficially supported [SDK](https://en.wikipedia.org/wiki/Software_development_kit)s are available for the following languages:\n\n* [Java](https://github.com/dtone/dtone-dvs-api-java-client)\n* [Node.js](https://www.npmjs.com/package/@dtone/dvs)\n\nThese SDKs offer an accelerated path to developing your applications as an alternative to accessing the REST API directly.\n\nSeparately, we would love to hear from you! If you have any questions and/or suggestions related to our SDKs, please do not hesitate to create corresponding [GitHub issues](https://guides.github.com/features/issues/) or send an email to the [DVS Open Source team](mailto:opensource@dtone.com).\n\n## Sandbox\n\nA sandbox environment is available for testing integrations with the DVS API. It is available at [https://preprod-dvs-api.dtone.com/v1/](https://preprod-dvs-api.dtone.com/v1/).\n\nYou can generate sandbox API keys from your [DT Shop](https://dtshop.dtone.com/account?tab=developer) account, under the **Pre-Production API Keys** section.\n\nAll transactions on the sandbox environment are simulated: no real transaction goes through. To simulate different responses, the last three digits of the recipient mobile number (i.e. `credit_party_identifier.mobile_number`) will have to be replaced with one of the following suffixes:\n\n| Suffix              | Transaction Status                        | Example       |\n| ---                 | ---                                       | ---           |\n| `100`, `200`, `300` | `COMPLETED` (PIN-less)                    | `+6595123100` |\n| `101`, `201`, `301` | `COMPLETED` (PIN-based)                   | `+6595123201` |\n| `102`, `202`, `302` | `DECLINED-INVALID-CREDIT-PARTY`           | `+6595123102` |\n| `103`, `203`, `303` | `DECLINED-BARRED-CREDIT-PARTY`            | `+6595123103` |\n| `104`, `204`, `304` | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE` | `+6595123205` |\n| `105`, `205`, `305` | `DECLINED-DUPLICATED-TRANSACTION`         | `+6595123105` |\n| `106`, `206`, `306` | `DECLINED`                                | `+6595123206` |\n| `107`, `207`, `307` | `DECLINED-EXCEPTION`                      | `+6595123107` |\n\nThe different suffixes for a given transaction status can be used to simulate delays, as follows:\n  * `10X` suffix will take at least 3 seconds to finish\n  * `20X` suffix will take at least 20 seconds to finish\n  * `30X` suffix will take at least 5 minutes to finish\n\nPlease note that there are products that do not require any credit party identifier such as Gift Cards. For these products, the simulated transaction will always be in `COMPLETED` status.\n\n## Versioning\n\nEndpoints of the API are prefixed with a corresponding version number.\n\nThis is done to provide complete isolation between implementations and to ensure that subsequent major changes to the API will never affect existing integrations.\n\nWhen a new version of the API is available and you are keen to upgrade, testing in the sandbox environment to ensure that everything works well with your implementation before switching to the production environment comes highly recommended.\n\nFeel free to [contact us](mailto:dvs-api-support@dtone.com) should you have any questions and/or are in need of assistance during your tests.\n\n## Transactions\n\nThe main purpose of this API is to deliver value (e.g. mobile airtime top-up, data bundles, etc.) to a beneficiary. This is what we call a \"transaction\".\n\nDuring the course of a transfer, a transaction undergoes various status changes (or transitions) as illustrated below.\n\n![transaction states](/images/transaction_states.png)\n\nAs changes in transaction status occur, updates are sent in real-time when a callback URL is provided. In conjunction, transaction status can be queried through one of two means: via the returned `id` or a provided `external_id`.\n\nThe latter serves as your unique reference and provides a utility to retrieve transaction details when exceptions occur, such as when the supposed API response was not received, as an example.\n\n## Balances\n\nTransactions can be created through the platform as long as there is enough balance available in your account. A given balance is composed of the following:\n\n| Balance   | Description                                              |\n| ---       | ---                                                      |\n| Available | Balance amount available for use                         |\n| Holding   | Amount being held while transactions are being processed |\n\nAs a given transaction goes through various changes in status as outlined [here](#section/Overview/Transactions), corresponding balance movements will be made. The following table illustrates the relationship between transaction status and balance movements:\n\n| Transaction Status                  | Balance Movement | Description                                                |\n| ---                                 | ---              | ---                                                        |\n| `CREATED`                           | Authorize        | Transfer wholesale price and fee from available to holding |\n| `CANCELLED`, `REJECTED`, `DECLINED` | Void             | Amount authorized in holding moves back to available       |\n| `COMPLETED`                         | Capture          | Amount authorized in holding is captured, i.e. debited     |\n| `REVERSED`                          | Reverse          | Debited amount is reversed back into available             |\n\n## Flow\n\nOnce a product has been selected through one of the [discovery methods](/#tag/Services) provided by the API, the actual transfer (i.e. transaction) can be performed in either one of the following modes:\n  - Asynchronous (recommended)\n  - Synchronous\n\nEach mode is accessible via a specific endpoint.\n\nAs soon as a transaction is confirmed, the transfer order will be sent to the operator for immediate processing. During this time, the transaction will remain in a `CONFIRMED` status until the final status is received from the operator.\n\n### Asynchronous Mode\n\nWhen a transaction is created and confirmed in an asynchronous fashion, the HTTP connection won't have to be kept open. This preserves system resources on your applications. As such, performing transactions **asynchronously** is **recommended**.\n\n### Synchronous Mode\n\nWhen a transaction is created and confirmed in a synchronous fashion, the HTTP connection will be kept open in an attempt to capture the final status from the receiving operator so it can be returned in the API response. The processing time usually takes just a few seconds. However, with some receiving operators, it may take longer.\n\nOur system will keep the HTTP connection open for up to 180 seconds (this value can be configured upon request) and will return a status before closing this connection. This status can be in one of the final status (e.g. `COMPLETED`, `DECLINED`) or not (e.g. `SUBMITTED`). In the latter case, this denotes the transaction is still being processed by the receiving operator.\n\n**Note:** your application does not have to wait for the connection to close, it can listen for a shorter period of time and query the final status later on (refer to the \"Final Status\" section below for more details).\n\n### Final Status\n\nRegardless of the processing mode, the application should be designed to capture the final status of a transaction. This can be done through one of the following means:\n  - Checking the status of a specific transaction via the corresponding API method (\"pull\" mechanism)\n  - Configuring a callback URL passed in the request when creating a transaction (\"push\" mechanism)\n\n## Callbacks\n\nAs a transaction is being processed, changes in status will be notified in real-time if a callback URL was provided. Even though one callback per transaction is expected (i.e. change to either `COMPLETED` or `DECLINED`), a manual reversal from the [DT One](https://dtone.com/) team, which may happen in very rare occasions, will also trigger a callback to inform your application of a change in transaction status to `REVERSED`.\n\nThis callback endpoint must be implemented by the sending partner, which should expect an HTTP `POST` request containing a transaction object represented in [JSON](https://en.wikipedia.org/wiki/JSON). As callbacks will be sent from the [DT One](https://dtone.com/) servers, these endpoints will have to be publicly-accessible in most cases. During development, a service such as [ngrok](https://ngrok.com/) can be used to expose local servers to the internet.\n\nUpon successful receipt of data, the callback endpoint should respond with an HTTP `2XX` status. In the event that the platform did not receive a successful status, callback notifications will be retried several times, beyond which, the transaction status will have to be queried through the API.\n\n## Status and Errors\n\n### HTTP Status Codes\n\n[DT One](https://dtone.com/) uses standard HTTP response codes to indicate whether an API request was successful or not.\n\n| Status | Description                                        |\n| ---    | ---                                                |\n| `200`  | OK                                                 |\n| `201`  | Created: Resource created                          |\n| `202`  | Accepted: Request has been accepted for processing |\n| `400`  | Bad Request: Request was malformed                 |\n| `401`  | Unauthorized: Credentials missing or invalid       |\n| `404`  | Not Found: Resource doesn't exist                  |\n| `429`  | Too Many Requests                                  |\n| `500`  | Server Error: Error occurred on DT One             |\n\n### API Error Codes\n\n| Code      | Description                                       |\n| ---       | ---                                               |\n| `1000400` | Bad Request                                       |\n| `1000401` | Unauthorized                                      |\n| `1000404` | Resource not found                                |\n| `1000429` | Too many requests                                 |\n| `1003001` | Product is not available in your account          |\n| `1003002` | Requested product amount is out of range          |\n| `1003003` | Requested product unit is invalid                 |\n| `1003101` | Benefits not defined for available products       |\n| `1003201` | Promotion not found                               |\n| `1003301` | Campaign not found                                |\n| `1005003` | Credit party mobile number is invalid             |\n| `1005004` | Service not found                                 |\n| `1005005` | Country not found                                 |\n| `1005006` | Operator not found                                |\n| `1005503` | Sender mobile number is invalid                   |\n| `1006001` | Insufficient balance                              |\n| `1006003` | Debit party mobile number is invalid              |\n| `1006009` | Account balance not found                         |\n| `1006503` | Beneficiary mobile number is invalid              |\n| `1007001` | Transaction external ID has already been used     |\n| `1007002` | Transaction has already been confirmed            |\n| `1007004` | Transaction can no longer be confirmed            |\n| `1007005` | Transaction has already been cancelled            |\n| `1007007` | Transaction can no longer be cancelled            |\n| `1007500` | Method not supported by operator                  |\n| `1008004` | Transaction not found                             |\n| `1009001` | Unexpected error, please contact our support team |\n\n### Transaction Status\n\n| Class       | Status                                          | Description                                                            |\n| ---         | ---                                             | ---                                                                    |\n| `CREATED`   | `CREATED`                                       | Created                                                                |\n| `CONFIRMED` | `CONFIRMED`                                     | Confirmed                                                              |\n| `REJECTED`  | `REJECTED`                                      | Rejected                                                               |\n| `REJECTED`  | `REJECTED-INVALID-CREDIT-PARTY`                 | Rejected - Credit party is invalid                                     |\n| `REJECTED`  | `REJECTED-BARRED-CREDIT-PARTY`                  | Rejected - Credit party is barred                                      |\n| `REJECTED`  | `REJECTED-INELIGIBLE-CREDIT-PARTY`              | Rejected - Credit party is ineligible for chosen product               |\n| `REJECTED`  | `REJECTED-INVALID-DEBIT-PARTY`                  | Rejected - Debit party is invalid                                      |\n| `REJECTED`  | `REJECTED-BARRED-DEBIT-PARTY`                   | Rejected - Debit party is barred                                       |\n| `REJECTED`  | `REJECTED-LIMITATIONS-ON-CREDIT-PARTY-AMOUNT`   | Rejected - Limitations on credit party cumulative transaction amount   |\n| `REJECTED`  | `REJECTED-LIMITATIONS-ON-CREDIT-PARTY-QUANTITY` | Rejected - Limitations on credit party cumulative transaction quantity |\n| `REJECTED`  | `REJECTED-OPERATOR-CURRENTLY-UNAVAILABLE`       | Rejected - Operator currently unavailable                              |\n| `REJECTED`  | `REJECTED-INSUFFICIENT-BALANCE`                 | Rejected - Insufficient balance                                        |\n| `CANCELLED` | `CANCELLED`                                     | Cancelled                                                              |\n| `SUBMITTED` | `SUBMITTED`                                     | Submitted                                                              |\n| `COMPLETED` | `COMPLETED`                                     | Completed                                                              |\n| `REVERSED`  | `REVERSED`                                      | Reversed                                                               |\n| `DECLINED`  | `DECLINED`                                      | Declined (no additional information available)                         |\n| `DECLINED`  | `DECLINED-INVALID-CREDIT-PARTY`                 | Declined - Credit party is invalid                                     |\n| `DECLINED`  | `DECLINED-BARRED-CREDIT-PARTY`                  | Declined - Credit party is barred                                      |\n| `DECLINED`  | `DECLINED-INELIGIBLE-CREDIT-PARTY`              | Declined - Credit party is ineligible for chosen product               |\n| `DECLINED`  | `DECLINED-INVALID-DEBIT-PARTY`                  | Declined - Debit party is invalid                                      |\n| `DECLINED`  | `DECLINED-BARRED-DEBIT-PARTY`                   | Declined - Debit party is barred                                       |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-OPERATOR-AMOUNT`       | Declined - Limitations on operator cumulative transaction amount       |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-CREDIT-PARTY-AMOUNT`   | Declined - Limitations on credit party cumulative transaction amount   |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-CUSTOMER-AMOUNT`       | Declined - Limitations on customer cumulative transaction amount       |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-OPERATOR-QUANTITY`     | Declined - Limitations on operator cumulative transaction quantity     |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-CREDIT-PARTY-QUANTITY` | Declined - Limitations on credit party cumulative transaction quantity |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-CUSTOMER-QUANTITY`     | Declined - Limitations on customer cumulative transaction quantity     |\n| `DECLINED`  | `DECLINED-DUPLICATED-TRANSACTION`               | Declined - Duplicated transaction                                      |\n| `DECLINED`  | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE`       | Declined - Operator currently unavailable                              |\n\n`REJECTED` and `DECLINED` status classes both denote unsuccessful transactions. The primary distinction between these two relates to the party that determined the failure:\n  * `REJECTED` are issued by the DVS platform based on various business rules (e.g. insufficient balance, limitations, etc)\n  * `DECLINED` are issued by the operators\n\nSeparately, it is recommended to define application logic based on **classes**, while additional distinction and/or insight are reflected on the actual **status**.\n\n## Pagination\n\nAPI resources supporting bulk fetches via \"list\" API methods will be returned in a paginated fashion.\n\n### Input Parameters\n\n| Field      | Required | Type    | Description                                      |\n| ---        | ---      | ---     | ---                                              |\n| `page`     | No       | Integer | Page number                                      |\n| `per_page` | No       | Integer | Number of results per page (default 50, max 100) |\n\n### Output Headers\n\n| Field           | Description                   |\n| ---             | ---                           |\n| `X-Total`       | Total number of records       |\n| `X-Total-Pages` | Total number of pages         |\n| `X-Per-Page`    | Number of records per page    |\n| `X-Page`        | Current page number           |\n| `X-Next-Page`   | Next page number (if any)     |\n| `X-Prev-Page`   | Previous page number (if any) |\n\n## Rate Limiting\n\nThe API endpoints have rate limiting in place to protect our service from excessive number of requests.\n\nIf the limit is reached, an [HTTP error 429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) will be returned by the server.\n\n# Authentication\n\n<!-- ReDoc-Inject: <security-definitions> -->"
+    "description": "# Overview\n\nWelcome to the Digital Value Services (DVS) API reference.\n\nThis API serves as the primary gateway to facilitate digital value transfers through [DT One](https://www.dtone.com), a leading global network covering more than 160 countries and 550 mobile operators.\n\nThe Digital Value Services API is organized according to [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) principles, using [JSON](https://en.wikipedia.org/wiki/JSON) as format for data interchange, and provides the following services:\n  - [Discovery Services](#tag/Services)\n  - [Transaction Services](#tag/Transactions)\n  - [Account Services](#tag/Balances)\n  - [Look-Up Services](#tag/Mobile-Number)\n\nIf you have any questions and/or suggestions related to our API, please do not hesitate to send an email to the [DVS API support team](mailto:dvs-api-support@dtone.com).\n\n## Integration Libraries\n\nOfficially supported [SDK](https://en.wikipedia.org/wiki/Software_development_kit)s are available for the following languages:\n\n* [Java](https://github.com/dtone/dtone-dvs-api-java-client)\n* [Node.js](https://www.npmjs.com/package/@dtone/dvs)\n\nThese SDKs offer an accelerated path to developing your applications as an alternative to accessing the REST API directly.\n\nSeparately, we would love to hear from you! If you have any questions and/or suggestions related to our SDKs, please do not hesitate to create corresponding [GitHub issues](https://guides.github.com/features/issues/) or send an email to the [DVS Open Source team](mailto:opensource@dtone.com).\n\n## Sandbox\n\nA sandbox environment is available for testing integrations with the DVS API. It is available at [https://preprod-dvs-api.dtone.com/v1/](https://preprod-dvs-api.dtone.com/v1/).\n\nYou can generate sandbox API keys from your [DT Shop](https://dtshop.dtone.com/account?tab=developer) account, under the **Pre-Production API Keys** section.\n\nAll transactions on the sandbox environment are simulated: no real transaction goes through. To simulate different responses, the last three digits of the `credit_party_identifier` (i.e. `mobile_number` or `account_number`, depending on the `required_credit_party_identifier_fields` of a given [Product](/#tag/Products)) will have to be replaced with one of the following suffixes:\n\n| Suffix              | Transaction Status                        | Example       |\n| ---                 | ---                                       | ---           |\n| `100`, `200`, `300` | `COMPLETED` (PIN-less)                    | `+6595123100` |\n| `101`, `201`, `301` | `COMPLETED` (PIN-based)                   | `+6595123201` |\n| `102`, `202`, `302` | `DECLINED-INVALID-CREDIT-PARTY`           | `+6595123102` |\n| `103`, `203`, `303` | `DECLINED-BARRED-CREDIT-PARTY`            | `+6595123103` |\n| `104`, `204`, `304` | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE` | `+6595123204` |\n| `105`, `205`, `305` | `DECLINED-DUPLICATED-TRANSACTION`         | `+6595123105` |\n| `106`, `206`, `306` | `DECLINED`                                | `+6595123206` |\n| `107`, `207`, `307` | `DECLINED-EXCEPTION`                      | `+6595123107` |\n\nThe different suffixes for a given transaction status can be used to simulate delays, as follows:\n  * `10X` suffix will take at least 3 seconds to finish\n  * `20X` suffix will take at least 20 seconds to finish\n  * `30X` suffix will take at least 5 minutes to finish\n\nPlease note that there are products that do not require any credit party identifier such as Gift Cards. For these products, the simulated transaction will always be in `COMPLETED` status.\n\n## Versioning\n\nEndpoints of the API are prefixed with a corresponding version number.\n\nThis is done to provide complete isolation between implementations and to ensure that subsequent major changes to the API will never affect existing integrations.\n\nWhen a new version of the API is available and you are keen to upgrade, testing in the sandbox environment to ensure that everything works well with your implementation before switching to the production environment comes highly recommended.\n\nFeel free to [contact us](mailto:dvs-api-support@dtone.com) should you have any questions and/or are in need of assistance during your tests.\n\n## Transactions\n\nThe main purpose of this API is to deliver value (e.g. mobile airtime top-up, data bundles, etc.) to a beneficiary. This is what we call a \"transaction\".\n\nDuring the course of a transfer, a transaction undergoes various status changes (or transitions) as illustrated below.\n\n![transaction states](/images/transaction_states.png)\n\nAs changes in transaction status occur, updates are sent in real-time when a callback URL is provided. In conjunction, transaction status can be queried through one of two means: via the returned `id` or a provided `external_id`.\n\nThe latter serves as your unique reference and provides a utility to retrieve transaction details when exceptions occur, such as when the supposed API response was not received, as an example.\n\n## Balances\n\nTransactions can be created through the platform as long as there is enough balance available in your account. A given balance is composed of the following:\n\n| Balance   | Description                                              |\n| ---       | ---                                                      |\n| Available | Balance amount available for use                         |\n| Holding   | Amount being held while transactions are being processed |\n\nAs a given transaction goes through various changes in status as outlined [here](#section/Overview/Transactions), corresponding balance movements will be made. The following table illustrates the relationship between transaction status and balance movements:\n\n| Transaction Status                  | Balance Movement | Description                                                |\n| ---                                 | ---              | ---                                                        |\n| `CREATED`                           | Authorize        | Transfer wholesale price and fee from available to holding |\n| `CANCELLED`, `REJECTED`, `DECLINED` | Void             | Amount authorized in holding moves back to available       |\n| `COMPLETED`                         | Capture          | Amount authorized in holding is captured, i.e. debited     |\n| `REVERSED`                          | Reverse          | Debited amount is reversed back into available             |\n\n## Flow\n\nOnce a product has been selected through one of the [discovery methods](/#tag/Services) provided by the API, the actual transfer (i.e. transaction) can be performed in either one of the following modes:\n  - Asynchronous (recommended)\n  - Synchronous\n\nEach mode is accessible via a specific endpoint.\n\nAs soon as a transaction is confirmed, the transfer order will be sent to the operator for immediate processing. During this time, the transaction will remain in a `CONFIRMED` status until the final status is received from the operator.\n\n### Asynchronous Mode\n\nWhen a transaction is created and confirmed in an asynchronous fashion, the HTTP connection won't have to be kept open. This preserves system resources on your applications. As such, performing transactions **asynchronously** is **recommended**.\n\n### Synchronous Mode\n\nWhen a transaction is created and confirmed in a synchronous fashion, the HTTP connection will be kept open in an attempt to capture the final status from the receiving operator so it can be returned in the API response. The processing time usually takes just a few seconds. However, with some receiving operators, it may take longer.\n\nOur system will keep the HTTP connection open for up to 180 seconds (this value can be configured upon request) and will return a status before closing this connection. This status can be in one of the final status (e.g. `COMPLETED`, `DECLINED`) or not (e.g. `SUBMITTED`). In the latter case, this denotes the transaction is still being processed by the receiving operator.\n\n**Note:** your application does not have to wait for the connection to close, it can listen for a shorter period of time and query the final status later on (refer to the \"Final Status\" section below for more details).\n\n### Final Status\n\nRegardless of the processing mode, the application should be designed to capture the final status of a transaction. This can be done through one of the following means:\n  - Checking the status of a specific transaction via the corresponding API method (\"pull\" mechanism)\n  - Configuring a callback URL passed in the request when creating a transaction (\"push\" mechanism)\n\n## Callbacks\n\nAs a transaction is being processed, changes in status will be notified in real-time if a callback URL was provided. Even though one callback per transaction is expected (i.e. change to either `COMPLETED` or `DECLINED`), a manual reversal from the [DT One](https://dtone.com/) team, which may happen in very rare occasions, will also trigger a callback to inform your application of a change in transaction status to `REVERSED`.\n\nThis callback endpoint must be implemented by the sending partner, which should expect an HTTP `POST` request containing a transaction object represented in [JSON](https://en.wikipedia.org/wiki/JSON). As callbacks will be sent from the [DT One](https://dtone.com/) servers, these endpoints will have to be publicly-accessible in most cases. During development, a service such as [ngrok](https://ngrok.com/) can be used to expose local servers to the internet.\n\nUpon successful receipt of data, the callback endpoint should respond with an HTTP `2XX` status. In the event that the platform did not receive a successful status, callback notifications will be retried several times, beyond which, the transaction status will have to be queried through the API.\n\n## Status and Errors\n\n### HTTP Status Codes\n\n[DT One](https://dtone.com/) uses standard HTTP response codes to indicate whether an API request was successful or not.\n\n| Status | Description                                        |\n| ---    | ---                                                |\n| `200`  | OK                                                 |\n| `201`  | Created: Resource created                          |\n| `202`  | Accepted: Request has been accepted for processing |\n| `400`  | Bad Request: Request was malformed                 |\n| `401`  | Unauthorized: Credentials missing or invalid       |\n| `404`  | Not Found: Resource doesn't exist                  |\n| `429`  | Too Many Requests                                  |\n| `500`  | Server Error: Error occurred on DT One             |\n| `503`  | Service Unavailable                                |\n\n### API Error Codes\n\n| Code      | Description                                       | HTTP Status |\n| ---       | ---                                               | ---         |\n| `1000400` | Bad Request                                       | `400`       |\n| `1000401` | Unauthorized                                      | `401`       |\n| `1000404` | Resource not found                                | `404`       |\n| `1000429` | Too many requests                                 | `429`       |\n| `1003001` | Product is not available in your account          | `404`       |\n| `1003002` | Requested product amount is out of range          | `400`       |\n| `1003003` | Requested product unit is invalid                 | `400`       |\n| `1003101` | Benefits not defined for available products       | `404`       |\n| `1003201` | Promotion not found                               | `404`       |\n| `1003301` | Campaign not found                                | `404`       |\n| `1005003` | Credit party mobile number is invalid             | `400`       |\n| `1005004` | Service not found                                 | `404`       |\n| `1005005` | Country not found                                 | `404`       |\n| `1005006` | Operator not found                                | `404`       |\n| `1005503` | Sender mobile number is invalid                   | `400`       |\n| `1006001` | Insufficient balance                              | `400`       |\n| `1006003` | Debit party mobile number is invalid              | `400`       |\n| `1006009` | Account balance not found                         | `404`       |\n| `1006503` | Beneficiary mobile number is invalid              | `400`       |\n| `1007001` | Transaction external ID has already been used     | `400`       |\n| `1007002` | Transaction has already been confirmed            | `400`       |\n| `1007004` | Transaction can no longer be confirmed            | `400`       |\n| `1007005` | Transaction has already been cancelled            | `400`       |\n| `1007007` | Transaction can no longer be cancelled            | `400`       |\n| `1007500` | Method not supported by operator                  | `400`       |\n| `1008004` | Transaction not found                             | `404`       |\n| `1009001` | Unexpected error, please contact our support team | `500`       |\n| `1009503` | Service unavailable, please retry later           | `503`       |\n\n### Transaction Status\n\n| Class       | Status                                          | Description                                                            |\n| ---         | ---                                             | ---                                                                    |\n| `CREATED`   | `CREATED`                                       | Created                                                                |\n| `CONFIRMED` | `CONFIRMED`                                     | Confirmed                                                              |\n| `REJECTED`  | `REJECTED`                                      | Rejected                                                               |\n| `REJECTED`  | `REJECTED-INVALID-CREDIT-PARTY`                 | Rejected - Credit party is invalid                                     |\n| `REJECTED`  | `REJECTED-BARRED-CREDIT-PARTY`                  | Rejected - Credit party is barred                                      |\n| `REJECTED`  | `REJECTED-INELIGIBLE-CREDIT-PARTY`              | Rejected - Credit party is ineligible for chosen product               |\n| `REJECTED`  | `REJECTED-INVALID-DEBIT-PARTY`                  | Rejected - Debit party is invalid                                      |\n| `REJECTED`  | `REJECTED-BARRED-DEBIT-PARTY`                   | Rejected - Debit party is barred                                       |\n| `REJECTED`  | `REJECTED-LIMITATIONS-ON-CREDIT-PARTY-AMOUNT`   | Rejected - Limitations on credit party cumulative transaction amount   |\n| `REJECTED`  | `REJECTED-LIMITATIONS-ON-CREDIT-PARTY-QUANTITY` | Rejected - Limitations on credit party cumulative transaction quantity |\n| `REJECTED`  | `REJECTED-OPERATOR-CURRENTLY-UNAVAILABLE`       | Rejected - Operator currently unavailable                              |\n| `REJECTED`  | `REJECTED-INSUFFICIENT-BALANCE`                 | Rejected - Insufficient balance                                        |\n| `CANCELLED` | `CANCELLED`                                     | Cancelled                                                              |\n| `SUBMITTED` | `SUBMITTED`                                     | Submitted                                                              |\n| `COMPLETED` | `COMPLETED`                                     | Completed                                                              |\n| `REVERSED`  | `REVERSED`                                      | Reversed                                                               |\n| `DECLINED`  | `DECLINED`                                      | Declined (no additional information available)                         |\n| `DECLINED`  | `DECLINED-INVALID-CREDIT-PARTY`                 | Declined - Credit party is invalid                                     |\n| `DECLINED`  | `DECLINED-BARRED-CREDIT-PARTY`                  | Declined - Credit party is barred                                      |\n| `DECLINED`  | `DECLINED-INELIGIBLE-CREDIT-PARTY`              | Declined - Credit party is ineligible for chosen product               |\n| `DECLINED`  | `DECLINED-INVALID-DEBIT-PARTY`                  | Declined - Debit party is invalid                                      |\n| `DECLINED`  | `DECLINED-BARRED-DEBIT-PARTY`                   | Declined - Debit party is barred                                       |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-OPERATOR-AMOUNT`       | Declined - Limitations on operator cumulative transaction amount       |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-CREDIT-PARTY-AMOUNT`   | Declined - Limitations on credit party cumulative transaction amount   |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-CUSTOMER-AMOUNT`       | Declined - Limitations on customer cumulative transaction amount       |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-OPERATOR-QUANTITY`     | Declined - Limitations on operator cumulative transaction quantity     |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-CREDIT-PARTY-QUANTITY` | Declined - Limitations on credit party cumulative transaction quantity |\n| `DECLINED`  | `DECLINED-LIMITATIONS-ON-CUSTOMER-QUANTITY`     | Declined - Limitations on customer cumulative transaction quantity     |\n| `DECLINED`  | `DECLINED-DUPLICATED-TRANSACTION`               | Declined - Duplicated transaction                                      |\n| `DECLINED`  | `DECLINED-OPERATOR-CURRENTLY-UNAVAILABLE`       | Declined - Operator currently unavailable                              |\n\n`REJECTED` and `DECLINED` status classes both denote unsuccessful transactions. The primary distinction between these two relates to the party that determined the failure:\n  * `REJECTED` are issued by the DVS platform based on various business rules (e.g. insufficient balance, limitations, etc)\n  * `DECLINED` are issued by the operators\n\nSeparately, it is recommended to define application logic based on **classes**, while additional distinction and/or insight are reflected on the actual **status**.\n\n## Pagination\n\nAPI resources supporting bulk fetches via \"list\" API methods will be returned in a paginated fashion.\n\n### Input Parameters\n\n| Field      | Required | Type    | Description                                      |\n| ---        | ---      | ---     | ---                                              |\n| `page`     | No       | Integer | Page number                                      |\n| `per_page` | No       | Integer | Number of results per page (default 50, max 100) |\n\n### Output Headers\n\n| Field           | Description                   |\n| ---             | ---                           |\n| `X-Total`       | Total number of records       |\n| `X-Total-Pages` | Total number of pages         |\n| `X-Per-Page`    | Number of records per page    |\n| `X-Page`        | Current page number           |\n| `X-Next-Page`   | Next page number (if any)     |\n| `X-Prev-Page`   | Previous page number (if any) |\n\n## Rate Limiting\n\nThe API endpoints have rate limiting in place to protect our service from excessive number of requests.\n\nIf the limit is reached, an [HTTP error 429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) will be returned by the server.\n\n# Authentication\n\n<!-- ReDoc-Inject: <security-definitions> -->"
   },
   "servers": [
-    {
-      "url": "http://127.0.0.1:8080/v1",
-      "description": "Development"
-    },
-    {
-      "url": "https://staging-dvs-api.transferto.dtone.com:8443/v1",
-      "description": "Staging"
-    },
     {
       "url": "https://preprod-dvs-api.dtone.com/v1",
       "description": "Pre-Production"
@@ -29,7 +21,7 @@
   "tags": [
     {
       "name": "Services",
-      "description": "The Digital Value Services platform provides access to various products across several industries. Such industries are termed as \"services\" in the Digital Value Services platform.\n\n| Service        | Examples                                  |\n| ---            | ---                                       |\n| Mobile         | Airtime Top Ups, Mobile Data Bundles, SMS |\n| Internet       | Broadband, Wi-Fi Recharge                 |\n| Utilities      | Electricity, Water, Utilities             |\n| Gift Cards     | Vouchers, Groceries, Gift Cards           |\n| Landline       | Landline                                  |\n| Television     | Television                                |\n| Insurance      | Insurance                                 |\n| Transportation | Transportation                            |\n| VoIP           | VoIP Credits                              |\n| Finance        | Financial Services and Institutions       |\n| Government     | Government Agencies                       |\n"
+      "description": "The Digital Value Services platform provides access to various products across several industries. Such industries are termed as \"services\" in the Digital Value Services platform.\n\n| Service        | Examples                                  |\n| ---            | ---                                       |\n| Mobile         | Airtime Top Ups, Mobile Data Bundles, SMS |\n| Internet       | Broadband, Wi-Fi Recharge                 |\n| Utilities      | Electricity, Water, Gas                   |\n| Gift Cards     | Vouchers, Groceries, General Gift Cards   |\n| Landline       | Landline                                  |\n| Television     | Television                                |\n| Insurance      | Insurance                                 |\n| Transportation | Transportation                            |\n| VoIP           | VoIP Credits                              |\n| Finance        | Financial Services and Institutions       |\n| Government     | Government Agencies                       |\n| Education      | Educational Institutions                  |\n\nSome services are further subdivided into subservices. The current list of services and the corresponding subservices underneath are as follows:\n\n| Service        | Subservices                                                                                                                    |\n| ---            | ---                                                                                                                            |\n| Mobile         | &bull; Airtime<br/>&bull; Bundle<br/>&bull; Data                                                                               |\n| Utilities      | &bull; Electricity<br/>&bull; Water<br/>&bull; Gas                                                                             |\n| Gift Cards     | &bull; Retail<br/>&bull; Gaming<br/>&bull; Cash Cards<br/>&bull; Food<br/>&bull; Entertainment<br/>&bull; Travel and Transport |\n"
     },
     {
       "name": "Countries",
@@ -364,7 +356,14 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Operator"
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Operator"
+                      },
+                      {
+                        "additionalProperties": false
+                      }
+                    ]
                   }
                 }
               }
@@ -427,7 +426,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Operator"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Operator"
+                    },
+                    {
+                      "additionalProperties": false
+                    }
+                  ]
                 }
               }
             }
@@ -818,7 +824,15 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
+              "$ref": "#/components/schemas/ServiceID"
+            }
+          },
+          {
+            "name": "subservice_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SubServiceID"
             }
           },
           {
@@ -849,7 +863,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
+              "$ref": "#/components/schemas/OperatorID"
             }
           },
           {
@@ -994,7 +1008,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AsyncTransaction"
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Transaction"
+                  },
+                  {
+                    "properties": {
+                      "callback_url": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  }
+                ]
               }
             }
           }
@@ -1092,7 +1118,19 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AsyncTransaction"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Transaction"
+                    },
+                    {
+                      "properties": {
+                        "callback_url": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1151,7 +1189,15 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
+              "$ref": "#/components/schemas/ServiceID"
+            }
+          },
+          {
+            "name": "subservice_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SubServiceID"
             }
           },
           {
@@ -1167,7 +1213,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
+              "$ref": "#/components/schemas/OperatorID"
             }
           },
           {
@@ -1229,7 +1275,19 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AsyncTransaction"
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Transaction"
+                      },
+                      {
+                        "properties": {
+                          "callback_url": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        }
+                      }
+                    ]
                   }
                 }
               }
@@ -1519,7 +1577,26 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/LookupMobileNumber"
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Operator"
+                      },
+                      {
+                        "type": "object",
+                        "required": [
+                          "identified"
+                        ],
+                        "properties": {
+                          "identified": {
+                            "type": "boolean",
+                            "description": "Indicates whether operator was identified as a direct match"
+                          }
+                        }
+                      },
+                      {
+                        "additionalProperties": false
+                      }
+                    ]
                   }
                 }
               }
@@ -1607,7 +1684,26 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/LookupMobileNumber"
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Operator"
+                      },
+                      {
+                        "type": "object",
+                        "required": [
+                          "identified"
+                        ],
+                        "properties": {
+                          "identified": {
+                            "type": "boolean",
+                            "description": "Indicates whether operator was identified as a direct match"
+                          }
+                        }
+                      },
+                      {
+                        "additionalProperties": false
+                      }
+                    ]
                   }
                 }
               }
@@ -1791,7 +1887,7 @@
         ],
         "additionalProperties": false
       },
-      "OperatorBase": {
+      "Operator": {
         "type": "object",
         "properties": {
           "id": {
@@ -1816,16 +1912,6 @@
           "name",
           "country",
           "regions"
-        ]
-      },
-      "Operator": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/OperatorBase"
-          },
-          {
-            "additionalProperties": false
-          }
         ]
       },
       "ServiceRegion": {
@@ -1937,10 +2023,17 @@
             "nullable": true
           },
           "service": {
-            "$ref": "#/components/schemas/Service"
+            "$ref": "#/components/schemas/ProductService"
           },
           "operator": {
-            "$ref": "#/components/schemas/Operator"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Operator"
+              },
+              {
+                "additionalProperties": false
+              }
+            ]
           },
           "regions": {
             "type": "array",
@@ -2040,6 +2133,16 @@
                 },
                 "nullable": true
               },
+              "required_additional_identifier_fields": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
               "availability_zones": {
                 "type": "array",
                 "items": {
@@ -2181,6 +2284,7 @@
               "required_sender_fields",
               "required_beneficiary_fields",
               "required_statement_identifier_fields",
+              "required_additional_identifier_fields",
               "availability_zones",
               "source",
               "destination",
@@ -2266,6 +2370,16 @@
                 "nullable": true
               },
               "required_statement_identifier_fields": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "required_additional_identifier_fields": {
                 "type": "array",
                 "items": {
                   "type": "array",
@@ -2428,6 +2542,7 @@
               "required_sender_fields",
               "required_beneficiary_fields",
               "required_statement_identifier_fields",
+              "required_additional_identifier_fields",
               "accepted_calculation_modes",
               "availability_zones",
               "source",
@@ -2524,6 +2639,16 @@
                 },
                 "nullable": true
               },
+              "required_additional_identifier_fields": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
               "availability_zones": {
                 "type": "array",
                 "items": {
@@ -2668,6 +2793,7 @@
               "required_sender_fields",
               "required_beneficiary_fields",
               "required_statement_identifier_fields",
+              "required_additional_identifier_fields",
               "availability_zones",
               "source",
               "destination",
@@ -2755,6 +2881,16 @@
                 "nullable": true
               },
               "required_statement_identifier_fields": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "required_additional_identifier_fields": {
                 "type": "array",
                 "items": {
                   "type": "array",
@@ -2920,6 +3056,7 @@
               "required_sender_fields",
               "required_beneficiary_fields",
               "required_statement_identifier_fields",
+              "required_additional_identifier_fields",
               "accepted_calculation_modes",
               "availability_zones",
               "source",
@@ -3007,6 +3144,16 @@
                 "nullable": true
               },
               "required_statement_identifier_fields": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "nullable": true
+              },
+              "required_additional_identifier_fields": {
                 "type": "array",
                 "items": {
                   "type": "array",
@@ -3172,6 +3319,7 @@
               "required_sender_fields",
               "required_beneficiary_fields",
               "required_statement_identifier_fields",
+              "required_additional_identifier_fields",
               "accepted_calculation_modes",
               "availability_zones",
               "source",
@@ -3216,6 +3364,34 @@
             "RANGED_VALUE_PAYMENT": "#/components/schemas/ProductRangedValuePayment"
           }
         }
+      },
+      "ProductService": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ServiceID"
+          },
+          "name": {
+            "type": "string"
+          },
+          "subservice": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/SubServiceID"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false
       },
       "ProductPromotion": {
         "type": "object",
@@ -3388,7 +3564,7 @@
                   "$ref": "#/components/schemas/ProductTypes"
                 },
                 "operator": {
-                  "$ref": "#/components/schemas/OperatorBase"
+                  "$ref": "#/components/schemas/Operator"
                 }
               },
               "required": [
@@ -3411,21 +3587,6 @@
           "products"
         ],
         "additionalProperties": false
-      },
-      "AsyncTransaction": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Transaction"
-          },
-          {
-            "properties": {
-              "callback_url": {
-                "type": "string",
-                "format": "uri"
-              }
-            }
-          }
-        ]
       },
       "Transaction": {
         "type": "object",
@@ -3537,7 +3698,7 @@
             "additionalProperties": false,
             "nullable": true,
             "writeOnly": true,
-            "description": "Required for ranged value products and when `calculation_mode` is set to `DESTINATION_MODE`"
+            "description": "Required for ranged value products and when `calculation_mode` is set to `DESTINATION_AMOUNT`"
           },
           "auto_confirm": {
             "type": "boolean",
@@ -3952,6 +4113,14 @@
                 "format": "date"
               }
             }
+          },
+          "additional_identifier": {
+            "type": "object",
+            "properties": {
+              "purchaser_id": {
+                "$ref": "#/components/schemas/PurchaserID"
+              }
+            }
           }
         }
       },
@@ -4007,28 +4176,6 @@
           "retail"
         ],
         "additionalProperties": false
-      },
-      "LookupMobileNumber": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/OperatorBase"
-          },
-          {
-            "type": "object",
-            "required": [
-              "identified"
-            ],
-            "properties": {
-              "identified": {
-                "type": "boolean",
-                "description": "Indicates whether operator was identified as a direct match"
-              }
-            }
-          },
-          {
-            "additionalProperties": false
-          }
-        ]
       },
       "Statement": {
         "type": "object",
@@ -4123,12 +4270,22 @@
         "maxLength": 64,
         "pattern": "\\S"
       },
+      "PurchaserID": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9\\-]{8,36}$",
+        "description": "Anonymized ID related to the purchase for compliance reasons (e.g. terminal, POS, agent, end user, etc.)"
+      },
       "NonEmptyString": {
         "type": "string",
         "minLength": 1,
         "pattern": "\\S"
       },
       "ServiceID": {
+        "type": "integer",
+        "format": "int32",
+        "minimum": 1
+      },
+      "SubServiceID": {
         "type": "integer",
         "format": "int32",
         "minimum": 1
