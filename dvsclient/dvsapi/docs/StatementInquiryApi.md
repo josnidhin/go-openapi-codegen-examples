@@ -1,6 +1,6 @@
 # \StatementInquiryApi
 
-All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
+All URIs are relative to *https://staging-dvs-api.transferto.dtone.com:8443/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

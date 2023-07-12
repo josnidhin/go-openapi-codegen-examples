@@ -256,6 +256,8 @@ info:
   x-logo:
     url: https://dvs-api-doc.dtone.com/images/dtone.png
 servers:
+- description: Staging
+  url: https://staging-dvs-api.transferto.dtone.com:8443/v1
 - description: Pre-Production
   url: https://preprod-dvs-api.dtone.com/v1
 - description: Production

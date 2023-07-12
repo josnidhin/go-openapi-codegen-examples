@@ -322,7 +322,7 @@ ctx = context.WithValue(context.Background(), dvsapi.ContextOperationServerVaria
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://preprod-dvs-api.dtone.com/v1*
+All URIs are relative to *https://staging-dvs-api.transferto.dtone.com:8443/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
